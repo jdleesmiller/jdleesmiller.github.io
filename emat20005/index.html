@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>EMAT20005</title>
+  </head>
+  <body>
+    <h1>EMAT20005: Product Realisation<br />
+      Personal Rapid Transit
+    </h1>
+    <p>
+    Fall 2010, Weeks 6-10<br/>
+    11:00-13:00 on Wednesdays in QB 1.59<br/>
+    Instructor: <a href="..">John Lees-Miller</a>
+    </p>
+
+    <h2>News</h2>
+    <h3>8 Dec, 2010</h3>
+    <ul>
+      <li>To submit the <a href="#report">final report</a>: either upload the
+      document and supporting sim files to <a
+        href="http://www.bristol.ac.uk/fluff/">fluff</a> and <a
+        href="http://www.enm.bris.ac.uk/scripts/contact/contact.php?id=aVubjyT9x14fDkHBxcR3DiU1UasS4F">send</a>
+      me the link, or drop them in the appropriate box in the Queen's School
+      Office.</li>
+    </ul>
+    <h3>2 Dec, 2010</h3>
+    <ul>
+      <li>Some additional help on gravity models is available <a href="more_notes_on_gravity_models.pdf">here</a>.</li>
+      <li>Clarification: hand-drawn sketches are fine for task 4.</li>
+    </ul>
+    <h3>26 Nov, 2010</h3>
+    <ul>
+      <li>More details for the <a href="#presentation">presentation</a> and <a href="#report">final report</a> have been added.</li>
+      <li>The page limit for the individual report has increased from 5 pages to 6, in order to allow two pages for each of the three iterations.</li>
+    </ul>
+
+    <h2>Outline</h2>
+    <ul>
+      <li>Week 6 (first class Wednesday, 17 Nov)
+      <ul>
+        <li>lecture: introduction to PRT + advice on choosing a site (<a href="https://www.bris.ac.uk/fluff/u/enjdlm/XvZ36tC1XtwJC3jbT4w5HwKE/">slides</a>)</li>
+        <li>form groups</li>
+        <li>set up <a href="#sim">ATS/CityMobil design and simulation tool</a></li>
+        <li>choose a site</li>
+        <li>start on demand estimates</li>
+      </ul></li>
+      <li>Week 7
+      <ul>
+        <li>lecture: simulator demo, gravity models (<a href="https://www.bris.ac.uk/fluff/u/enjdlm/ZM5CBvsbnZCDtsYYt3e0CQKE/">slides</a>), performance metrics</li>
+        <li>work on <a href="#demand">task 2</a> and <a href="#design">task 3a</a></li>
+        <li><strong>Deliverable:</strong> in class, show me
+        <ul>
+          <li>a map of your site,</li>
+          <li>the scale of the map, in meters per pixel, and</li>
+          <li>the major demand generators in the area.</li>
+        </ul></li>
+      </ul></li>
+      <li>Week 8
+      <ul>
+        <li>questions and answers</li>
+        <li>work on <a href="#design">task 3b/3c</a></li>
+        <li><strong>Deliverable:</strong> at the start of class, show me a simulation file containing your group's preliminary network (<a href="#design">task 3a</a>), including stations and network.</li>
+      </ul></li>
+      <li>Week 9
+      <ul>
+        <li>questions and answers</li>
+        <li>work on <a href="#design">task 3c</a> and <a href="#design-stations">task 4</a></li>
+      </ul></li>
+      <li>Week 10
+      <ul>
+        <li><strong>Deliverable:</strong> 10 minute <a
+          href="#presentation">presentation</a> in class</li>
+        <li><strong>Deliverable:</strong> <a href="#report">final report</a> due at 4pm on Friday, 17 December</li>
+      </ul></li>
+    </ul>
+    <h2>Assessment</h2>
+    <table border="1" cellpadding="4">
+      <tr><th>Item</th><th>Weight</th></tr>
+      <tr><td>deliverable in week 7</td><td>5%</td></tr>
+      <tr><td>deliverable in week 8</td><td>5%</td></tr>
+      <tr><td>final presentation</td><td>30%</td></tr>
+      <tr><td>final report: group component</td><td>40%</td></tr>
+      <tr><td>final report: individual component</td><td>20%</td></tr>
+    </table>
+
+    <a name="sim"></a> 
+    <h2>Task 0 &nbsp; Get the simulation tool.</h2> 
+    <h3>For the Lab Machines</h3> 
+    <ol> 
+      <li>Download <a href="atscitymobil-20101123.zip">atscitymobil-20101123.zip</a> (2.5MB). (Right click and choose Save Target As...)</li> 
+      <li>Extract the zip file to your university drive.</li> 
+      <li>Double click <em>atscitymobil.exe</em> to launch.</li> 
+    </ol> 
+    <h3>For your Laptop / PC</h3> 
+    <p> 
+    Please use this <a href="http://www.ultraprt.com/uploads/citymobil/atscitymobil-bundled-setup-20101123.exe">installer</a> (20MB). You can use the zip file above on your home machine, but this installer sets up shortcuts and file associations. Note that the simulator only runs on Windows, at present.
+    </p>
+
+    <h3>Tutorial</h3>
+
+    <p>This <a href="http://www.ultraprt.com/prt/implementation/simulation/">tutorial</a> is a good reference on how to use the simulator.</p>
+
+    <a name="site"></a>
+    <h2>Task 1 &nbsp; Choose a site.</h2>
+
+    <p>You will need a map of the area, and you will have to know the scale of the map image, in meters per pixel. (Hint: A screenshot from <a href="http://www.google.com/earth">Google Earth</a> or <a href="http://maps.google.co.uk/">Google Maps</a> is good, and Google Earth has a tool for measuring distances.)</p>
+
+    <p>You will need to identify the major demand generators in the area. (Hint: Google Earth and Google Maps label most major facilities and land marks.)</p>
+
+    <p>Your site can be anywhere, but keep in mind that you have to estimate what the potential passenger demand will be. For ideas, you can go to <a href="http://www.ultraprt.com/applications">http://www.ultraprt.com/applications</a> but please do <em>not</em> use a site that has already been studied by someone else.</p> 
+    
+    <p>Alternatively, you can work from a <a href="http://en.wikipedia.org/wiki/Greenfield_land">greenfield</a> (undeveloped) site, and develop your site around your PRT system, rather than trying to fit the system into an existing site. Keep in mind, however, that designing both the site and the PRT system will require more work. If your group wants to do this, please discuss with me before the end of week 6.</p>
+
+    <p>Also note that your service area must not exceed 5km by 5km, due to limitations of the simulator.</p>
+
+    <a name="site-outputs"></a>
+    <h3>Outputs</h3>
+    <ul>
+      <li>A map of your site.</li>
+      <li>The scale of the map, in meters per pixel.</li>
+      <li>A list of the major demand generators in the area.</li>
+    </ul>
+
+
+    <a name="demand"></a>
+    <h2>Task 2 &nbsp; Place stations and create demand scenarios.</h2>
+
+    <p>Now you are ready to place stations near your site's demand generators. Exactly how many stations you place and where you place them depends on your estimates for the demand between pairs of stations. For this project, you will have to make several (educated) guesses at what the demand will be.</p>
+
+    <p>When deciding where to place stations, you should be thinking about the following guidelines.</p>
+
+    <ul>
+      <li>Passengers will typically walk to or from the PRT stations. A good rule of thumb is that walking distances from each station to any nearby demand generators should be less than about 400m, because very few people will be willing to walk farther than this.</li>
+      <li>You can build stations inside or on top of existing buildings, or you can build free-standing stations.</li>
+      <li>To get an idea of the area required for a station, see these <a href="http://www.ultraprt.com/Bath/home-2/competition-details/stations/">design guidelines</a>. However, do not spend too much time worrying about all of the details; you will do some detailed design work, later.</li>
+      <li>You must be able to access the stations with guideways.</li>
+      <li>Stations cost money.</li>
+      <li>The maximum number of stations is 20, due to simulator limitations.</li>
+      <li>The minimum number of stations is 12.</li>
+      <li>The total flow of vehicles (in flow plus out flow) at any station must not exceed 300 vehicles per hour. If you have a large demand generator, you should split the demand between several stations.</li>
+    </ul>
+
+    <p>To represent the passenger demand, you will create one <em>demand scenario</em> per group member. Each scenario describes the passenger demand at a particular time. For example, a large urban system might have an <em>AM peak</em> during morning rush hour, in which most of the demand is from the outskirts to the center. The evening rush hour is the <em>PM peak</em> demand. Outside of peak times, the passenger flows are typically smaller and more <em>balanced</em>; that is, the average flow into each region tends to equal the average flow out. Other scenarios might come from special events, for example at a stadium or convention centre. Each scenario will suggest different system optimisations.</p>
+
+    <p>The data required to define a scenario are the in flow and out flow of vehicles at every station. As mentioned above, the total flow (in plus out) for each station must be less than 300 vehicles per hour. Also, the <em>sum</em> of all the in flows must equal the sum of all the out flows for each scenario; these sums are written <em>T<sub>i</sub></em> in the table below. Your scenarios must include one <em>balanced flow</em> scenario, in which the flow in and out of each station is (roughly) equal. The others should represent peaks with different spatial distribution and intensity. The total flow (<em>T<sub>i</sub></em>) for the whole system must be at least 700 vehicle trips per hour for the balanced scenario and at least 1300 trips per hour for the peak scenarios.</p>
+
+    <p>Note that the simulator needs to know the demand in vehicles per hour; the average <em>vehicle occupancy</em> relates this to passengers per hour. To help calibrate your numbers, a reasonable guess at vehicle occupancy is 1.2 passengers per vehicle, but it will be higher for some sites, for example if there are many couples or families using the system. Different scenarios may also have different vehicle occupancies.</p>
+
+    <p>Finally, for each scenario you will have to estimate how many hours per day (or per week) each scenario will occur. We will assume here that the actual demand will always be like one of the scenarios. This allows us to estimate the system's annual patronage, which will be important in subsequent sections.</p>
+
+    <p>You may want to organize these data in a table like the following (it would be a good idea to use a spreadsheet).</p>
+    
+    <a name="scenario-table"></a>
+    <table border="1" cellpadding="4">
+      <tr><th></th>
+        <th colspan="6">Vehicle Flows (vehicles/hour)</th>
+      </tr>
+      <tr><th align="right">Scenario:</th>
+        <th colspan="2">Balanced</th>
+        <th colspan="2">AM Peak</th>
+        <th colspan="2">PM Peak</th>
+      </tr>
+      <tr><th align="left">Station</th>
+        <th>In</th><th>Out</th>
+        <th>In</th><th>Out</th>
+        <th>In</th><th>Out</th>
+      </tr>
+      <tr><td>Park Plaza East</td>
+        <td align="right">80</td><td align="right">80</td>
+        <td align="right">50</td><td align="right">250</td>
+        <td align="right">200</td><td align="right">80</td>
+      </tr>
+      <tr><td>Park Plaza West</td>
+        <td align="right">80</td><td align="right">80</td>
+        <td align="right">50</td><td align="right">150</td>
+        <td align="right">200</td><td align="right">30</td>
+      </tr>
+      <tr><td>...</td>
+        <td align="right">...</td><td align="right">...</td>
+        <td align="right">...</td><td align="right">...</td>
+        <td align="right">...</td><td align="right">...</td>
+      </tr>
+      <tr><th align="left">Total In/Out</th>
+        <td align="center">T<sub>1</sub></td>
+        <td align="center">T<sub>1</sub></td>
+        <td align="center">T<sub>2</sub></td>
+        <td align="center">T<sub>2</sub></td>
+        <td align="center">T<sub>3</sub></td>
+        <td align="center">T<sub>3</sub></td>
+      </tr>
+      <tr><th align="left">Total Hourly Flow</th>
+        <td align="center" colspan="2">T<sub>1</sub></td>
+        <td align="center" colspan="2">T<sub>2</sub></td>
+        <td align="center" colspan="2">T<sub>3</sub></td>
+      </tr>
+      <tr><td colspan="7">&nbsp;</td></tr>
+      <tr><th align="left">Hours / Day</th>
+        <td align="center" colspan="2">...</td>
+        <td align="center" colspan="2">...</td>
+        <td align="center" colspan="2">...</td>
+      </tr>
+      <tr><th align="left">Total Daily Vehicle Flow</th>
+        <td align="center" colspan="6">...</td>
+      </tr>
+      <tr><th align="left">Vehicle Occupancy</th>
+        <td align="center" colspan="6">1.2 passengers / vehicle</td>
+      </tr>
+      <tr><th align="left">Total Passengers / Day</th>
+        <td align="center" colspan="6">...</td>
+      </tr>
+      <tr><th align="left">Total Passengers / Year</th>
+        <td align="center" colspan="6">...</td>
+      </tr>
+    </table>
+
+    <p>The next step is to run a <a href="http://en.wikipedia.org/wiki/Trip_distribution#Gravity_model">gravity model</a> to turn each scenario into an <em>origin-destination demand matrix</em> (OD matrix) that you can use with the simulator. The OD matrix specifies the average number of vehicle trips per hour between each pair of stations. The simulator uses this matrix to to generate passengers randomly according to a <a href="http://en.wikipedia.org/wiki/Poisson_process">Poisson process</a>.</p>
+
+    <p>The equations for the gravity model and an algorithm for running it will be described in class. Use the straight-line distances between stations as "costs."  (<strong>Note</strong>: the version of the sim that you downloaded in the first week did not report straight-line distances in the output; the <a href="#sim">latest version</a> does.) The suggested dispersion factor is 0.5. You are free to tweak this factor, or to edit the resulting OD matrix directly, if you wish, provided that the resulting matrix still satisfies the constraints on total flow at stations and for the system as a whole. You can implement the algorithm however you like; it's possible to do it in MATLAB or in Excel (hint: use the <a href="enable_excel_2007_solver.pdf">solver add-in</a>).</p>
+
+    <h3>Outputs</h3>
+    <ul>
+      <li>An ATS/CityMobil simulator (.atscm) file with
+      <ul>
+        <li>your map as the background image,</li>
+        <li>the background image scale (meters per pixel) set properly, and</li>
+        <li>your stations in the simulator (place them with the Build tool).</li>
+      </ul></li>
+      <li>One scenario per group member.</li>
+      <li>One origin-destination demand matrix per scenario.</li>
+      <li>See also section 1 of the <a href="#report">final report</a>.</li>
+    </ul>
+
+
+    <a name="design"></a>
+    <h2>Task 3&nbsp; Design a PRT network.</h2>
+
+    <p>Now you are ready to connect the stations with guideways. We'll do this in three stages.</p>
+    <ol type="a">
+      <li>As a group, create a preliminary network design based on the given guidelines (below). Here you should just aim to connect all the stations and add one depot, in order to get the simulation running.</li>
+      <li>Individually, pick a demand scenario and optimise the network for that scenario using the given cost structure.</li>
+      <li>As a group, agree on a final design that takes all of the scenarios into account.</li>
+    </ol>
+
+    <p>For (a), you will have to show me the simulation in class in week 8. For (b), each group member must write an appendix to the final report that documents the optimisation process for his/her scenario.</p>
+
+    <h3>Guidelines</h3>
+    <ul>
+      <li>The vehicles can only run on dedicated guideway. Pedestrians and road traffic cannot mix with moving PRT vehicles. The usual way to accommodate this is to build elevated guideway, but you can also run at-grade (on the ground, protected by a fence), or below-grade (in a tunnel). At-grade guideway is much less expensive than elevated guideway (see below). (Note that the simulator does not distinguish between grades.)</li>
+
+      <li>A good network design strategy is to connect the stations in one-way loops, like in the Urban Case Study network that comes bundled with the simulator.</li>
+
+      <li>However, your loops should not be too long, because travel times for trips that go the long way around the loop become too large. For example, in the Urban Case Study, the trip time from station 8 to station 7 is only about 40s, but the travel time from 7 to 8 (the long way around) is nearly 8 minutes.</li>
+
+      <li>Whether a long travel time between a pair of stations is acceptable depends on how much demand you expect between those stations. You may choose to build extra guideway to make some loops shorter or connect loops more directly, or you may choose to reverse the direction of a loop. Note that this depends on the scenario.</li>
+
+      <li>Your guideways should follow existing rights of way (roads, alleys, railway lines, bridges) where possible. You can cut through buildings, especially if it allows you to put a station inside.</li>
+
+      <li>Guideway costs money. However, you must connect all of the stations, and building extra guideway for more direct routes reduces travel times and the number of vehicles that you need.</li>
+
+      <li>To reduce passenger waiting times at a station, you can construct a depot upstream of the station. Depots help the system's empty vehicle management algorithm to keep vehicles close to where they will be needed.</li>
+
+      <li>See these <a href="http://www.ultraprt.com/Bath/home-2/competition-details/guideway/">design guidelines</a> for more information on the guideways. However, do not spend too much time worrying about all of the details; you will do some detailed design work for some small sections, later.</li>
+    </ul>
+
+    <h3>Cost Structure for Optimisation</h3>
+    <p>Your objective is to minimize the sum of system costs and user costs, according to the following cost estimates.</p>
+
+    <a name="costs"></a>
+    <table border="1" cellpadding="4">
+      <tr><th>Capital Costs</th><th>&pound;</th></tr>
+      <tr><td>1 vehicle</td><td align="right">50k</td></tr>
+      <tr><td>1 station</td><td align="right">0.5M</td></tr>
+      <tr><td>1 depot</td><td align="right">0.4M</td></tr>
+      <tr><td>1 km at-grade guideway</td><td align="right">1M</td></tr>
+      <tr><td>1 km elevated guideway</td><td align="right">2.5M</td></tr>
+      <tr><td>other</td><td align="right">+50%</td></tr>
+      <tr><th>Operating Costs</th><th>&pound;</th></tr>
+      <tr><td>1 passenger km</td><td align="right">0.15</td></tr>
+      <tr><th>User Costs</th><th>&pound;</th></tr>
+      <tr><td>1 minute passenger travel time</td><td align="right">0.1</td></tr>
+      <tr><td>1 minute passenger waiting time</td><td align="right">0.2</td></tr>
+    </table>
+
+    <p>Some of the costing inputs you can read directly from the network, but the number of vehicles and the mean passenger waiting time must be estimated by simulation. You should run 5 simulations and average the results, in order to get reliable numbers.</p>
+
+    <p>The simulator output includes the total track length, but the simulator does not know anything about grades. For costing, you should estimate roughly what percentage of your track is at-grade. Do not worry about getting this exactly right, because all of the costs are rough; just try to estimate to within 10% or so.</p>
+
+    <p>Once you have computed the base capital costs (vehicles, stations, depots and guideway), add 50% to cover related expenses, such as central control software and hardware, and a contingency.</p>
+
+    <p>The system operating costs are given as a rough total cost per passenger kilometer. The simulator output includes the 'mean demand-weighted passenger trip distance,' which you can use to compute the operating cost per passenger trip. To scale this up to an annual operating cost, you will use the passenger trips / year figure from task 2. (Note that when you are optimising for a single scenario, multiplication by the total passengers per year effectively assumes that the demand is <em>always</em> like this scenario; this is not really true, but it is good enough for our purposes here.)</p>
+
+    <p>You can approach the user costs similarly; here the relevant simulator outputs are the 'mean demand-weighted passenger trip time' and the mean passenger waiting time. The user costs are based on a standard <a href="http://en.wikipedia.org/wiki/Value_of_time">value of time</a> calculation.</p>
+
+    <p>These costs are rough estimates. The main point is that there are trade-offs between capital costs, operating costs and user costs. For example, you can build more guideway to reduce travel times, which increases your capital cost but decreases your operating and user costs.</p>
+
+    <p>Operating and user costs occur over time, so you should use <a href="http://en.wikipedia.org/wiki/Net_present_value">present values</a> to weigh them against capital costs. Assume the standard public works discount rate of 6% per year, and discount over 30 years.</p>
+
+    <p>These costs give you a way of evaluating networks objectively. However, you should be mindful of externalities. For example, this does not include a cost for visual intrusion in culturally sensitive areas. It also does not account for changes in pedestrian flows; areas that were once quiet could become busy, and vice versa. You may reject a design that is "optimal" by cost but undesirable for other reasons.</p>
+
+    <p>I strongly recommend that you create a spreadsheet to keep track of the cost calculations.</p>
+
+    <h3>Constraints</h3>
+    <ul>
+      <li>Maximum number of depots is 5.</li>
+      <li>90% of passengers should wait less than 60s (but somewhat longer tails are fine for peak demand scenarios).</li>
+      <li>You may add new stations or remove stations that have low value for some or all scenarios (e.g. low demand and/or requiring a lot of extra infrastructure). However, you will then have to modify the scenarios and regenerate demand matrices. The total demand must stay within the limits given in task 2.</li>
+    </ul>
+
+    <a name="design-composite"></a>
+    <h3>Optimising for Multiple Scenarios</h3>
+
+    <p>Once each member of your group has optimised your initial network for one scenario, you will apply what you've learned to design a network that works for all of them.</p>
+
+    <p>To evaluate your final network, use a <em>composite cost</em> that describes its combined performance on all of the demand scenarios. The capital costs apply to all scenarios equally, but the operating and user costs depend on the demand. So, you should evaluate your final network on each scenario and record the trip distance, trip time and passenger waiting time for each one. Then you should weight these by how frequently each scenario occurs (as estimated in task 2) and apply the cost model. (Also note that the number of vehicles you need is the largest number needed in any single scenario.)</p>
+
+    <p>You should do several iterations to improve the composite cost. Again, be mindful of externalities.</p>
+
+    <p>Note: The simulator will only let you enter one OD matrix at a time, but you can copy and paste OD matrices to/from the sim. The best way to do this is to copy the matrix from one simulation into Excel, delete the last row and the last column (the totals), and then paste it into another simulation.</p>
+
+    <h3>Cost/Benefit Analysis</h3>
+
+    <p>To measure the user benefits that could come from building a PRT system, one must compare user costs with PRT to user costs with existing modes. Here we will compare PRT with a very simplistic model of a bus system. Assume that users wait an average of 5 minutes for the bus, and that the average travel time by bus is the time taken to travel the <em>straight-line distance</em> from origin to destination at 12km/h. (<strong>Note</strong>: the version of the sim that you downloaded in the first week did not report straight-line distances in the output; the <a href="#sim">latest version</a> does.) Use the travel and waiting time savings (or not) with the <a href="#costs">cost table</a> to compute user benefits and system costs.</p>
+
+    <h3>Outputs</h3>
+    <p>See section 2 in the <a href="#report">final report</a>.</p>
+
+    <a name="design-stations"></a>
+    <h2>4 &nbsp; Design two stations in detail.</h2>
+    
+    <p>Pick two stations that are interesting or challenging, for example due to
+    large size or passenger volumes, culturally sensitive surroundings or an
+    architecturally interesting setting (e.g. integrated into a building), and
+    produce a conceptual design for each one.</p>
+
+    <p>You should produce a plan view of the station, keeping the following
+    questions in mind.</p>
+    <ul>
+      <li>Precisely where will the station be built? Is it a standalone station,
+      or is it part of an existing building? If it is standalone, is the station
+      area on the ground, or is it elevated?</li>
+      <li>How will you connect the guideways into and out of the station?</li>
+      <li>How will passengers enter and exit the station?</li>
+      <li>How many berths will the station have? (Hint: use the largest
+      number of berths assigned by the simulation in any demand scenario.)</li>
+    </ul>
+
+    <p>The "vehicle side" of the station should be consistent with these <a
+      href="http://www.ultraprt.com/Bath/home-2/competition-details/stations/">design
+      guidelines</a>; see also <a
+      href="http://www.ultraprt.com/prt/infra/station-design/">this
+      overview</a>. The <a
+      href="http://www.ultraprt.com/uploads/DesignContest/Station_Guide.skp">3D
+      design template</a> (in SketchUp) is particularly helpful. You should consider where the main line and the on- and off-ramps will go.
+    </p>
+
+    <p>Note: hand-drawn sketches are fine.</p>
+
+    <p><strong>Bonus</strong>: Construct an architectural rendering (e.g. in SketchUp) of the station. You can use the 3D design template in the guidelines to get started.</p>
+
+    <h3>Outputs</h3>
+    <p>See section 3 in the <a href="#report">final report</a>.</p>
+
+    <a name="presentation"></a>
+    <h2>Details for Presentation</h2>
+
+    <p>Each group's presentation will last around 10 minutes with a few minutes for questions. Your presentation should cover essentially the same content as the main body of the <a href="#report">final report</a> (sections 1-3), with a focus on the visual and qualitative aspects of your design. Every group member must participate in the presentation.</p>
+
+    <a name="report"></a>
+    <h2>Details for Final Report</h2>
+
+    <p>Each group should submit a report as described below. The main body of the report (sections 1-3) is limited to 5000 words on 20 pages. In addition, each group member should submit an appendix (see below) of up to 600 words on 6 pages. Note that these are word and page <em>maxima</em>: you should aim to be concise (and use lots of pictures!).</p>
+
+    <p>In addition to the written report, please submit the following ATS/CityMobil (.atscm) simulation files.</p> 
+    <ul>
+      <li>An .atscm file for your group's final network.</li>
+      <li>An .atscm file for each group member's final network, including the demand matrix for the corresponding demand scenario.</li>
+    </ul>
+
+    <p>To submit: either upload the document and supporting sim files to <a
+      href="http://www.bristol.ac.uk/fluff/">fluff</a> and <a
+      href="http://www.enm.bris.ac.uk/scripts/contact/contact.php?id=aVubjyT9x14fDkHBxcR3DiU1UasS4F">send</a>
+    me the link, or drop them in the appropriate box in the Queen's School
+    Office.</p>
+
+    <h3>Marking Criteria</h3>
+    <p>The report will be marked according to the following five equally
+    weighted criteria.</p>
+    <ul>
+      <li>Clarity and Conciseness</li>
+      <li>Problem Analysis</li>
+      <li>Down-select Logic (comparison of iterations / alternatives)</li>
+      <li>Technology Employed</li>
+      <li>Overall Design and Solution</li>
+    </ul>
+
+    <h3>Final Report Content</h3>
+
+    <h4>Section 1: Site, Stations and Demand</h4>
+    <ul>
+      <li>A map of your site with labels for the main demand generators.</li>
+      <li>Where is your site?</li>
+      <li>Why might a PRT system be appropriate for this site?</li>
+      <li>Table of scenarios (one per group member) like <a
+        href="#scenario-table">this one</a>.</li>
+      <li>How did you guess the in and out flows for your scenarios?</li>
+      <li>How did you implement the gravity model?</li>
+      <li>What is the effect of the dispersion parameter?</li>
+      <li>What dispersion parameter value(s) did you use?</li>
+    </ul>
+    <h4>Section 2: System Optimisation</h4>
+    <ul>
+      <li>A screenshot of your group's initial network (<a
+        href="#design">task 3a</a>).</li>
+      <li>A record of three iterations / design alternatives evaluated according
+      to <a href="#design-composite">composite cost</a>, one of which should be
+      selected as your group's "final" (preferred) network. For each alternative, include
+      <ul>
+        <li>a screen shot of the network,</li>
+        <li>a table of costs (capital, operating, user, total and net present value), and</li>
+        <li>a brief description of how it relates to other alternatives and/or
+        the networks you designed for individual scenarios.</li>
+      </ul>
+      </li>
+      <li>Cost/benefit analysis for the final network:
+      <ul>
+        <li>Explain your cost/benefit calculations.</li>
+        <li>Do the benefits outweigh the costs?</li>
+        <li>What are the most important variables (travel times, waiting times, discount factor, ...)? (sensitivity)</li>
+        <li>Are there other benefits or costs (not included in the cost
+        function here) that could change the conclusion?</li>
+      </ul></li>
+    </ul>
+    <h4>Section 3: Detailed Design for Two Stations</h4>
+    <p>For each of the two stations:</p>
+    <ul>
+      <li>Why is the station interesting and/or challenging? What other
+      stations did you consider before selecting these two?</li>
+      <li>How many berths does the station need?</li>
+      <li>What are the effects of the station on its surrounding area, in
+      terms of economic, environmental and social impact?</li>
+      <li>Plan view of the station (see <a href="#design-stations">guidelines</a>).</li>
+      <li><strong>Bonus:</strong> include architectural renderings of one
+      or both stations (see <a href="#design-stations">guidelines</a>).</li>
+    </ul>
+    <h4>Appendices (one per group member)</h4>
+    <p>Your appendix should describe the process that you (individually) went through to optimise the system for your scenario. In particular, you should provide a record of three iterations; for each one, you should include
+    </p>
+    <ul>
+      <li>a screen shot of the network,</li>
+      <li>a table of costs (capital, operating, user, total and net present value), and</li>
+      <li>a brief description of what changes you made and your rationale.</li>
+    </ul>
+
+    <h2>Other Resources</h2>
+    <ul>
+      <li><a href="http://en.wikipedia.org/wiki/Personal Rapid Transit">Personal
+      Rapid Transit</a> on Wikipedia</li>
+      <li><a href="http://www.ultraprt.com">ULTra PRT</a> company site</li>
+      <li>ULTra PRT <a href="http://www.ultraprt.com/bath">design competition
+        for Bath</a></li>
+      <li>Other PRT vendors:
+      <a href="http://www.2getthere.eu/">2getthere</a>, 
+      <a href="http://www.vectusprt.com/">Vectus PRT</a>
+      </li>
+    </ul>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl."
+          : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost +
+            "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-8962570-4");
+          pageTracker._trackPageview();
+        } catch(err) {}</script>
+  </body>
+</html>
