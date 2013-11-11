@@ -117,6 +117,10 @@ section {
   padding-bottom:50px;
 }
 
+section .venue {
+  font-style: italic;
+}
+
 small {
   font-size:11px;
 }
