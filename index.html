@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!doctype html>
 <html>
   <head>
@@ -7,7 +10,6 @@
 
     <link href="http://jdlm.info/" rel="canonical" />
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -73,7 +75,7 @@ document.write('<a href="mail' +
           (<a href="http://hdl.handle.net/1983/1761">preprint</a>)
           </li>
           <li>Lees-Miller, J. D. Empty Vehicle Redistribution for Personal Rapid Transit. Ph.D. thesis, University of Bristol, 2011.
-          (<a href="thesis_v11_hyperref.pdf">thesis</a>) 
+          (<a href="thesis_v11_hyperref.pdf">thesis</a>)
           (<a href="https://github.com/jdleesmiller/si_taxi">code</a>)
           </li>
           <li>Lees-Miller, J. D. and Wilson, R. E. Sampling for Personal Rapid Transit Empty Vehicle Redistribution. <span class="venue">Transportation Research Record: Journal of the Transportation Research Board</span>, 2216:174–181, 2011.
@@ -111,17 +113,6 @@ document.write('<a href="mail' +
         <p><small>Hosted on <a href="https://github.com">GitHub Pages</a> &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-    <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl."
-    : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost +
-      "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-try {
-  var pageTracker = _gat._getTracker("UA-8962570-4");
-  pageTracker._trackPageview();
-} catch(err) {}</script>
-    <script src="javascripts/scale.fix.js"></script>
+    {% include google_analytics.html %}
   </body>
 </html>
