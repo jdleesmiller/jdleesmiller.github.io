@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Syntax Highlighting with GitHub and CodeMirror</title>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/mode/markdown/markdown.min.js"></script>
+    <style>
+      .github-code {
+        border: 1px solid gray;
+      }
+
+      .github-code-footer {
+        padding: 5px;
+        background: #f7f7f7;
+      }
+
+      .github-code .CodeMirror {
+        height: auto;
+      }
+    </style>
+    <script type="text/javascript">
+      $(function () {
+        function makeEllipsis(codeMirror, fromLine, toLine) {
+          var ellipsis = $('<a href="#">&hellip;</a>')
+          var marker = codeMirror.markText(
+            { line: fromLine, ch: 0 },
+            { line: toLine || codeMirror.lineCount(), ch: null },
+            { replacedWith: ellipsis[0] })
+          ellipsis.click(function () {
+            marker.clear()
+          })
+        }
+
+        $('.github-code').each(function () {
+          var $this = $(this)
+          var url = $this.data('url')
+          if (!url) return
+
+          var $code = $('<div>')
+          $code.text('Loading...')
+          $this.append($code)
+
+          var $footer = $('<div>')
+          $footer.addClass('github-code-footer')
+          var $link = $('<a>')
+          $link.attr('href', url)
+          $link.text(url)
+          $footer.append($link)
+          $this.append($footer)
+
+          $.ajax(url, {
+            dataType: 'text',
+            success: function (data, status, xhr) {
+              $code.empty()
+              var codeMirror = CodeMirror($code[0], {
+                value: data,
+                readOnly: 'nocursor',
+                lineNumbers: true,
+                lineWrapping: true
+              })
+              var startLine = $this.data('startLine')
+              if (startLine) {
+                makeEllipsis(codeMirror, 0, parseInt(startLine, 10) - 2)
+              }
+              var endLine = $this.data('endLine')
+              if (endLine) {
+                makeEllipsis(codeMirror, parseInt(endLine, 10), null)
+              }
+            }
+          })
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <h1>Syntax Highlighting with GitHub and CodeMirror</h1>
+    <div class="github-code"
+      data-url="https://raw.githubusercontent.com/jdleesmiller/ds-docker-demo/master/README.md"
+      data-start-line="11"
+      data-end-line="14"></div>
+  </body>
+</html>
