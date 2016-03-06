@@ -17,3 +17,6 @@ github_username: jdleesmiller
 
 # Build settings
 markdown: kramdown
+
+kramdown:
+  input: GFM
