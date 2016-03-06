@@ -7,23 +7,22 @@ categories: articles
 
 Here are some tips and tricks that I learned the hard way when developing and deploying web applications written for [node.js](https://nodejs.org) using [Docker](https://www.docker.com).
 
-There are lots of beginner level docker and node tutorials out there, but there do not seem to be many improver / intermediate level tutorials. The beginner level tutorials tend to miss out  some important best practices and practical advice, so that's what I'm aiming to cover here.
-
-In this tutorial, we'll set up the [socket.io chat example](http://socket.io/get-started/chat/) in docker, from scratch to production-ready. In particular, we'll see how to:
+In this tutorial article, we'll set up the [socket.io chat example](http://socket.io/get-started/chat/) in docker, from scratch to production-ready, so hopefully you can learn them the easy way. In particular, we'll see how to:
 
   * Actually get started bootstrapping a node application with docker.
   * Not run everything as root (bad!).
+  * Use binds to keep your test-edit-reload cycle short in development.
   * Manage `node_modules` in a container (there's a trick to this).
   * Ensure repeatable builds with [npm shrinkwrap](https://docs.npmjs.com/cli/shrinkwrap).
   * Share a `Dockerfile` between development and production.
 
-This article assumes you already have some familiarity with Docker and node.js. If you'd like a gentle intro to docker first, you can <a href="http://jdlm.info/ds-docker-demo/" target="_blank">try my slides about docker</a> (<a href="https://news.ycombinator.com/item?id=8630451" target="_blank">discussion on hacker news</a>) or try one of the many, many other docker intros out there.
+This tutorial assumes you already have some familiarity with Docker and node.js. If you'd like a gentle intro to docker first, you can <a href="http://jdlm.info/ds-docker-demo/" target="_blank">try my slides about docker</a> (<a href="https://news.ycombinator.com/item?id=8630451" target="_blank">discussion on hacker news</a>) or try one of the many, many other docker intros out there.
 
 ## Getting Started
 
-We're going to set things up from scratch. The final code is available [on github here](https://github.com/jdleesmiller/docker-chat-demo), and there are tags for each step along the way. [Here's the first step.](https://github.com/jdleesmiller/docker-chat-demo/tree/01-bootstrapping)
+We're going to set things up from scratch. The final code is available [on github here](https://github.com/jdleesmiller/docker-chat-demo), and there are tags for each step along the way. [Here's the code for the first step](https://github.com/jdleesmiller/docker-chat-demo/tree/01-bootstrapping), in case you'd like to follow along.
 
-Without docker, we'd start by installing node and any other dependencies on the host and running `npm init` to create a new package. However, the whole point of using docker is that you don't have to install things on the host, so we'd like to avoid that. Instead, we'll start by creating a "bootstrapping container" that has node installed, and we'll use it to set up the npm package for the application. We'll also learn more by doing it this way.
+Without docker, we'd start by installing node and any other dependencies on the host and running `npm init` to create a new package. However, the whole point of using docker is that you don't have to install things on the host, so we'd like to avoid that. (And we'll learn more by doing it this way.) Instead, we'll start by creating a "bootstrapping container" that has node installed, and we'll use it to set up the npm package for the application.
 
 We'll need to write two files, a `Dockerfile` and a `docker-compose.yml`, to which we'll add more later on. Let's start with the bootstrapping `Dockerfile`:
 
@@ -41,13 +40,13 @@ WORKDIR $HOME/chat
 
 This file is relatively short, but there already some important points:
 
-1. We start from the official docker image for the latest long term support (LTS) release, at time of writing. I prefer to name a specific version, rather than one of the 'floating' tags like `node:argon` or `node:latest`, so that if you or someone else builds this image on a different machine, you will get the same version, rather than risking an accidental upgrade and attendant head-scratching.
+1. We start from the official docker image for the latest long term support (LTS) release, at time of writing. I prefer to name a specific version, rather than one of the 'floating' tags like `node:argon` or `node:latest`, so that if you or someone else builds this image on a different machine, they will get the same version, rather than risking an accidental upgrade and attendant head-scratching.
 
-1. We create an unprivileged user, prosaically called `app`, to run the app inside the container. If you don't do this, then the process inside the container will run as **root**, which is against security best practices and [principles](https://en.wikipedia.org/wiki/Principle_of_least_privilege). Many docker tutorials skip this step for simplicity, but I think it's very important.
+1. We create an unprivileged user, prosaically called `app`, to run the app inside the container. If you don't do this, then the process inside the container will run as **root**, which is against security best practices and [principles](https://en.wikipedia.org/wiki/Principle_of_least_privilege). Many docker tutorials skip this step for simplicity, and we will have to do some extra work to make it happen, but I think it's very important.
 
-1. Install a more recent version of NPM. This isn't strictly necessary, but npm has improved a lot recently, and in particular `npm shrinkwrap` support is a lot better; more on this later. Again, I think it's best to specify an exact version in the Dockerfile, to avoid accidental upgrades on later builds.
+1. Install a more recent version of NPM. This isn't strictly necessary, but npm has improved a lot recently, and in particular `npm shrinkwrap` support is a lot better; more on shrinkwrap later. Again, I think it's best to specify an exact version in the Dockerfile, to avoid accidental upgrades on later builds.
 
-Now here's our bootstrapping compose file:
+Now here's our bootstrapping compose file, `docker-compose.yml`:
 
 ```yaml
 chat:
@@ -57,7 +56,7 @@ chat:
     - .:/home/app/chat
 ```
 
-It defines a single service, built from the `Dockerfile`. All it does for now is to echo `ready` and exit. The volume line, `.:/home/app/chat`, tells docker to mount the application folder `.` on the host to the `/home/app/chat` folder inside the container, so that changes we'll make to source files on the host will be automatically reflected inside the container, and vice versa. This is very important for keeping your "test-edit-reload" cycles as short as possible in development. It will, however, create some issues with how npm installs dependencies, which we'll come back to.
+It defines a single service, built from the `Dockerfile`. All it does for now is to echo `ready` and exit. The volume line, `.:/home/app/chat`, tells docker to mount the application folder `.` on the host to the `/home/app/chat` folder inside the container, so that changes we'll make to source files on the host will be automatically reflected inside the container, and vice versa. This is very important for keeping your test-edit-reload cycles as short as possible in development. It will, however, create some issues with how npm installs dependencies, which we'll come back to.
 
 For now, we're good to go. When we run `docker-compose up`, docker will create our container with node set up.
 
@@ -104,7 +103,7 @@ Here's the [resulting code on github](https://github.com/jdleesmiller/docker-cha
 
 Next up on our list is to install the app's dependencies. We want these dependencies to be installed inside the container via the `Dockerfile`, so when we run `docker-compose up` for the first time, the app is ready to go.
 
-In order to do this, we need to run `npm install` in the `Dockerfile`, and, before we do that, we need to get the `package.json` and `npm-shrinkwrap.json` files that it reads into the container. Here's what it looks like:
+In order to do this, we need to run `npm install` in the `Dockerfile`, and, before we do that, we need to get the `package.json` and `npm-shrinkwrap.json` files that it reads into the image. Here's what it looks like:
 
 ```diff
 diff --git a/Dockerfile b/Dockerfile
@@ -127,11 +126,11 @@ Again, it's a pretty small change, but there are some important points:
 
 1. We could `COPY` the whole application folder on the host into `$HOME/chat`, rather than just the packaging files, but we'll see later that we can save some time on our docker builds by only copying in what we need at this point, and copying in the rest after we run `npm install`. This takes better advantage of `docker build`'s layer caching.
 
-1. Files copied into the container with the `COPY` command end up being owned by root inside of the container, which means that our unprivileged `app` user can't read or write them, which it will not like. So, we simply `chown` them to `app` after copying. (It would be nice if we could move the `COPY` after the `USER app` step, and the files would be copied as the `app` user, but this is [not (yet) the case](https://github.com/docker/docker/issues/6119).)
+1. Files copied into the container with the `COPY` command end up being owned by root inside of the container, which means that our unprivileged `app` user can't read or write them, which it will not like. So, we simply `chown` them to `app` after copying. (It would be nice if we could move the `COPY` after the `USER app` step, and the files would be copied as the `app` user, but that is [not (yet) the case](https://github.com/docker/docker/issues/6119).)
 
 1. Finally, we added a step at the end to run `npm install`. This will run as the `app` user and install the dependencies in `$HOME/chat/node_modules` inside the container.
 
-That last point causes some trouble when we use the image in development, because we mount `$HOME/chat` inside the container to the application folder on the host. Unfortunately, the `node_modules` folder doesn't exist there on the host, so this mount effectively 'hides' the node modules that we installed.
+That last point causes some trouble when we use the image in development, because we bind `$HOME/chat` inside the container to the application folder on the host. Unfortunately, the `node_modules` folder doesn't exist there on the host, so this bind effectively 'hides' the node modules that we installed.
 
 ### The `node_modules` Volume Trick
 
@@ -149,7 +148,7 @@ index 9e0b012..9ac21d6 100644
 +    - /home/app/chat/node_modules
 ```
 
-Now when docker starts a container from the image, it will copy `$HOME/chat/node_modules` in the image to a new volume, and then `$HOME/chat/node_modules` will point to that volume, rather than the (empty) `node_modules` folder on the host.
+Now when docker starts a container from the image, it will copy `$HOME/chat/node_modules` in the image, which is where the dependencies will be installed, to a new volume, and then `$HOME/chat/node_modules` will point to that volume, rather than the (empty) `node_modules` folder on the host.
 
 ### Package Installation and Shrinkwrap
 
@@ -188,7 +187,7 @@ Here’s the [resulting code on github](https://github.com/jdleesmiller/docker-c
 
 ## Running the App
 
-We are finally ready to install the app, so we'll copy in [the source files](https://github.com/rauchg/chat-example) and install the `socket.io` package, using the same process as above.
+We are finally ready to install the app, so we'll copy in [the remaining source files](https://github.com/rauchg/chat-example), `index.js` and `index.html`, and install the `socket.io` package, using the same process as above.
 
 In our `Dockerfile`, we can now tell docker what command to run when starting a container using the image, namely `node index.js`. Then we can remove the dummy command from our docker compose file, and finally tell docker compose to expose port 3000 in the container on the host:
 
