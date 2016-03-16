@@ -23,15 +23,15 @@ layout: null
           <img src="images/pic_2011.jpeg" alt="John Lees-Miller" />
         </div>
         <ul>
-          <li><a href="http://jdleesmiller.blogspot.com">Blog</a></li>
+          <li><a href="https://www.overleaf.com">Overleaf</a></li>
+          <li><a href="https://www.twitter.com/jdleesmiller">Twitter</a></li>
+          <li><a href="https://uk.linkedin.com/in/jdleesmiller">LinkedIn</a></li>
+          <li><a href="https://github.com/jdleesmiller">GitHub</a></li>
           <li><a href="http://www.citeulike.org/user/jdleesmiller">CiteULike</a></li>
           <li><a href="http://scholar.google.co.uk/citations?user=KvIYTKYAAAAJ">Google Scholar</a></li>
 
-          <li><a href="https://github.com/jdleesmiller">GitHub</a></li>
-          <li><a href="https://www.overleaf.com">Overleaf</a></li>
-          <li><a href="https://www.twitter.com/jdleesmiller">twitter</a></li>
-          <li><a href="https://uk.linkedin.com/in/jdleesmiller">LinkedIn</a></li>
           <li><a href="http://orcid.org/0000-0003-3492-8854">ORCID</a></li>
+          <li><a href="http://jdleesmiller.blogspot.com">Old Blog</a></li>
           <li>
             <script type="text/javascript">
 //<![CDATA[
@@ -47,16 +47,27 @@ document.write('<a href="mail' +
         </ul>
       </header>
       <section>
+        <h3><a name="articles" class="anchor" href="#articles"></a>Recent Article(s)</h3>
+        <ul>
+        {% for post in site.posts %}
+          <li>
+            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>:
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+        </ul>
+
         <h3><a name="about" class="anchor" href="#about"></a>About</h3>
         <ul>
           <li>He is a co(de)founder at <a href="http://www.overleaf.com">Overleaf</a>, an online editor that helps scientists write papers collaboratively.</li>
-          <li>He was a post-doc at the University of Southampton, and then the University of Bristol, where he worked on ways of cheaply tracking cars through road networks to help us understand how people make travel decisions.</li>
           <li>He did a PhD on how to efficiently operate fleets of driverless cars, so we'll be ready when they get here. That was in the engineering mathematics department at the <a href="http://www.bris.ac.uk/engineering/departments/engineering-mathematics/">University of Bristol</a>.</li>
           <li>He was part of <a href="http://www.ultraglobalprt.com">the team</a> that delivered the <a href="http://www.youtube.com/watch?v=Byk8LcPovOQ">world's first Personal Rapid Transit system</a> at London's Heathrow Airport in 2011 &mdash; computer-guided taxis on dedicated roads.</li>
+          <li>He was a post-doc at the University of Southampton, and then the University of Bristol, where he worked on ways of cheaply tracking cars through road networks to help us understand how people make travel decisions.</li>
           <li>He studied computing science at the <a href="http://www.cs.ualberta.ca/">University of Alberta</a>.</li>
         </ul>
         <h3><a name="publications" class="anchor" href="#publications"></a>Publications</h3>
         <ul>
+          <li>Mascia, M., Hu, S., Han, K., Sun, A., North, R., and Lees-Miller, J. D. A holistic approach for performance assessment of personal rapid transit. <span class="venue">Research in Transportation Business &amp; Management</span>. 2016. (<a href="http://dx.doi.org/10.1016/j.rtbm.2016.01.008">doi</a>)</li>
           <li>Box, S., Lees-Miller, J. D., Snowdon, J., Hammond, J., Hamilton, A., Gupta, S., Wilson, R. E., and Waterson, B. 30 cars, figure of 8, 1 show: large scale proving ground experiments to investigate junction control. In <span class="venue">45th Annual Conference of the Universities’ Transport Study Group</span>. 2013a.</li>
           <li>Box, S., Lees-Miller, J. D., Snowdon, J., Hammond, J., Hamilton, A., Gupta, S., Wilson, R. E., and Waterson, B. Lessons from proving ground experiments to investigate junction control. In <span class="venue">16th International IEEE Conference on Intelligent Transport Systems</span>. 2013b.</li>
           <li>Wilson, R. E., Anable, J., Cairns, S., Chatterton, T., Notley, S., and Lees-Miller, J. D. On the Estimation of Temporal Mileage Rates. <span class="venue">Procedia - Social and Behavioral Sciences</span>, 80:139–156, 2013.
