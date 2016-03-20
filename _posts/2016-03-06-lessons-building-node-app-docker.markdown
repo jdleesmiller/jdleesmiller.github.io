@@ -337,7 +337,7 @@ index e7bd11e..d031130 100644
    volumes:
 ```
 
-Note that we have to give the full path to `nodemon`, because it is installed as an npm dependency and so is not on the path. We could set up an npm script to run `nodemon`, but I've had problems with that approach. Containers running npm scripts tend to take 10s to shut down (the default timeout), because `npm` does not forward the `TERM` signal from docker to the actual process. It therefore seems better to just run the command directly. (This situation is [changing rapidly](https://github.com/npm/npm/pull/10868), however!)
+Note that we have to give the full path to `nodemon`, because it is installed as an npm dependency and so is not on the path. We could set up an npm script to run `nodemon`, but I've had problems with that approach. Containers running npm scripts tend to take 10s to shut down (the default timeout), because `npm` does not forward the `TERM` signal from docker to the actual process. It therefore seems better to just run the command directly. (**Update:** This [should be fixed](https://github.com/npm/npm/pull/10868) in npm 3.8.1+, so you should now be able to use npm scripts in containers!)
 
 ```
 $ docker-compose up
