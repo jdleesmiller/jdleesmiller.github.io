@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Lessons Learned the Hard Way from Building a Node App in Docker"
+title: "Lessons from Building a Node App in Docker"
 date: 2016-03-06 19:54:56 +0000
 categories: articles
 ---
