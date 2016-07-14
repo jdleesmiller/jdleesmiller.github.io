@@ -5,6 +5,16 @@ date: 2016-03-06 19:54:56 +0000
 categories: articles
 ---
 
+**Updates**
+
+**2016-04-22** There was some lively [discussion about this article on Hacker News](https://news.ycombinator.com/item?id=11545975).
+
+**2016-07-14** This article has been [translated into Japanese](http://postd.cc/lessons-building-node-app-docker/)!
+
+---
+
+&nbsp;
+
 Here are some tips and tricks that I learned the hard way when developing and deploying web applications written for [node.js](https://nodejs.org) using [Docker](https://www.docker.com).
 
 In this tutorial article, we'll set up the [socket.io chat example](http://socket.io/get-started/chat/) in docker, from scratch to production-ready, so hopefully you can learn these lessons the easy way. In particular, we'll see how to:
