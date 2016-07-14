@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How a Technical Cofounder Spends his Time: Minute-by-minute Data for a Year"
+title: "How a Technical Co-founder Spends his Time: Minute-by-minute Data for a Year"
 date: 2016-07-04 18:00:00 +0000
 categories: articles
 ---
