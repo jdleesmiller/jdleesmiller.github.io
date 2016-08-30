@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How a Technical Co-founder Spends his Time: Minute-by-minute Data for a Year"
+title: "How a Technical Co-founder Spends their Time: Minute-by-minute Data for a Year"
 date: 2016-07-04 18:00:00 +0000
 categories: articles
 ---
@@ -34,6 +34,8 @@ The product is an online collaborative editor like Google Docs but specialised f
 You can find out more about how I collected and processed my time tracking data in this section, or you can just [skip to the graphs](#results)!
 
 ### The metime App
+
+**Update 2016-08-30:** I've now [open sourced metime](https://github.com/jdleesmiller/metime) in case you want to look at it in more detail.
 
 I built a simple web app to record my time. There are many time tracking apps out there, but I wanted something I could customise. Since it was written in [meteor](https://www.meteor.com/), I called it "metime". It won't win any awards, but it did the job. It looked like this:
 
