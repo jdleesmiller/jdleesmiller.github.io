@@ -9,7 +9,7 @@ I'm co-founder and CTO at [Overleaf](https://www.overleaf.com), a successful Saa
 
 Like most people who track their time, my goal was to improve my productivity. It gave me data to answer questions about whether I was spending too much or too little time on particular activities, for example user support or client projects. The data showed that my intuition on these questions was often wrong.
 
-There were also some less tangible benefits. It was reassuring on a Friday to have an answer to that usually rhetorical question, "where did this week go?" I feel like it also reduced context switching: if I stopped what I was doing to answer an chat message or email, I had to take the time to record it in my time tracker. I think this added friction was a win for overall productivity, perhaps paradoxically.
+There were also some less tangible benefits. It was reassuring on a Friday to have an answer to that usually rhetorical question, "where did this week go?" I feel like it also reduced context switching: if I stopped what I was doing to answer a chat message or email, I had to take the time to record it in my time tracker. I think this added friction was a win for overall productivity, perhaps paradoxically.
 
 This post documents the (simple) system I built to record my time, how I analysed the data, and the results. The main things I learned were:
 
