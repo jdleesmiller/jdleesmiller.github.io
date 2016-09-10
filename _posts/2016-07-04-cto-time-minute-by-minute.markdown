@@ -5,6 +5,14 @@ date: 2016-07-04 18:00:00 +0000
 categories: articles
 ---
 
+**Updates**
+
+**2016-08-30** There was some lively [discussion about this article on Hacker News](https://news.ycombinator.com/item?id=12385707).
+
+---
+
+&nbsp;
+
 I'm co-founder and CTO at [Overleaf](https://www.overleaf.com), a successful SaaS startup based in London. From August 2014 to December 2015, I manually tracked all of my work time, minute-by-minute, and analysed the data in R.
 
 Like most people who track their time, my goal was to improve my productivity. It gave me data to answer questions about whether I was spending too much or too little time on particular activities, for example user support or client projects. The data showed that my intuition on these questions was often wrong.
