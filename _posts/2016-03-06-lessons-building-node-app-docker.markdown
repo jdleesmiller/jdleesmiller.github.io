@@ -239,6 +239,8 @@ app@912d123f3cea:~/chat$ exit
 
 Here’s the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/03-dependencies).
 
+(**Update:** Newer versions of Docker support 'named volumes', which you could use to make the `node_modules` folder survive after the one-off `docker-compose run` container is removed. See [the docs](https://docs.docker.com/compose/compose-file/#volumes-volumedriver) and [this pull request](https://github.com/jdleesmiller/docker-chat-demo/pull/6/files) for more info. It's also worth noting that once you have your service up and running, it's often easier to use `docker-compose exec` to start a shell in your service and install packages that way.)
+
 ## Running the App
 
 We are finally ready to install the app, so we'll copy in [the remaining source files](https://github.com/rauchg/chat-example), namely `index.js` and `index.html`. Then we'll install the `socket.io` package, using `npm install --save` as we did in the previous section.
