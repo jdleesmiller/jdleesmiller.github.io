@@ -70,7 +70,7 @@ chat:
 
 It defines a single service, built from the `Dockerfile`. All it does for now is to echo `ready` and exit. The volume line, `.:/home/app/chat`, tells docker to mount the application folder `.` on the host to the `/home/app/chat` folder inside the container, so that changes we'll make to source files on the host will be automatically reflected inside the container, and vice versa. This is very important for keeping your test-edit-reload cycles as short as possible in development. It will, however, create some issues with how npm installs dependencies, which we'll come back to.
 
-(**Update:** I should also mention that in order to use the volume line to mount the application folder from the host in the container, the uids (Linux user identifiers) must be the same on the host and in the container. Particularly if you use a newer node image, you may find that the uid does not match. See [https://github.com/jdleesmiller/docker-chat-demo/issues/8](this issue) for more info.)
+(**Update:** I should also mention that in order to use the volume line to mount the application folder from the host in the container, the uid (Linux user identifier) of your user on the host must be the same as the uid of the `app` user in the container. Particularly if you use a newer node image, you may find that the uid does not match. If this happens, you may need to adjust the uid of the `app` user in the container. See [this issue](https://github.com/jdleesmiller/docker-chat-demo/issues/8) for more info.)
 
 For now, however, we’re good to go. When we run docker-compose up, docker will create an image with node set up as specified in the `Dockerfile`, and it will start a container with that image and run the echo command, which shows that everything is set up OK.
 
