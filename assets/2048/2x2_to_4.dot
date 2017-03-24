@@ -1,0 +1,25 @@
+digraph {
+  splines=spline;
+  nodesep=1;
+  ranksep=2;
+  node [fontname="Courier"];
+  s0_0_0_2 [shape=record, color=blue, label="{{win!}}"];
+  s0_0_1_1 [shape=record, color=green, label="{{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}|{right}}"];
+  s0_1_1_0 [shape=record, color=green, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}|{left}}"];
+  s1_0_0_1 [shape=record, color=green, label="{{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;&nbsp;|&nbsp;2}|{left}}"];
+  s1_0_1_0 [shape=record, color=green, label="{{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;&nbsp;}|{up}}"];
+  s1_0_1_1 [shape=record, label="{{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}|{up}}"];
+  s1_1_0_0 [shape=record, color=green, label="{{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;&nbsp;}|{right}}"];
+  s1_1_1_0 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}|{up}}"];
+  s0_0_1_1 -> s0_0_0_2 [taillabel=" 1.00 ", weight=100, color=grey];
+  s0_1_1_0 -> s1_1_1_0 [taillabel=" 0.45 ", weight=45, color=grey];
+  s0_1_1_0 -> s0_0_0_2 [taillabel=" 0.10 ", weight=10, color=grey];
+  s0_1_1_0 -> s1_0_1_1 [taillabel=" 0.45 ", weight=45, color=grey];
+  s1_0_0_1 -> s1_1_1_0 [taillabel=" 0.45 ", weight=45, color=grey];
+  s1_0_0_1 -> s0_0_0_2 [taillabel=" 0.10 ", weight=10, color=grey];
+  s1_0_0_1 -> s1_0_1_1 [taillabel=" 0.45 ", weight=45, color=grey];
+  s1_0_1_0 -> s0_0_0_2 [taillabel=" 1.00 ", weight=100, color=grey];
+  s1_0_1_1 -> s0_0_0_2 [taillabel=" 1.00 ", weight=100, color=grey];
+  s1_1_0_0 -> s0_0_0_2 [taillabel=" 1.00 ", weight=100, color=grey];
+  s1_1_1_0 -> s0_0_0_2 [taillabel=" 1.00 ", weight=100, color=grey];
+}
