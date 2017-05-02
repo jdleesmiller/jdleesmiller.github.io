@@ -1,0 +1,896 @@
+zstd level 12:
+  compression ratio           : 1.19
+  compression elapsed hours   : 0.0228
+  compression CPU hours       : 0.0230
+  compression max RSS (KiB)   : 26912
+  compressed GiB              : 0.6513
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 6168
+  ------------------
+  storage cost                : k$36.51
+  compute cost                : k$1.03
+  total cost                  : k$37.54
+zstd level 11:
+  compression ratio           : 1.19
+  compression elapsed hours   : 0.0229
+  compression CPU hours       : 0.0230
+  compression max RSS (KiB)   : 26888
+  compressed GiB              : 0.6514
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 6228
+  ------------------
+  storage cost                : k$36.51
+  compute cost                : k$1.03
+  total cost                  : k$37.55
+zstd level 8:
+  compression ratio           : 1.18
+  compression elapsed hours   : 0.0139
+  compression CPU hours       : 0.0140
+  compression max RSS (KiB)   : 10480
+  compressed GiB              : 0.6567
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 4152
+  ------------------
+  storage cost                : k$36.81
+  compute cost                : k$0.75
+  total cost                  : k$37.56
+zstd level 14:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0280
+  compression CPU hours       : 0.0282
+  compression max RSS (KiB)   : 55520
+  compressed GiB              : 0.6495
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 6208
+  ------------------
+  storage cost                : k$36.41
+  compute cost                : k$1.20
+  total cost                  : k$37.61
+zstd level 10:
+  compression ratio           : 1.19
+  compression elapsed hours   : 0.0180
+  compression CPU hours       : 0.0181
+  compression max RSS (KiB)   : 14588
+  compressed GiB              : 0.6558
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 4132
+  ------------------
+  storage cost                : k$36.76
+  compute cost                : k$0.87
+  total cost                  : k$37.63
+zstd level 7:
+  compression ratio           : 1.18
+  compression elapsed hours   : 0.0131
+  compression CPU hours       : 0.0132
+  compression max RSS (KiB)   : 8876
+  compressed GiB              : 0.6586
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 4116
+  ------------------
+  storage cost                : k$36.92
+  compute cost                : k$0.72
+  total cost                  : k$37.64
+zstd level 13:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0281
+  compression CPU hours       : 0.0282
+  compression max RSS (KiB)   : 30872
+  compressed GiB              : 0.6503
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0017
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 6256
+  ------------------
+  storage cost                : k$36.45
+  compute cost                : k$1.21
+  total cost                  : k$37.66
+zstd level 9:
+  compression ratio           : 1.19
+  compression elapsed hours   : 0.0197
+  compression CPU hours       : 0.0198
+  compression max RSS (KiB)   : 12360
+  compressed GiB              : 0.6554
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 4124
+  ------------------
+  storage cost                : k$36.73
+  compute cost                : k$0.93
+  total cost                  : k$37.66
+zstd level 15:
+  compression ratio           : 1.21
+  compression elapsed hours   : 0.0396
+  compression CPU hours       : 0.0398
+  compression max RSS (KiB)   : 75912
+  compressed GiB              : 0.6443
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0017
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 10296
+  ------------------
+  storage cost                : k$36.12
+  compute cost                : k$1.59
+  total cost                  : k$37.71
+zstd level 4:
+  compression ratio           : 1.17
+  compression elapsed hours   : 0.0060
+  compression CPU hours       : 0.0061
+  compression max RSS (KiB)   : 12520
+  compressed GiB              : 0.6652
+  GiB saved                   : 0.11
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 4124
+  ------------------
+  storage cost                : k$37.29
+  compute cost                : k$0.49
+  total cost                  : k$37.78
+zstd level 6:
+  compression ratio           : 1.17
+  compression elapsed hours   : 0.0119
+  compression CPU hours       : 0.0120
+  compression max RSS (KiB)   : 6316
+  compressed GiB              : 0.6630
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 3104
+  ------------------
+  storage cost                : k$37.16
+  compute cost                : k$0.68
+  total cost                  : k$37.84
+zstd level 5:
+  compression ratio           : 1.16
+  compression elapsed hours   : 0.0090
+  compression CPU hours       : 0.0091
+  compression max RSS (KiB)   : 4348
+  compressed GiB              : 0.6682
+  GiB saved                   : 0.11
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 3124
+  ------------------
+  storage cost                : k$37.45
+  compute cost                : k$0.58
+  total cost                  : k$38.03
+zstd level 3:
+  compression ratio           : 1.16
+  compression elapsed hours   : 0.0046
+  compression CPU hours       : 0.0046
+  compression max RSS (KiB)   : 7324
+  compressed GiB              : 0.6709
+  GiB saved                   : 0.11
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 3092
+  ------------------
+  storage cost                : k$37.60
+  compute cost                : k$0.43
+  total cost                  : k$38.03
+brotli level 6:
+  compression ratio           : 1.19
+  compression elapsed hours   : 0.0246
+  compression CPU hours       : 0.0248
+  compression max RSS (KiB)   : 41484
+  compressed GiB              : 0.6550
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0031
+  decompression CPU hours     : 0.0030
+  decompression max RSS (KiB) : 8072
+  ------------------
+  storage cost                : k$36.71
+  compute cost                : k$1.35
+  total cost                  : k$38.07
+brotli level 5:
+  compression ratio           : 1.18
+  compression elapsed hours   : 0.0163
+  compression CPU hours       : 0.0164
+  compression max RSS (KiB)   : 41212
+  compressed GiB              : 0.6601
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0031
+  decompression CPU hours     : 0.0030
+  decompression max RSS (KiB) : 7720
+  ------------------
+  storage cost                : k$37.00
+  compute cost                : k$1.08
+  total cost                  : k$38.08
+brotli level 7:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0412
+  compression CPU hours       : 0.0414
+  compression max RSS (KiB)   : 50272
+  compressed GiB              : 0.6479
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0031
+  decompression CPU hours     : 0.0031
+  decompression max RSS (KiB) : 8096
+  ------------------
+  storage cost                : k$36.32
+  compute cost                : k$1.90
+  total cost                  : k$38.21
+brotli level 8:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0459
+  compression CPU hours       : 0.0462
+  compression max RSS (KiB)   : 57020
+  compressed GiB              : 0.6473
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0031
+  decompression CPU hours     : 0.0030
+  decompression max RSS (KiB) : 7912
+  ------------------
+  storage cost                : k$36.28
+  compute cost                : k$2.05
+  total cost                  : k$38.33
+zstd level 16:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0621
+  compression CPU hours       : 0.0625
+  compression max RSS (KiB)   : 43300
+  compressed GiB              : 0.6465
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0016
+  decompression max RSS (KiB) : 10332
+  ------------------
+  storage cost                : k$36.24
+  compute cost                : k$2.31
+  total cost                  : k$38.55
+brotli level 4:
+  compression ratio           : 1.15
+  compression elapsed hours   : 0.0078
+  compression CPU hours       : 0.0079
+  compression max RSS (KiB)   : 29408
+  compressed GiB              : 0.6747
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0031
+  decompression CPU hours     : 0.0030
+  decompression max RSS (KiB) : 8104
+  ------------------
+  storage cost                : k$37.82
+  compute cost                : k$0.81
+  total cost                  : k$38.63
+zstd level 2:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0028
+  compression CPU hours       : 0.0028
+  compression max RSS (KiB)   : 2988
+  compressed GiB              : 0.6841
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0016
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 2476
+  ------------------
+  storage cost                : k$38.35
+  compute cost                : k$0.37
+  total cost                  : k$38.72
+zstd level 17:
+  compression ratio           : 1.21
+  compression elapsed hours   : 0.0852
+  compression CPU hours       : 0.0857
+  compression max RSS (KiB)   : 117080
+  compressed GiB              : 0.6408
+  GiB saved                   : 0.14
+  decompression elapsed hours : 0.0017
+  decompression CPU hours     : 0.0017
+  decompression max RSS (KiB) : 18508
+  ------------------
+  storage cost                : k$35.92
+  compute cost                : k$3.07
+  total cost                  : k$39.00
+brotli level 3:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0060
+  compression CPU hours       : 0.0061
+  compression max RSS (KiB)   : 14316
+  compressed GiB              : 0.6831
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0032
+  decompression CPU hours     : 0.0032
+  decompression max RSS (KiB) : 6688
+  ------------------
+  storage cost                : k$38.29
+  compute cost                : k$0.77
+  total cost                  : k$39.06
+brotli level 2:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0055
+  compression CPU hours       : 0.0056
+  compression max RSS (KiB)   : 13636
+  compressed GiB              : 0.6833
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0033
+  decompression CPU hours     : 0.0032
+  decompression max RSS (KiB) : 6740
+  ------------------
+  storage cost                : k$38.30
+  compute cost                : k$0.76
+  total cost                  : k$39.07
+brotli level 0:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0049
+  compression CPU hours       : 0.0050
+  compression max RSS (KiB)   : 14000
+  compressed GiB              : 0.6838
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0033
+  decompression CPU hours     : 0.0032
+  decompression max RSS (KiB) : 6688
+  ------------------
+  storage cost                : k$38.33
+  compute cost                : k$0.75
+  total cost                  : k$39.08
+brotli level 1:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0049
+  compression CPU hours       : 0.0049
+  compression max RSS (KiB)   : 13028
+  compressed GiB              : 0.6838
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0033
+  decompression CPU hours     : 0.0032
+  decompression max RSS (KiB) : 6716
+  ------------------
+  storage cost                : k$38.33
+  compute cost                : k$0.75
+  total cost                  : k$39.08
+zstd level 1:
+  compression ratio           : 1.12
+  compression elapsed hours   : 0.0018
+  compression CPU hours       : 0.0019
+  compression max RSS (KiB)   : 2672
+  compressed GiB              : 0.6932
+  GiB saved                   : 0.08
+  decompression elapsed hours : 0.0015
+  decompression CPU hours     : 0.0015
+  decompression max RSS (KiB) : 2676
+  ------------------
+  storage cost                : k$38.85
+  compute cost                : k$0.33
+  total cost                  : k$39.18
+gzip level 5:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0202
+  compression CPU hours       : 0.0203
+  compression max RSS (KiB)   : 1948
+  compressed GiB              : 0.6815
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1792
+  ------------------
+  storage cost                : k$38.20
+  compute cost                : k$1.49
+  total cost                  : k$39.69
+gzip level 6:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0211
+  compression CPU hours       : 0.0212
+  compression max RSS (KiB)   : 1920
+  compressed GiB              : 0.6812
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1620
+  ------------------
+  storage cost                : k$38.18
+  compute cost                : k$1.52
+  total cost                  : k$39.70
+gzip level 4:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0197
+  compression CPU hours       : 0.0198
+  compression max RSS (KiB)   : 1860
+  compressed GiB              : 0.6821
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1756
+  ------------------
+  storage cost                : k$38.23
+  compute cost                : k$1.48
+  total cost                  : k$39.71
+gzip level 7:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0217
+  compression CPU hours       : 0.0218
+  compression max RSS (KiB)   : 1876
+  compressed GiB              : 0.6810
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1800
+  ------------------
+  storage cost                : k$38.17
+  compute cost                : k$1.54
+  total cost                  : k$39.72
+gzip level 8:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0238
+  compression CPU hours       : 0.0239
+  compression max RSS (KiB)   : 1820
+  compressed GiB              : 0.6808
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1716
+  ------------------
+  storage cost                : k$38.16
+  compute cost                : k$1.61
+  total cost                  : k$39.77
+gzip level 3:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0187
+  compression CPU hours       : 0.0188
+  compression max RSS (KiB)   : 1920
+  compressed GiB              : 0.6837
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0048
+  decompression CPU hours     : 0.0047
+  decompression max RSS (KiB) : 1756
+  ------------------
+  storage cost                : k$38.32
+  compute cost                : k$1.46
+  total cost                  : k$39.78
+gzip level 2:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0182
+  compression CPU hours       : 0.0183
+  compression max RSS (KiB)   : 1820
+  compressed GiB              : 0.6844
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0048
+  decompression CPU hours     : 0.0047
+  decompression max RSS (KiB) : 1744
+  ------------------
+  storage cost                : k$38.36
+  compute cost                : k$1.45
+  total cost                  : k$39.81
+gzip level 1:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0179
+  compression CPU hours       : 0.0180
+  compression max RSS (KiB)   : 1916
+  compressed GiB              : 0.6853
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0050
+  decompression CPU hours     : 0.0049
+  decompression max RSS (KiB) : 1672
+  ------------------
+  storage cost                : k$38.41
+  compute cost                : k$1.46
+  total cost                  : k$39.87
+gzip level 9:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0294
+  compression CPU hours       : 0.0295
+  compression max RSS (KiB)   : 2004
+  compressed GiB              : 0.6807
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0047
+  decompression CPU hours     : 0.0046
+  decompression max RSS (KiB) : 1700
+  ------------------
+  storage cost                : k$38.15
+  compute cost                : k$1.79
+  total cost                  : k$39.95
+zstd level 18:
+  compression ratio           : 1.22
+  compression elapsed hours   : 0.1243
+  compression CPU hours       : 0.1249
+  compression max RSS (KiB)   : 117216
+  compressed GiB              : 0.6385
+  GiB saved                   : 0.14
+  decompression elapsed hours : 0.0018
+  decompression CPU hours     : 0.0017
+  decompression max RSS (KiB) : 18488
+  ------------------
+  storage cost                : k$35.79
+  compute cost                : k$4.35
+  total cost                  : k$40.14
+zstd level 19:
+  compression ratio           : 1.22
+  compression elapsed hours   : 0.1409
+  compression CPU hours       : 0.1415
+  compression max RSS (KiB)   : 231692
+  compressed GiB              : 0.6372
+  GiB saved                   : 0.14
+  decompression elapsed hours : 0.0023
+  decompression CPU hours     : 0.0022
+  decompression max RSS (KiB) : 34904
+  ------------------
+  storage cost                : k$35.72
+  compute cost                : k$4.99
+  total cost                  : k$40.70
+brotli level 9:
+  compression ratio           : 1.22
+  compression elapsed hours   : 0.1466
+  compression CPU hours       : 0.1473
+  compression max RSS (KiB)   : 78640
+  compressed GiB              : 0.6398
+  GiB saved                   : 0.14
+  decompression elapsed hours : 0.0032
+  decompression CPU hours     : 0.0031
+  decompression max RSS (KiB) : 7760
+  ------------------
+  storage cost                : k$35.86
+  compute cost                : k$5.33
+  total cost                  : k$41.19
+seven_zip level 3:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0824
+  compression CPU hours       : 0.0828
+  compression max RSS (KiB)   : 11868
+  compressed GiB              : 0.6487
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0294
+  decompression CPU hours     : 0.0292
+  decompression max RSS (KiB) : 5244
+  ------------------
+  storage cost                : k$36.36
+  compute cost                : k$7.90
+  total cost                  : k$44.26
+xz level 1:
+  compression ratio           : 1.20
+  compression elapsed hours   : 0.0948
+  compression CPU hours       : 0.0953
+  compression max RSS (KiB)   : 10460
+  compressed GiB              : 0.6491
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0308
+  decompression CPU hours     : 0.0306
+  decompression max RSS (KiB) : 2856
+  ------------------
+  storage cost                : k$36.38
+  compute cost                : k$8.56
+  total cost                  : k$44.95
+seven_zip level 1:
+  compression ratio           : 1.17
+  compression elapsed hours   : 0.0673
+  compression CPU hours       : 0.0676
+  compression max RSS (KiB)   : 4652
+  compressed GiB              : 0.6658
+  GiB saved                   : 0.11
+  decompression elapsed hours : 0.0306
+  decompression CPU hours     : 0.0304
+  decompression max RSS (KiB) : 4620
+  ------------------
+  storage cost                : k$37.32
+  compute cost                : k$7.63
+  total cost                  : k$44.95
+xz level 2:
+  compression ratio           : 1.21
+  compression elapsed hours   : 0.1114
+  compression CPU hours       : 0.1119
+  compression max RSS (KiB)   : 18096
+  compressed GiB              : 0.6439
+  GiB saved                   : 0.13
+  decompression elapsed hours : 0.0306
+  decompression CPU hours     : 0.0304
+  decompression max RSS (KiB) : 3892
+  ------------------
+  storage cost                : k$36.09
+  compute cost                : k$9.06
+  total cost                  : k$45.16
+xz level 0:
+  compression ratio           : 1.18
+  compression elapsed hours   : 0.0837
+  compression CPU hours       : 0.0841
+  compression max RSS (KiB)   : 4400
+  compressed GiB              : 0.6615
+  GiB saved                   : 0.12
+  decompression elapsed hours : 0.0313
+  decompression CPU hours     : 0.0311
+  decompression max RSS (KiB) : 2052
+  ------------------
+  storage cost                : k$37.08
+  compute cost                : k$8.29
+  total cost                  : k$45.37
+seven_zip level 5:
+  compression ratio           : 1.25
+  compression elapsed hours   : 0.1795
+  compression CPU hours       : 0.1803
+  compression max RSS (KiB)   : 192996
+  compressed GiB              : 0.6207
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0285
+  decompression CPU hours     : 0.0283
+  decompression max RSS (KiB) : 20740
+  ------------------
+  storage cost                : k$34.79
+  compute cost                : k$10.90
+  total cost                  : k$45.69
+xz level 3:
+  compression ratio           : 1.22
+  compression elapsed hours   : 0.1375
+  compression CPU hours       : 0.1382
+  compression max RSS (KiB)   : 33424
+  compressed GiB              : 0.6402
+  GiB saved                   : 0.14
+  decompression elapsed hours : 0.0306
+  decompression CPU hours     : 0.0304
+  decompression max RSS (KiB) : 5904
+  ------------------
+  storage cost                : k$35.88
+  compute cost                : k$9.91
+  total cost                  : k$45.79
+seven_zip level 7:
+  compression ratio           : 1.26
+  compression elapsed hours   : 0.1910
+  compression CPU hours       : 0.1918
+  compression max RSS (KiB)   : 381320
+  compressed GiB              : 0.6174
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0283
+  decompression CPU hours     : 0.0281
+  decompression max RSS (KiB) : 37100
+  ------------------
+  storage cost                : k$34.61
+  compute cost                : k$11.24
+  total cost                  : k$45.85
+xz level 4:
+  compression ratio           : 1.24
+  compression elapsed hours   : 0.1608
+  compression CPU hours       : 0.1615
+  compression max RSS (KiB)   : 50028
+  compressed GiB              : 0.6298
+  GiB saved                   : 0.15
+  decompression elapsed hours : 0.0302
+  decompression CPU hours     : 0.0300
+  decompression max RSS (KiB) : 5896
+  ------------------
+  storage cost                : k$35.30
+  compute cost                : k$10.60
+  total cost                  : k$45.90
+xz level 5:
+  compression ratio           : 1.25
+  compression elapsed hours   : 0.1756
+  compression CPU hours       : 0.1763
+  compression max RSS (KiB)   : 97144
+  compressed GiB              : 0.6246
+  GiB saved                   : 0.15
+  decompression elapsed hours : 0.0299
+  decompression CPU hours     : 0.0297
+  decompression max RSS (KiB) : 9992
+  ------------------
+  storage cost                : k$35.01
+  compute cost                : k$11.03
+  total cost                  : k$46.04
+xz level 6:
+  compression ratio           : 1.25
+  compression elapsed hours   : 0.1792
+  compression CPU hours       : 0.1799
+  compression max RSS (KiB)   : 97112
+  compressed GiB              : 0.6245
+  GiB saved                   : 0.15
+  decompression elapsed hours : 0.0302
+  decompression CPU hours     : 0.0300
+  decompression max RSS (KiB) : 9952
+  ------------------
+  storage cost                : k$35.01
+  compute cost                : k$11.20
+  total cost                  : k$46.20
+xz level 7:
+  compression ratio           : 1.25
+  compression elapsed hours   : 0.1947
+  compression CPU hours       : 0.1956
+  compression max RSS (KiB)   : 191280
+  compressed GiB              : 0.6207
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0297
+  decompression CPU hours     : 0.0296
+  decompression max RSS (KiB) : 18200
+  ------------------
+  storage cost                : k$34.79
+  compute cost                : k$11.62
+  total cost                  : k$46.41
+xz level 8:
+  compression ratio           : 1.26
+  compression elapsed hours   : 0.2026
+  compression CPU hours       : 0.2036
+  compression max RSS (KiB)   : 379832
+  compressed GiB              : 0.6175
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0296
+  decompression CPU hours     : 0.0294
+  decompression max RSS (KiB) : 34684
+  ------------------
+  storage cost                : k$34.61
+  compute cost                : k$11.86
+  total cost                  : k$46.47
+bzip2 level 9:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0727
+  compression CPU hours       : 0.0731
+  compression max RSS (KiB)   : 8648
+  compressed GiB              : 0.6806
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0339
+  decompression CPU hours     : 0.0337
+  decompression max RSS (KiB) : 4856
+  ------------------
+  storage cost                : k$38.15
+  compute cost                : k$8.39
+  total cost                  : k$46.54
+bzip2 level 8:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0706
+  compression CPU hours       : 0.0709
+  compression max RSS (KiB)   : 7684
+  compressed GiB              : 0.6814
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0342
+  decompression CPU hours     : 0.0340
+  decompression max RSS (KiB) : 4340
+  ------------------
+  storage cost                : k$38.19
+  compute cost                : k$8.38
+  total cost                  : k$46.57
+bzip2 level 4:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0685
+  compression CPU hours       : 0.0689
+  compression max RSS (KiB)   : 4752
+  compressed GiB              : 0.6855
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0342
+  decompression CPU hours     : 0.0340
+  decompression max RSS (KiB) : 2836
+  ------------------
+  storage cost                : k$38.42
+  compute cost                : k$8.31
+  total cost                  : k$46.73
+bzip2 level 3:
+  compression ratio           : 1.13
+  compression elapsed hours   : 0.0676
+  compression CPU hours       : 0.0679
+  compression max RSS (KiB)   : 3856
+  compressed GiB              : 0.6871
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0339
+  decompression CPU hours     : 0.0336
+  decompression max RSS (KiB) : 2288
+  ------------------
+  storage cost                : k$38.52
+  compute cost                : k$8.22
+  total cost                  : k$46.74
+bzip2 level 5:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0697
+  compression CPU hours       : 0.0700
+  compression max RSS (KiB)   : 5548
+  compressed GiB              : 0.6842
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0345
+  decompression CPU hours     : 0.0343
+  decompression max RSS (KiB) : 3120
+  ------------------
+  storage cost                : k$38.35
+  compute cost                : k$8.40
+  total cost                  : k$46.75
+bzip2 level 6:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0703
+  compression CPU hours       : 0.0706
+  compression max RSS (KiB)   : 6248
+  compressed GiB              : 0.6830
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0349
+  decompression CPU hours     : 0.0347
+  decompression max RSS (KiB) : 3612
+  ------------------
+  storage cost                : k$38.28
+  compute cost                : k$8.50
+  total cost                  : k$46.78
+bzip2 level 2:
+  compression ratio           : 1.13
+  compression elapsed hours   : 0.0672
+  compression CPU hours       : 0.0675
+  compression max RSS (KiB)   : 3156
+  compressed GiB              : 0.6895
+  GiB saved                   : 0.09
+  decompression elapsed hours : 0.0334
+  decompression CPU hours     : 0.0332
+  decompression max RSS (KiB) : 2048
+  ------------------
+  storage cost                : k$38.65
+  compute cost                : k$8.14
+  total cost                  : k$46.79
+bzip2 level 1:
+  compression ratio           : 1.12
+  compression elapsed hours   : 0.0684
+  compression CPU hours       : 0.0688
+  compression max RSS (KiB)   : 2292
+  compressed GiB              : 0.6940
+  GiB saved                   : 0.08
+  decompression elapsed hours : 0.0321
+  decompression CPU hours     : 0.0319
+  decompression max RSS (KiB) : 1568
+  ------------------
+  storage cost                : k$38.90
+  compute cost                : k$7.94
+  total cost                  : k$46.84
+bzip2 level 7:
+  compression ratio           : 1.14
+  compression elapsed hours   : 0.0711
+  compression CPU hours       : 0.0715
+  compression max RSS (KiB)   : 6996
+  compressed GiB              : 0.6822
+  GiB saved                   : 0.10
+  decompression elapsed hours : 0.0354
+  decompression CPU hours     : 0.0352
+  decompression max RSS (KiB) : 3900
+  ------------------
+  storage cost                : k$38.24
+  compute cost                : k$8.62
+  total cost                  : k$46.85
+seven_zip level 9:
+  compression ratio           : 1.27
+  compression elapsed hours   : 0.2322
+  compression CPU hours       : 0.2335
+  compression max RSS (KiB)   : 692452
+  compressed GiB              : 0.6142
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0281
+  decompression CPU hours     : 0.0279
+  decompression max RSS (KiB) : 69800
+  ------------------
+  storage cost                : k$34.43
+  compute cost                : k$12.55
+  total cost                  : k$46.98
+xz level 9:
+  compression ratio           : 1.27
+  compression elapsed hours   : 0.2440
+  compression CPU hours       : 0.2459
+  compression max RSS (KiB)   : 691100
+  compressed GiB              : 0.6143
+  GiB saved                   : 0.16
+  decompression elapsed hours : 0.0295
+  decompression CPU hours     : 0.0293
+  decompression max RSS (KiB) : 67384
+  ------------------
+  storage cost                : k$34.43
+  compute cost                : k$13.20
+  total cost                  : k$47.64
+brotli level 10:
+  compression ratio           : 1.24
+  compression elapsed hours   : 1.5030
+  compression CPU hours       : 1.5084
+  compression max RSS (KiB)   : 855820
+  compressed GiB              : 0.6269
+  GiB saved                   : 0.15
+  decompression elapsed hours : 0.0055
+  decompression CPU hours     : 0.0055
+  decompression max RSS (KiB) : 7428
+  ------------------
+  storage cost                : k$35.14
+  compute cost                : k$49.78
+  total cost                  : k$84.92
+brotli level 11:
+  compression ratio           : 1.24
+  compression elapsed hours   : 1.5044
+  compression CPU hours       : 1.5099
+  compression max RSS (KiB)   : 854804
+  compressed GiB              : 0.6269
+  GiB saved                   : 0.15
+  decompression elapsed hours : 0.0055
+  decompression CPU hours     : 0.0054
+  decompression max RSS (KiB) : 7272
+  ------------------
+  storage cost                : k$35.14
+  compute cost                : k$49.81
+  total cost                  : k$84.95
