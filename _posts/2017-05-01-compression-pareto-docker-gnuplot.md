@@ -285,7 +285,7 @@ I think the genome dataset is actually quite a tough one to compress; in my own 
 
 Thanks to [Hope Thomas](https://twitter.com/h0peth0mas) for reviewing drafts of this article.
 
-If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com). `:)`
+If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
 
 ## Appendix: How to Reproduce the Plots
 
