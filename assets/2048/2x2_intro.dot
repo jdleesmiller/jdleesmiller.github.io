@@ -1,0 +1,11 @@
+digraph {
+  splines=spline;
+  nodesep=1;
+  ranksep=2;
+  node [fontname="Courier"];
+  s0_1_1_0 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}|{up}|{12.49}}"];
+  s0_1_1_1 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;2}|{up}|{13.07}}"];
+  s0_1_2_1 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;2}|{up}|{13.85}}"];
+  s0_1_1_0 -> s0_1_1_1 [taillabel=" 0.90 ", weight=90, color=grey];
+  s0_1_1_0 -> s0_1_2_1 [taillabel=" 0.10 ", weight=10, color=grey];
+}
