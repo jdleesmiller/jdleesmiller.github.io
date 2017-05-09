@@ -47,7 +47,7 @@ To address these portability challenges, I packaged the utility and its many dep
 
 It's also possible to run the utility in Docker on Mac and Windows, but [ongoing issues](https://github.com/docker/for-mac/issues/77) with the I/O performance of docker volumes on those platforms mean that the results are not very representative of what you would see if you ran the programs natively. That situation is improving rapidly, however, so hopefully soon this approach will also extend to non-Linux platforms.
 
-For the genomics dataset, I ran the experiments on an m3.medium virtual machine instance on Amazon EC2. [Here's the results table as a CSV.](/assets/compare_compressors/hg38_m3.csv) Now we're ready to see what the data look like.
+For the genomics dataset, I ran the experiments on an m3.medium virtual machine instance on Amazon EC2. [Here's the results table as a CSV](/assets/compare_compressors/hg38_m3.csv) ([view on figshare](https://figshare.com/articles/Metrics_from_Compressing_the_Human_Genome_with_Six_Programs/4989737)). Now we're ready to see what the data look like.
 
 ## Step 3a: Analyze the Data with Plots
 
@@ -332,7 +332,7 @@ where:
 
 - The `--volume /tmp:/tmp` flag is optional but may improve performance. The utility does its compression and decompression in `/tmp` inside the container, and all of the writes inside the container go through Docker's union file system. By mounting `/tmp` on the host, we bypass the union file system. (Ideally, we'd just set this volume up in the Dockerfile, but unfortunately it's 10x slower on Docker for Mac and Windows; hopefully that will improve soon.)
 
-Alternatively, note that you can just download [the results I generated](/assets/compare_compressors/hg38_m3.csv) and put them in `data/hg38.csv` for analysis.
+Alternatively, note that you can just download [the results I generated](/assets/compare_compressors/hg38_m3.csv) ([view on figshare](https://figshare.com/articles/Metrics_from_Compressing_the_Human_Genome_with_Six_Programs/4989737)) and put them in `data/hg38.csv` for analysis.
 
 ### Analyze the Data
 
