@@ -1,11 +1,45 @@
 digraph {
-  splines=spline;
   nodesep=1;
-  ranksep=2;
   node [fontname="Courier"];
-  s0_1_1_0 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}|{up}|{12.49}}"];
-  s0_1_1_1 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;2}|{up}|{13.07}}"];
-  s0_1_2_1 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;2}|{up}|{13.85}}"];
-  s0_1_1_0 -> s0_1_1_1 [taillabel=" 0.90 ", weight=90, color=grey];
-  s0_1_1_0 -> s0_1_2_1 [taillabel=" 0.10 ", weight=10, color=grey];
+  s0_1_1_0 [shape=record, label="{{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s1_1_1_0 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s1_1_2_0 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;4|&nbsp;&nbsp;}}"];
+  s1_1_0_1 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;2}}"];
+  s1_1_0_2 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;4}}"];
+
+  up [label="up"]
+  s0_1_1_0 -> up
+  up -> s1_1_1_0 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  up -> s1_1_2_0 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+  up -> s1_1_0_1 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  up -> s1_1_0_2 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+
+  a2 [label="..."]
+  a3 [label="..."]
+  a4 [label="..."]
+
+  s1_1_2_0 -> a2
+  s1_1_0_1 -> a3
+  s1_1_0_2 -> a4
+
+  s2_1_1_0 [shape=record, label="{{&nbsp;4|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s2_1_2_0 [shape=record, label="{{&nbsp;4|&nbsp;4}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s2_1_0_1 [shape=record, label="{{&nbsp;4|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}}"];
+  s2_1_0_2 [shape=record, label="{{&nbsp;4|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;4}}"];
+  left [label="left"]
+  s1_1_1_0 -> left
+  left -> s2_1_1_0 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  left -> s2_1_2_0 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+  left -> s2_1_0_1 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  left -> s2_1_0_2 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+
+  a5 [label="..."]
+  a6 [label="..."]
+  a7 [label="..."]
+  a8 [label="..."]
+
+  s2_1_1_0 -> a5
+  s2_1_2_0 -> a6
+  s2_1_0_1 -> a7
+  s2_1_0_2 -> a8
 }

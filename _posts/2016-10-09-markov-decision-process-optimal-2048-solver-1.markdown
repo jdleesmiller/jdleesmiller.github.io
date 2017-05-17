@@ -33,12 +33,15 @@ Let's start by recapping the rules of 2048, which we can deduce from [its freely
 
 The toddler version on the 2-by-2 board is played with the same rules as the full game, except that, as we'll see later, it's not possible to make it all the way to the 2048 tile on a 2-by-2 board. We'll instead settle for winning at a lower value.
 
-To illustrate the rules, here is a quick example:
+To illustrate the rules, here is a quick example. Suppose the game starts with two `2` tiles in the diagonal cells. If our first move is `up`, the lower `2` tile slides up, leaving the cells in the bottom row empty. The game then selects one of the two empty tiles at random, which is to say with probability 0.5 each, and adds a `2` tile to that cell with probability 0.9 or a `4` tile with probability 0.1.
 
-```
-2    -- right --> 2 2   or  4 2  or    2  or    2
-  2                 2         2      2 2      4 2
-```
+<p align="center">
+<img src="/assets/2048/2x2_intro.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/2x2_intro_annotated.svg" alt="TODO" />
+</p>
 
 ## A Markov Decision Process Approach
 
