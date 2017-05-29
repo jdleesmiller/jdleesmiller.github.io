@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Compressing Genomes for Fun and Profit with Pareto, Docker and Gnuplot"
+title: "Choosing Compression with Pareto, Docker and Gnuplot"
 date: 2017-05-01 13:00:00 +0000
 categories: articles
 ---
