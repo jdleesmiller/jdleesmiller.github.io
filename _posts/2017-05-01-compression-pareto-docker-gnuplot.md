@@ -384,7 +384,7 @@ The utility also contains some other commands, such as [`plot_3d` for a plot of 
 
 ## Footnotes
 
-[^1]: Amusingly, if you google this, you'll find the company I was indirectly referring to. Apparently Google gets jokes now. I should also mention that, as I understand it, current personal genomics services don't actually work this way. They look for a fixed set of genetic markers rather than actually sequencing the whole genome. IANAB.
+[^1]: Amusingly, if you google this, you'll find the company I was indirectly referring to. Apparently Google gets jokes now. I should also mention that, as I understand it, current personal genomics services don't actually work this way. They look for a fixed set of genetic markers rather than actually sequencing the whole genome. Moreover, compression of genomics data is an [active research area](https://en.wikipedia.org/wiki/Compression_of_Genomic_Re-Sequencing_Data), and you could probably do a lot better than what we'll do here. It's just an example. IANAB.
 
 [^2]: The genetic code uses only four letters, T, C, A and G, and happily we can represent each of those four letters as a two-bit number, 00<sub>2</sub>, 01<sub>2</sub>, 10<sub>2</sub> and 11<sub>2</sub>, respectively. The 2-bit data are already compressed relative to simply writing the text in ASCII, which would use 8 bits (1 byte) per letter --- 4x compression almost for free! However, the genome contains many repeating sequences, so we can reasonably expect a clever compression algorithm to reduce the compressed size even further.
 
