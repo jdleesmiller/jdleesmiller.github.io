@@ -1,29 +1,47 @@
 ---
 layout: post
-title: "Towards an Optimal 2048 Solver with Markov Decision Processes &mdash; Part 1"
+title: "The Mathematics of 2048 &mdash; Part 1"
 date: 2016-10-09 16:00:00 +0000
 categories: articles
 ---
 
-<p align='center'>
-  <img src='/assets/2048/2048.png' width='30%' alt='Screenshot of 2048'>
-</p>
+<img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
-The first half of 2014 was bad for productivity. It gave rise to a trifecta of distraction with [flapping birds](https://en.wikipedia.org/wiki/Flappy_Bird), [simulated goats](https://en.wikipedia.org/wiki/Goat_Simulator), and merging tiles --- the remarkably addictive [2048](http://gabrielecirulli.github.io/2048). <sup><a name='footnote-mashups-ref' href='#footnote-mashups'>1</a></sup> We have mostly [moved on](https://www.google.com/trends/explore?date=2014-01-01%202014-12-31&q=%2Fm%2F0_gzt9y,2048,goat%20simulator&hl=en) since then, but in this article I'd like to revisit this fun little puzzle game. In particular, I'll use an enormously powerful mathematical decision making framework called a Markov Decision Process (MDP) for the very important task of deciding whether to swipe left, right, up or down.
+For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048). Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
 
-I have two motivations. First, 2048 is a nice way to learn about MDPs. This article doesn't assume any prior knowledge of MDPs, and it will introduce the necessary concepts as they arise. Second, MDPs hold the promise of obtaining a *provably optimal* solution for the game &mdash; a way of playing that we can show mathematically to be the (or a) best possible way of playing.
+To try to better understand what makes the game work so well, I have been working on analyzing it in a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
-There are already [lots of good strategies](http://stackoverflow.com/a/22389702/2053820) and [good bots](http://stackoverflow.com/questions/22342854/what-is-the-optimal-algorithm-for-the-game-2048) for playing 2048 --- if in doubt, check out this [video of a bot playing well past the 8192 tile](https://www.youtube.com/watch?v=96ab_dK6JM0). However, the bots are based on heuristics, which give no particular guarantees on how well they play. It might be possible to play much better than the strongest current bots and humans, or not; by using MDPs we may be able to find out.
+In this first part, I will describe 2048 as seen through the lens of an MDP, and we will use this insight to explore the properties of a "toddler" version of the game on a 2-by-2 board playing to the X tile. We'll see that this game is much less fun than the grownup version on a 4-by-4 board, but still interesting.
 
-Before we get too excited, however, I should point out the 'Towards' in the title. We will see that the full game of 2048 is in fact quite hard, and we won't get all the way to a provably optimal solution, at least not right now, and at least not on my laptop. Instead, we'll start with games with the same rules but on smaller boards, which we'll see are easier to solve.
+In later parts, I will extend the approach to larger boards and tiles and maybe, one day, the full game of 2048. The code behind this post is [available here](https://github.com/jdleesmiller/twenty48), and it leads the blog posts, so you can peek ahead at later results if you like.
 
 ## 2048 for Toddlers and Small Computers
 
-In this part 1, we'll investigate a 'toddler' version of the game, on a 2-by-2 board &mdash; one quarter the size of the 4-by-4 board on which 2048 is normally played. We'll see that there's still quite a bit that can be said, even for the toddler version.
+I'll start by introducing the key ideas behind an MDP in the context of the 2-by-2 "toddler" version of 2048. So, even if you are not familiar with MDPs, or with 2048, hopefully you will finish this section with an understanding of both.
+
+### States, Actions and Transition Probabilities
+
+The two most important nouns in the language of MDPs are *state* and *action*. We assume that time progresses in discrete time steps. At the start of each time step, the process is in a given *state*, then a decision maker takes an *action*, and then the process moves to a *successor state*, which may be determined in part by chance, for the start of the next time step.
+
+In the game, a *state* is a configuration of the board, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />. A state specifies the value of the tile, if any, in each cell. The decision maker is in this case the player, and he or she takes an *action* from a state by swiping `left`, `right`, `up` or `down`. The result of the action is that all of the tiles slide all the tiles as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
+
+For example, if we choose the action `up` from <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the lower `2` tile slides up into the top row and is merged with the `2` tile to produce a `4` tile. The `2` tile in the upper right has nowhere to go and stays put. This leaves the cells in the bottom row empty.
+
+At this point, however, we still don't know for sure what the *successor state* will be, because the game gets to place a random tile in one of the empty cells. The successor state will depend on which cell it picks and which tile it places. The rules by which it does this are captured by *transition probabilities*.
+
+Get dynamics from [its freely available source code](https://github.com/gabrielecirulli/2048):
+
+Diagram
+
+### Rewards, Values and Policies
+
+At some point we also need to talk about the start states... but interestingly MDPs don't really distinguish particular start states.
+
+Each state comes with an associated *reward*, which the decision maker receives upon entering it. To "solve" the problem, we are looking for a *optimal policy* that tells the decision maker which action to take in each state, in order to collect as much reward as possible. In its simplest form, an optimal policy is a table that maps each state to the best action to take in that state, and the decision maker simply looks up its actions in this policy table.
 
 Let's start by recapping the rules of 2048, which we can deduce from [its freely available source code](https://github.com/gabrielecirulli/2048):
 
-1. When the game starts, the board contains two tiles in random positions. Each tile is either a 2, with probability 0.9, or a 4, with probability 0.1.
+1. When the game starts, the board contains two tiles in randomly chosen cells. Each tile is either a 2, with probability 0.9, or a 4, with probability 0.1.
 
 1. For each move, we can swipe left, right, up or down to slide all the tiles as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
 
@@ -53,7 +71,6 @@ Next we will see how to map these rules into the language of Markov Decision Pro
 
 Markov Decision Processes (MDPs) are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs are simple but powerful way of approaching them, with many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
-The general setup for an MDP is as follows. Time progresses in discrete *time steps*. At each time step, the process is in a given *state*, a decision maker takes an *action*, and the process then moves to a *successor state*, which may be determined in part by chance, for the next time step. Each state comes with an associated *reward*, which the decision maker receives upon entering it. To "solve" the problem, we are looking for a *optimal policy* that tells the decision maker which action to take in each state, in order to collect as much reward as possible. In its simplest form, an optimal policy is a table that maps each state to the best action to take in that state, and the decision maker simply looks up its actions in this policy table.
 
 In the case of 2048,
 
@@ -207,6 +224,33 @@ We'll see that the same techniques apply, and we'll need some new techniques to 
 Digits: http://xkcd.com/1344/
 
 Expectimax: https://web.uvic.ca/~maryam/AISpring94/Slides/06_ExpectimaxSearch.pdf
+
+
+
+
+The
+
+While most
+
+
+I have been working on solving  with mathematics. In this part 1, I'll describe how to model 2048 as a Markov Decision Process (MDP) and present some results for a "toddler" version of the game on a 2-by-2 board.
+
+The first half of 2014 was bad for productivity. It gave rise to a trifecta of distraction with [flapping birds](https://en.wikipedia.org/wiki/Flappy_Bird), [simulated goats](https://en.wikipedia.org/wiki/Goat_Simulator), and merging tiles: [2048](http://gabrielecirulli.github.io/2048). <sup><a name='footnote-mashups-ref' href='#footnote-mashups'>1</a></sup> Most of us have since [moved on](https://www.google.com/trends/explore?date=2014-01-01%202014-12-31&q=%2Fm%2F0_gzt9y,2048,goat%20simulator&hl=en), but I would like to revisit 2048.
+
+
+
+
+
+I have been working toward solving 2048 mathematically.
+
+since then, but in this article I'd like to revisit this fun little puzzle game. In particular, I'll use an enormously powerful mathematical decision making framework called a Markov Decision Process (MDP) for the very important task of deciding whether to swipe left, right, up or down.
+
+I have two motivations. First, 2048 is a nice way to learn about MDPs. This article doesn't assume any prior knowledge of MDPs, and it will introduce the necessary concepts as they arise. Second, MDPs hold the promise of obtaining a *provably optimal* solution for the game &mdash; a way of playing that we can show mathematically to be the (or a) best possible way of playing.
+
+There are already [lots of good strategies](http://stackoverflow.com/a/22389702/2053820) and [good bots](http://stackoverflow.com/questions/22342854/what-is-the-optimal-algorithm-for-the-game-2048) for playing 2048 --- if in doubt, check out this [video of a bot playing well past the 8192 tile](https://www.youtube.com/watch?v=96ab_dK6JM0). However, the bots are based on heuristics, which give no particular guarantees on how well they play. It might be possible to play much better than the strongest current bots and humans, or not; by using MDPs we may be able to find out.
+
+Before we get too excited, however, I should point out the 'Towards' in the title. We will see that the full game of 2048 is in fact quite hard, and we won't get all the way to a provably optimal solution, at least not right now, and at least not on my laptop. Instead, we'll start with games with the same rules but on smaller boards, which we'll see are easier to solve.
+
 
 ---
 
