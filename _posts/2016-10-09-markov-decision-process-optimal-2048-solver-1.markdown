@@ -33,17 +33,74 @@ Let's start by recapping the rules of 2048, which we can deduce from [its freely
 
 The toddler version on the 2-by-2 board is played with the same rules as the full game, except that, as we'll see later, it's not possible to make it all the way to the 2048 tile on a 2-by-2 board. We'll instead settle for winning at a lower value.
 
-To illustrate the rules, here is a quick example. Suppose the game starts with two `2` tiles in the diagonal cells. If our first move is `up`, the lower `2` tile slides up, leaving the cells in the bottom row empty. The game then selects one of the two empty tiles at random, which is to say with probability 0.5 each, and adds a `2` tile to that cell with probability 0.9 or a `4` tile with probability 0.1.
+To illustrate the rules, here is a quick example:
 
 <p align="center">
-<img src="/assets/2048/2x2_intro.svg" alt="TODO" />
+<img src="/assets/2048/2x2_intro_1.svg" alt="Example with results of moving up from state (-, 2, 2, -)" width="75%" />
 </p>
 
+Here we suppose that the game starts with two `2` tiles in the diagonal cells. If our first move is `up`, the lower `2` tile slides up, leaving the cells in the bottom row empty. The game then selects one of the two empty tiles at random, which is to say with probability 0.5 each, and adds either a `2` tile to that cell, with probability 0.9, or a `4` tile, with probability 0.1. For example, in the leftmost board below, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the new tile appears in the bottom left square with probability 0.5, and it is a `2` with probability 0.9, which gives a joint probability of \\(0.5 \\times 0.9 = 0.45\\) for that outcome.
+
+If we suppose that the leftmost outcome is the one that happens, and our second move is `left`, the two `2` tiles on the first row merge together into a `4` tile in the top left, leaving the cells in the righthand column empty. The game then selects one of those two empty tiles at random, as above, and so on.
+
 <p align="center">
-<img src="/assets/2048/2x2_intro_annotated.svg" alt="TODO" />
+<img src="/assets/2048/2x2_intro_2.svg" alt="Example with results of sliding left from state (2, 2, 2, -)" width="75%" />
 </p>
+
+Next we will see how to map these rules into the language of Markov Decision Processes.
 
 ## A Markov Decision Process Approach
+
+Markov Decision Processes (MDPs) are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs are simple but powerful way of approaching them, with many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
+
+The general setup for an MDP is as follows. Time progresses in discrete *time steps*. At each time step, the process is in a given *state*, a decision maker takes an *action*, and the process then moves to a *successor state*, which may be determined in part by chance, for the next time step. Each state comes with an associated *reward*, which the decision maker receives upon entering it. To "solve" the problem, we are looking for a *optimal policy* that tells the decision maker which action to take in each state, in order to collect as much reward as possible. In its simplest form, an optimal policy is a table that maps each state to the best action to take in that state, and the decision maker simply looks up its actions in this policy table.
+
+In the case of 2048,
+
+- there is one move per time step,
+- a state is a board configuration, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, and
+- an action is a move, such as `left`.
+
+The game dynamics are encoded in the *transition probabilities* that, together with the current state and the action taken, define a probability distribution over the next state. The transition probabilities are where we handle both the tile movement and merging rules, which are deterministic, and the placement of new `2` and `4` tiles, which are non-deterministic. For the example above, we can label each of these components.
+
+<p align="center">
+<img src="/assets/2048/2x2_intro_2_annotated.svg" alt="The example above with states, actions, transition probabilities and successor states labelled." width="80%" />
+</p>
+
+The final piece of the puzzle is to define the *rewards*, which will require us to make the notion of choosing a policy to "collect as much reward as possible" more precise. This is a bit more technical, so we will need some notation [^general]. Let's start with the transition probabilities. Let \\(S\\) be the set of states, and for each state \\(s \\in S\\), let \\(A_s\\) be the set of actions that are valid in state \\(s\\). Then let \\(\\Pr(s, a, s')\\) denote the probability that, if we begin in state \\(s \\in S\\) and take action \\(a \\in A_s\\), we transition to state \\(s' \\in S\\) in the next time step.
+
+Next, the policy. let \\(\\pi: S \\rightarrow A \\), where \\(\\pi(s) \\in A_s\\) is the action to take in state \\(s\\).
+
+\\(A = \\bigcup_{s \\in S} A_s\\)
+
+Define the *value*, \\(V(s)\\), of state \\(s\\) to be the expected discounted sum of future rewards from state \\(s\\), if we follow policy \\(\\pi\\). That is,
+\\[
+V(s) = R(s) + \\gamma \\sum_{s'} \\Pr(s, \\pi(s), s') V(s')
+\\]
+
+
+
+# SCRATCH
+
+An *optimal policy* is one that maximises the expected (discounted) sum of the future rewards from each state, if the decision maker follows that policy.
+
+If we can formulate 2048 as an MDP and find an optimal policy for that MDP, we can legitimately claim to have *solved* the game of 2048 --- to have found the (or a) best way of playing.
+
+
+That last sentence may be improved by dissection:  
+
+
+In equations, we can write this precisely as follows. Fo
+
+Let \\(\\pi\\) be a For each state \\(s\\), let \\(\\pi(s)\\) denote the action that  \\(V(s)\\) denote the value of
+
+
+We will formulate 2048 as an MDP, as follows. A configuration of the board is a *state*, and the direction we swipe is an *action* that we take in that state. The game mechanics of moving and merging tiles and then adding a random (2 or 4) tile are captured by the *transition probabilities* and corresponding *successor states*.
+
+
+
+
+
 
 MDPs are a way of looking at problems that involve making decisions in the presence of uncertainty. Such problems are all around us, and MDPs are simple but powerful way of approaching them, with many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html). If you are not familiar with MDPs, 2048 provides a nice example to learn more about them in practice --- while there are some heavy mathematics at work behind the scenes, setting up a problem as an MDP and solving it is often surprisingly easy.
 
@@ -61,8 +118,6 @@ The transition probabilities encode the rules of the game.
 Next we need to define the objective. There are several different objectives we might have --- maximising the score (in 2048, your score increases every time you merge tiles), playing for as long as possible, or getting to the maximum tile as quickly as possible. In MDP terms, we will receive a reward of 1 when we win and repeat this forever, basking in glory.
 
 The problem with basking in glory forever is that your sums will diverge. To avoid this, we need to introduce a discount rate. A discount rate captures what in finance is usually phrased as the time value of money --- that a dollar you get today is worth more than a dollar you get tomorrow. A mathematically convenient way of representing this is to "discount" future rewards by a constant factor less than 1, usually denoted \\(\\gamma\\) (gamma). If \\(\\gamma = 0.95\\), it means that a dollar you get tomorrow is worth the same to you as $0.95 today.
-
-# SCRATCH
 
 Here we're aiming not primarily to build a stronger AI, but instead to try to develop a way of saying *how strong* the AIs are --- are they essentially optimal, or is there even more room to improve? We can only know by using techniques such as Markov Decision Processes to try to find what optimal is.
 
@@ -158,6 +213,8 @@ Expectimax: https://web.uvic.ca/~maryam/AISpring94/Slides/06_ExpectimaxSearch.pd
 <sup><a name='footnote-mashups' href='#footnote-mashups-ref'>1</a></sup> Flappy Bird was released in May 2013, but it became popular in January 2014. And I should also mention [flappy 2048](https://hczhcz.github.io/Flappy-2048/), [Doge 2048](http://doge2048.com/) and, of course, [flappy Doge 2048](http://www.donaldguy.com/Flappy-Doge2048/)?
 
 [^2]: In case you, like me, sometimes felt like the game was scheming against you, giving you exactly the wrong tile at the wrong time, reading the source code reveals no such evil. Never attribute to malice that which can be attributed to randomness. That said, [there is a version that tries to give you the worst possible tile](https://aj-r.github.io/Evil-2048). As you might expect, it is much harder.
+
+[^general]: This treatment of MDPs is not fully general. For example, the policy can be stochastic, in which case...
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
