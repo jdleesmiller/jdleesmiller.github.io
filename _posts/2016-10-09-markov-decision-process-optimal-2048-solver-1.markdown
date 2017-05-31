@@ -9,7 +9,7 @@ categories: articles
 
 For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048). Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
 
-To try to better understand what makes the game work so well, I have been working on analyzing it in a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
+To better understand what makes the game work so well, I have been working on analyzing it using a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
 In this first part, I will describe 2048 as seen through the lens of an MDP, and we will use this insight to explore the properties of a "toddler" version of the game on a 2-by-2 board playing to the X tile. We'll see that this game is much less fun than the grownup version on a 4-by-4 board, but still interesting.
 
@@ -23,15 +23,27 @@ I'll start by introducing the key ideas behind an MDP in the context of the 2-by
 
 The two most important nouns in the language of MDPs are *state* and *action*. We assume that time progresses in discrete time steps. At the start of each time step, the process is in a given *state*, then a decision maker takes an *action*, and then the process moves to a *successor state*, which may be determined in part by chance, for the start of the next time step.
 
-In the game, a *state* is a configuration of the board, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />. A state specifies the value of the tile, if any, in each cell. The decision maker is in this case the player, and he or she takes an *action* from a state by swiping `left`, `right`, `up` or `down`. The result of the action is that all of the tiles slide all the tiles as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
+In the game, a *state* is a configuration of the board, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />. A state specifies the value of the tile, if any, in each cell. The decision maker is in this case the player, and he or she takes an *action* from a state by swiping `left`, `right`, `up` or `down`. The result of the action is that all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
 
-For example, if we choose the action `up` from <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the lower `2` tile slides up into the top row and is merged with the `2` tile to produce a `4` tile. The `2` tile in the upper right has nowhere to go and stays put. This leaves the cells in the bottom row empty.
+For example, if we choose the action `up` from <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the lower `2` tile slides up into the top row and is merged with the `2` tile to produce a `4` tile. The `2` tile in the upper right has nowhere to go and stays put. This leaves the cells in the bottom row empty, but they don't stay empty, because the game now gets to place a tile in one of the empty cells.
 
-At this point, however, we still don't know for sure what the *successor state* will be, because the game gets to place a random tile in one of the empty cells. The successor state will depend on which cell it picks and which tile it places. The rules by which it does this are captured by *transition probabilities*.
+This is where the element of chance comes in, because the game chooses which cell and which tile randomly. We can find out how the game does this by reading [its freely available source code](https://github.com/gabrielecirulli/2048): it picks an empty cell uniformly at random, and then in that cell it places a `2` tile with probability 0.9, or a `4` tile with probability 0.1. So, while we can't say for sure which successor state we will end up in given the player's action, with this information we can define a probability distribution over the possible successor states.
 
-Get dynamics from [its freely available source code](https://github.com/gabrielecirulli/2048):
+This probability distribution over the successor states, given the initial state and the player's action in that state, is defined by the *transition probabilities*.
 
-Diagram
+<p align="center">
+<img src="/assets/2048/2x2_intro.svg" alt="Example with results of moving up from state (2, 2, 2, -)" width="75%" />
+</p>
+
+
+For example, in the leftmost board below, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the new tile appears in the bottom left square with probability 0.5, and it is a `2` with probability 0.9, which gives a joint probability of \\(0.5 \\times 0.9 = 0.45\\) for that outcome.
+
+
+
+In this example, we can
+
+transition probs
+
 
 ### Rewards, Values and Policies
 
