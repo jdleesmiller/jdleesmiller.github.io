@@ -21,63 +21,57 @@ I'll start by introducing the key ideas behind an MDP in the context of the 2-by
 
 ### States, Actions and Transition Probabilities
 
-The two most important nouns in the language of MDPs are *state* and *action*. We assume that time progresses in discrete time steps. At the start of each time step, the process is in a given *state*, then a decision maker takes an *action*, and then the process moves to a *successor state*, which may be determined in part by chance, for the start of the next time step.
+The two main nouns in the language of MDPs are *state* and *action*. We assume that time progresses in discrete steps. At the start of each step, the process is in a given *state*, then a decision maker takes an *action*. The process then moves to a *successor state*, which may be determined in part by chance, for the start of the next step.
 
-In the game, a *state* is a configuration of the board, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />. A state specifies the value of the tile, if any, in each cell. The decision maker is in this case the player, and he or she takes an *action* from a state by swiping `left`, `right`, `up` or `down`. The result of the action is that all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
+In the game, a *state* is a configuration of the board, such as <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />. Each state specifies the value of the tile, if any, in each cell on the board. The decision maker is in this case the player, and he or she takes an *action* by swiping `left`, `right`, `up` or `down`. Each time the player takes an action, the process transitions to a new state.
 
-For example, if we choose the action `up` from <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the lower `2` tile slides up into the top row and is merged with the `2` tile to produce a `4` tile. The `2` tile in the upper right has nowhere to go and stays put. This leaves the cells in the bottom row empty, but they don't stay empty, because the game now gets to place a tile in one of the empty cells.
+In particular, the result of the player's action is that all of the tiles slide as far as possible in the chosen direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles. For example, if we choose the action `up` from the state <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the lower `2` tile slides up into the top row and is merged with the `2` tile in the top left to produce a `4` tile. The `2` tile in the top right has nowhere to go and stays put. This leaves the cells in the bottom row empty, but they don't stay empty, because the game now gets to place a tile in one of the empty cells.
 
 This is where the element of chance comes in, because the game chooses which cell and which tile randomly. We can find out how the game does this by reading [its freely available source code](https://github.com/gabrielecirulli/2048): it picks an empty cell uniformly at random, and then in that cell it places a `2` tile with probability 0.9, or a `4` tile with probability 0.1. So, while we can't say for sure which successor state we will end up in given the player's action, with this information we can define a probability distribution over the possible successor states.
 
-This probability distribution over the successor states, given the initial state and the player's action in that state, is defined by the *transition probabilities*.
+This probability distribution over the successor states, given the initial state and the player's action in that state, is encoded in the *transition probabilities*. In this case, there are four possible successor states as shown in the diagram below:
 
 <p align="center">
 <img src="/assets/2048/2x2_intro.svg" alt="Example with results of moving up from state (2, 2, 2, -)" width="75%" />
 </p>
 
+For example, the probability of transitioning to the leftmost successor state, <img src="/assets/2048/2x2_s2_1_1_0.svg" style="height: 2em;" alt="The state (4, 2, 2, -)" />, is 0.45, because the game picks the bottom left square with probability 0.5, and it places a `2` tile in that square with probability 0.9; since the choice of cell and the choice of tile are independent, the joint probability is \\(0.5 \\times 0.9 = 0.45\\).
 
-For example, in the leftmost board below, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the new tile appears in the bottom left square with probability 0.5, and it is a `2` with probability 0.9, which gives a joint probability of \\(0.5 \\times 0.9 = 0.45\\) for that outcome.
+Taken together, the states, actions and transition probabilities encode the game dynamics &mdash; essentially the rules of the game. Next we will look at what it means to win the game (or not).
 
+### Rewards, Policies and Values
 
+#### In General
 
-In this example, we can
+Each state in an MDP comes with an associated *reward*, which the decision maker receives upon entering that state. The decision maker's objective is to take actions so as to collect as much reward as possible. To make this idea more precise, we'll need two more concepts: policies and values.
 
-transition probs
+A *policy* describes how the decision maker decides which action to take in each state. In it's simplest form, a policy is a table that maps each state to an action, and at each time step the decision maker simply finds the current state in the table and takes the corresponding action.
 
+The *value* of a state, given that the decision maker follows a given policy, is the *expected discounted sum of future rewards* that the decision maker will receive upon entering that state. To unpick that rather complicated statement, an equation is worth a lot of words, so let's explain that in the context of an equation.
 
-### Rewards, Values and Policies
+We'll need some notation. Let \\(S\\) be the set of states, and for each state \\(s \\in S\\), let \\(A_s\\) be the set of actions that are possible in state \\(s\\). Then define:
 
-At some point we also need to talk about the start states... but interestingly MDPs don't really distinguish particular start states.
+1. The transition probabilities: let \\(\\Pr(s' \| s, a)\\) denote the probability that we transition to state \\(s' \\in S\\) for the next time step given that we are in state \\(s \\in S\\) and take action \\(a \\in A_s\\) in the current time step.
 
-Each state comes with an associated *reward*, which the decision maker receives upon entering it. To "solve" the problem, we are looking for a *optimal policy* that tells the decision maker which action to take in each state, in order to collect as much reward as possible. In its simplest form, an optimal policy is a table that maps each state to the best action to take in that state, and the decision maker simply looks up its actions in this policy table.
+1. The reward: let \\(R(s)\\) denote the reward received for entering state \\(s\\).
 
-Let's start by recapping the rules of 2048, which we can deduce from [its freely available source code](https://github.com/gabrielecirulli/2048):
+1. The policy: let \\(\\pi(s) \\in A_s\\) denote the action to take in state \\(s\\) when following policy \\(\\pi\\). The policy \\(\\pi\\) maps from states to actions [^general].
 
-1. When the game starts, the board contains two tiles in randomly chosen cells. Each tile is either a 2, with probability 0.9, or a 4, with probability 0.1.
+1. The value: let \\(V^\\pi(s)\\) denote the value of state \\(s\\) when following policy \\(\\pi\\).
 
-1. For each move, we can swipe left, right, up or down to slide all the tiles as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with value equal to the sum of the two tiles.
+The value of a state when following policy \\(\\pi\\) is then given by
+\\[
+V^\\pi(s) = R(s) + \\gamma \\sum_{s'} \\Pr(s' \| s, \\pi(s)) V^\\pi(s')
+\\]
+where \\(\\gamma\\) is called the *discount factor*, and \\(0 < \\gamma < 1\\). The first term, \\(R(s)\\), is the immediate reward for entering state \\(s\\), and the second term is the *expected future reward*, assuming that we follow policy \\(\\pi\\) for the current state and also in the future. It is worth remarking that this is a recursive definition: the value of each state is defined in terms of the values of its possible successor states, weighted by the transition probabilities.
 
-1. After each move, the game places one new tile in a random position. Again, the new tile either has value 2, with probability 0.9, or value 4, with probability 0.1. [^2]
+The discount factor, \\(\\gamma\\), trades off the value of the immediate reward against the value of the future rewards. In other words, it [accounts for the time value of money](https://en.wikipedia.org/wiki/Time_value_of_money) to the decision maker. If \\(\\gamma\\) is close to 1, it means that the decision maker is very patient: they don't mind waiting for future rewards; likewise, smaller values of \\(\\gamma\\) mean that the decision maker is less patient.
 
-1. The game ends when either (a) the board is full, and it is not possible to move any tile, in which case we lose, or (b) a tile with value 2048 is reached.
+So, we can now state our objective more clearly: find a policy that maximizes value.
 
-The toddler version on the 2-by-2 board is played with the same rules as the full game, except that, as we'll see later, it's not possible to make it all the way to the 2048 tile on a 2-by-2 board. We'll instead settle for winning at a lower value.
+#### In 2048
 
-To illustrate the rules, here is a quick example:
-
-<p align="center">
-<img src="/assets/2048/2x2_intro_1.svg" alt="Example with results of moving up from state (-, 2, 2, -)" width="75%" />
-</p>
-
-Here we suppose that the game starts with two `2` tiles in the diagonal cells. If our first move is `up`, the lower `2` tile slides up, leaving the cells in the bottom row empty. The game then selects one of the two empty tiles at random, which is to say with probability 0.5 each, and adds either a `2` tile to that cell, with probability 0.9, or a `4` tile, with probability 0.1. For example, in the leftmost board below, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, the new tile appears in the bottom left square with probability 0.5, and it is a `2` with probability 0.9, which gives a joint probability of \\(0.5 \\times 0.9 = 0.45\\) for that outcome.
-
-If we suppose that the leftmost outcome is the one that happens, and our second move is `left`, the two `2` tiles on the first row merge together into a `4` tile in the top left, leaving the cells in the righthand column empty. The game then selects one of those two empty tiles at random, as above, and so on.
-
-<p align="center">
-<img src="/assets/2048/2x2_intro_2.svg" alt="Example with results of sliding left from state (2, 2, 2, -)" width="75%" />
-</p>
-
-Next we will see how to map these rules into the language of Markov Decision Processes.
+For 2048, we want to define the rewards so that the player is rewarded for winning the game. Here we'll say that say that the player wins the game if they reach a state containing a 2048 tile [^winning]. Therefore, we will define the rewards so that the player gets a reward of 1 if they enter a state with a 2048 tile (i.e. win) and 0 for every other state.
 
 ## A Markov Decision Process Approach
 
@@ -271,6 +265,8 @@ Before we get too excited, however, I should point out the 'Towards' in the titl
 [^2]: In case you, like me, sometimes felt like the game was scheming against you, giving you exactly the wrong tile at the wrong time, reading the source code reveals no such evil. Never attribute to malice that which can be attributed to randomness. That said, [there is a version that tries to give you the worst possible tile](https://aj-r.github.io/Evil-2048). As you might expect, it is much harder.
 
 [^general]: This treatment of MDPs is not fully general. For example, the policy can be stochastic, in which case...
+
+[^winning]: Getting to the 2048 tile is not the only possible objective for the game. You could instead try to collect as many points as possible, which basically means playing for as long as possible, before filling up the board. In that case, you'd essentially want to give a reward of 1 (say) for every non-losing state, and then 0 reward for the losing state. It's certainly possible to go beyond the 2048 tile, so the number of states would be much larger in that case.
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
