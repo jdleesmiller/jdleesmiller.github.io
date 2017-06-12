@@ -11,7 +11,7 @@ For several months in early 2014, everyone was addicted to [2048](http://gabriel
 
 To better understand what makes the game work so well, I have been working on analyzing it using a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
-In this first part, I will describe 2048 as seen through the lens of an MDP, and we will use this insight to explore the properties of a "toddler" version of the game on a 2-by-2 board playing to the X tile. We'll see that this game is much less fun than the grownup version on a 4-by-4 board, but still interesting.
+In this first part, I will describe 2048 as seen through the lens of an MDP, and we will use this insight to explore the properties of a "toddler" version of the game on a 2-by-2 board playing to the 32 tile. We'll see that this game is much less fun than the grownup version on a 4-by-4 board, but still interesting.
 
 In later parts, I will extend the approach to larger boards and tiles and maybe, one day, the full game of 2048. The code behind this post is [available here](https://github.com/jdleesmiller/twenty48), and it leads the blog posts, so you can peek ahead at later results if you like.
 
@@ -73,6 +73,91 @@ So, we can now state our objective more clearly: find a policy that maximizes va
 
 For 2048, we want to define the rewards so that the player is rewarded for winning the game. Here we'll say that say that the player wins the game if they reach a state containing a 2048 tile [^winning]. Therefore, we will define the rewards so that the player gets a reward of 1 if they enter a state with a 2048 tile (i.e. win) and 0 for every other state.
 
+
+### Results
+
+#### How many States
+
+One of the first questions we can ask is, how many states are there? One way to get an estimate is to observe that, for the 2x2 game, there are 4 cells, and each cell can be empty or take one of the values 2, 4, 8, 16 or 32. We'll assume that once we get a 32 tile, we have won, and we don't particularly care where the `32` tile is; that means we can focus on just the values up to 16. This gives us 5 possible values (blank + four numbers) for each cell, so \\(5^4 = 625\\) regular states plus one state for losing and one state for winning, so 627 in total.
+
+That's not too scary for the 2x2 board, but if we apply the same logic to the 4x4 board with 16 cells and 11 possible values for each tile, the figure is \\(11^{16} = 45,949,729,863,572,161\\). That's about 46 quadrillion states, which won't fit on your Mac Book any time soon. We're therefore interested in how we can simplify the model by eliminating states. The two main ways of doing this are to remove states that are related by symmetry and to consider only reachable states.
+
+#### Reachability
+
+Just because we can write a state, does not mean that there is any sequence of moves from any start state that will actually generate that state. For example, the state
+```
+8 8
+8 8
+```
+cannot occur in the 2x2 game, even though it was included in our estimate that there were 627 states. One way to see this is to observe that every state must contain at least one `2` or `4` tile, because the game adds one after each move; this implies the state with all 8s can't happen. (We can also use this observation to refine the state counting estimate above, but it doesn't make much difference.)
+
+#### Canonicalization
+
+Many states are distinct but equivalent to other states. For example,
+```
+4 2
+2
+```
+is the same as
+```
+2 4
+  2
+```
+because they are mirror images of each other. If we knew that the best action in the former state was to go left, the best action in the latter state would be go to right. We can find other states by reflecting through different axes (or by rotating):
+```
+  2
+2 4
+```
+and
+```
+2
+4 2
+```
+
+Rather than treating each of these equivalent states as a separate state, we can just pick one of them as the 'canonical' form of that group of states. One approach to finding the canonical form is as follows: given a state, generate all of its possible rotations and reflections, sort them into some kind of order, and then choose the smallest one as the canonical state.
+
+To define an ordering over the states, we can view each state as a number in which each cell contributes one digit. One way to do this is to start in the top left and read the cells by rows; for each cell, we write a \\(0\\) digit if the cell is empty, and the digit \\(i\\) for a cell that contains a \\(2^i\\) tile. For the four equivalent states above, the corresponding numbers would be:
+```
+2 1 1 0
+1 2 0 1
+0 1 1 2
+1 0 2 1
+```
+The smallest of these numbers is \\(0112\\), so the corresponding state
+```
+  2
+2 4
+```
+is the canonical state for this equivalence class of states.
+
+#### Non-Recurrence
+
+A useful property of 2048 is that sum of the tiles on the board always increases by either 2 or 4 with each move. This property does not help us reduce the size of the state space, but we'll see that it does help us cut up the set of all possible states, so we don't have to worry about all of the states at once.
+
+To see that the property holds, we can observe that:
+
+1. The game adds a `2` or `4` tile after each move, which increases the sum of the tile values by either 2 or 4, and
+
+2. if the player merges two tiles with the same value, that does not change the sum of the tile values.
+
+For example, if we start with two `2` tiles, they contribute \\(2 + 2 = 4\\) to the sum, and the player merges them, the resulting `4` tile still contributes \\(4\\) to the sum.
+
+This means that we can organize the states into *layers* according to the sum of their tiles. If the game is in a state in the layer with sum 10, we know that the next state must be in the layer with sum 12 or sum 14. This also implies that states never repeat in the course of the game: every move increases the sum.
+
+#### Solving the Toddler Version
+
+- ideas:
+  - could generate all reachable states without canonicalization, just to show how much less than 627 it is. I wonder whether it will be 250 --- 2 * 5**3.
+  - some sort of D3 visualization of all of the states and the optimal policy; I guess we could instead show all of the possible action transitions and just highlight the ones that occur in the optimal policy, but it's already a lot of lines even with just the optimal transitions shown
+  - explain the optimality idea last?
+
+- can't get to 2048
+- how to show the game? would like to get one picture
+- bottleneck
+
+# SCRATCH
+
+
 ## A Markov Decision Process Approach
 
 Markov Decision Processes (MDPs) are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs are simple but powerful way of approaching them, with many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
@@ -101,9 +186,6 @@ Define the *value*, \\(V(s)\\), of state \\(s\\) to be the expected discounted s
 V(s) = R(s) + \\gamma \\sum_{s'} \\Pr(s, \\pi(s), s') V(s')
 \\]
 
-
-
-# SCRATCH
 
 An *optimal policy* is one that maximises the expected (discounted) sum of the future rewards from each state, if the decision maker follows that policy.
 
