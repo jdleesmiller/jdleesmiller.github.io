@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Mathematics of 2048 &mdash; Part 1"
+title: "The Mathematics of 2048 &mdash; Part 1: How Many States are There?"
 date: 2016-10-09 16:00:00 +0000
 categories: articles
 ---
@@ -9,7 +9,133 @@ categories: articles
 
 For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048). Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
 
-To better understand what makes the game work so well, I have been working on analyzing it using a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
+To better understand what makes the game work so well, I have been trying to analyze it mathematically. In this first part, we'll work toward answering one of the most basic questions we can ask about the game: how many possible configurations of the board ("states") are there?
+
+In future parts, we'll explore how many moves it can take to win the game, and then how to model the game as a Markov Decision Process, which may in principle let us 'solve' the game --- that is, to find the best possible way to play. The insights gained in each part will help us in the next.
+
+## The Name of the Game
+
+Let's start with a recap of the rules of the game and some terminology. The board comprises 16 *cells* in a 4x4 grid. Each cell can be empty or can contain a *tile* with a value that is a power of 2 between 2 and 2048 (that is, 2, 4, 8, 16, &hellip; up to 2048). The game dynamics, which we can discover by reading [its freely available source code](https://github.com/gabrielecirulli/2048) are:
+
+1. The game starts with two randomly selected tiles in two randomly selected cells.
+
+1. The player moves `left`, `right`, `up` or `down`, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
+
+1. The game places a single randomly selected tile in a randomly selected available cell.
+
+1. Go to step 2.
+
+When the game places a tile at random, it always applies the same rule: choose an available cell uniformly at random, and place either a `2` tile, with probability 0.9, or a `4` tile, with probability 0.1. At the start, the game applies this rule twice on an empty board to place the two initial tiles. Then it applies it again after each turn.
+
+The game continues until either (a) a `2048` tile is obtained, in which case the player wins, or (b) the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the primary objective of reaching the `2048` tile, which will make our lives a bit easier.
+
+## Permutations: Bad Hair Day
+
+The most basic way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\) possible states, which is roughly 184 quadrillion states, or about \\(10^{17}\\). We'll see in this section that we can refine this estimate (albeit not by that much).
+
+We'll also generalize this result to cover 2048-like games played on different sized boards (not just 4x4) and up to different tiles (not just the 2048 tile).
+
+Let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). To simplify notation, let \\(C=B^2\\) denote the number of cells on the board. For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
+
+First, since the game ends when we obtain a \\(2^K\\) tile, we don't particularly care about where that tile is or what else is on the board. We can therefore condense all of the states with a \\(2^K\\) tile into a special "win" state. In the remaining states, each cell can either be blank or have one of \\(K - 1\\) tiles. This reduces the number of states we have to worry about to \\[K^C + 1\\] where the \\(1\\) is for the win state.
+
+Second, we can observe that some of those \\(K^C\\) states can never occur in the game. In particular: every state must contain at least two non-empty cells, and at least one of those must be a `2` or `4` tile. To see why this is true, we can observe that it holds at the start of the game, when there are two tiles on the board, each of which must be either a `2` or a `4`; then it remains true after each move, because even if tiles are merged, there is always at least one tile left, namely the merged one, and then the game adds a random `2` or `4` tile after the move. This ensures that we always have at least two tiles, one of which is either a `2` or a `4`.
+
+To account for this constraint, we can subtract all states with no `2` or `4` tile, of which are \\((K-2)^C\\), and also the states with only one `2` tile, of which there are \\(C\\), and the states with only one `4` tile, of which there are again \\(C\\). This gives an estimate of
+\\[K^C - (K-2)^C - 2C + 1\\]
+states in total. Of course, when \\(K\\) or \\(C\\) is large, this looks pretty much just like \\(K^C\\), which is the dominant term, but this correction is more significant for smaller values.
+
+Let's use this formula to tabulate the estimated number of states various board sizes and maximum tiles:
+
+<table>
+  <thead>
+    <tr>
+      <th>Maximum Tile</th>
+      <th colspan="3">Board Size</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th align="right">2x2</th>
+      <th align="right">3x3</th>
+      <th align="right">4x4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="right">8</td>
+      <td align="right">73</td>
+      <td align="right">19,665</td>
+      <td align="right">43,046,689</td>
+    </tr>
+    <tr>
+      <td align="right">16</td>
+      <td align="right">233</td>
+      <td align="right">261,615</td>
+      <td align="right">4,294,901,729</td>
+    </tr>
+    <tr>
+      <td align="right">32</td>
+      <td align="right">537</td>
+      <td align="right">1,933,425</td>
+      <td align="right">152,544,843,873</td>
+    </tr>
+    <tr>
+      <td align="right">64</td>
+      <td align="right">1,033</td>
+      <td align="right">9,815,535</td>
+      <td align="right">2,816,814,940,129</td>
+    </tr>
+    <tr>
+      <td align="right">128</td>
+      <td align="right">1,769</td>
+      <td align="right">38,400,465</td>
+      <td align="right">33,080,342,678,945</td>
+    </tr>
+    <tr>
+      <td align="right">256</td>
+      <td align="right">2,793</td>
+      <td align="right">124,140,015</td>
+      <td align="right">278,653,866,803,169</td>
+    </tr>
+    <tr>
+      <td align="right">512</td>
+      <td align="right">4,153</td>
+      <td align="right">347,066,865</td>
+      <td align="right">1,819,787,258,282,209</td>
+    </tr>
+    <tr>
+      <td align="right">1024</td>
+      <td align="right">5,897</td>
+      <td align="right">865,782,255</td>
+      <td align="right">9,718,525,023,289,313</td>
+    </tr>
+    <tr>
+      <td align="right">2048</td>
+      <td align="right">8,073</td>
+      <td align="right">1,970,527,185</td>
+      <td align="right">44,096,709,674,720,289</td>
+    </tr>
+  </tbody>
+</table>
+
+We can see immediately that the 2x2 and 3x3 games have far fewer states than the 4x4 game. We've managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(10^{16}\\). In the following sections, we'll see that these estimates can be reduced much further.
+
+## Reachability: Can't Get There from Here
+
+## Canonicalization: By Any Other Name
+
+## Non-Recurrence: Don't Look Back
+
+
+The game of 2048 is ordinarily played on a 4x4 board, but it will be helpful to start with smaller boards: 2x2 and 3x3.
+
+By
+
+
+
+
+
+a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
 In this first part, I will describe 2048 as seen through the lens of an MDP, and we will use this insight to explore the properties of a "toddler" version of the game on a 2-by-2 board playing to the 32 tile. We'll see that this game is much less fun than the grownup version on a 4-by-4 board, but still interesting.
 
