@@ -29,19 +29,19 @@ When the game places a tile at random, it always applies the same rule: choose a
 
 The game continues until either (a) a `2048` tile is obtained, in which case the player wins, or (b) the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the primary objective of reaching the `2048` tile, which will make our lives a bit easier.
 
-## Permutations: Bad Hair Day
+## Combinatorics: Let Me Count the Ways
 
-The most basic way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\) possible states, which is roughly 184 quadrillion states, or about \\(10^{17}\\). We'll see in this section that we can refine this estimate (albeit not by that much).
+The most basic way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\) possible states that we can write in this way. That is 184 quadrillion (~\\(10^{17}\\)) states, which won't fit on my laptop any time soon.
 
-We'll also generalize this result to cover 2048-like games played on different sized boards (not just 4x4) and up to different tiles (not just the 2048 tile).
+In this section, we'll see how to refine this estimate slightly and also generalize the process to cover 2048-like games played on different sized boards (not just 4x4) and up to different tiles (not just the 2048 tile). We'll see that the smaller games are much more tractable, and we'll use them to develop the key ideas in later sections. Let's begin with some notation.
 
-Let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). To simplify notation, let \\(C=B^2\\) denote the number of cells on the board. For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
+Let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). For convenience, let \\(C\\) denote the number of cells on the board, so \\(C=B^2\\). For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
 
 First, since the game ends when we obtain a \\(2^K\\) tile, we don't particularly care about where that tile is or what else is on the board. We can therefore condense all of the states with a \\(2^K\\) tile into a special "win" state. In the remaining states, each cell can either be blank or have one of \\(K - 1\\) tiles. This reduces the number of states we have to worry about to \\[K^C + 1\\] where the \\(1\\) is for the win state.
 
-Second, we can observe that some of those \\(K^C\\) states can never occur in the game. In particular: every state must contain at least two non-empty cells, and at least one of those must be a `2` or `4` tile. To see why this is true, we can observe that it holds at the start of the game, when there are two tiles on the board, each of which must be either a `2` or a `4`; then it remains true after each move, because even if tiles are merged, there is always at least one tile left, namely the merged one, and then the game adds a random `2` or `4` tile after the move. This ensures that we always have at least two tiles, one of which is either a `2` or a `4`.
+Second, we can observe that some of those \\(K^C\\) states can never occur in the game. In particular, we can use the following fact: every state must contain at least two non-empty cells, and at least one of those must be a `2` or `4` tile. To see why this is true, we can observe that it holds at the start of the game, when there are two tiles on the board, each of which must be either a `2` or a `4`; then it remains true after each move, because even if tiles are merged, there is always at least one tile left, namely the merged one, and then the game adds a random `2` or `4` tile after the move. This ensures that we always have at least two tiles, one of which is either a `2` or a `4`.
 
-To account for this constraint, we can subtract all states with no `2` or `4` tile, of which are \\((K-2)^C\\), and also the states with only one `2` tile, of which there are \\(C\\), and the states with only one `4` tile, of which there are again \\(C\\). This gives an estimate of
+To account for this constraint, we can subtract all states with no `2` or `4` tile, of which are \\((K-2)^C\\), and also the states with just one `2` tile and all other cells empty, of which there are \\(C\\), and the states with only one `4` tile and all other cells empty, of which there are again \\(C\\). This gives an estimate of
 \\[K^C - (K-2)^C - 2C + 1\\]
 states in total. Of course, when \\(K\\) or \\(C\\) is large, this looks pretty much just like \\(K^C\\), which is the dominant term, but this correction is more significant for smaller values.
 
@@ -118,9 +118,116 @@ Let's use this formula to tabulate the estimated number of states various board 
   </tbody>
 </table>
 
-We can see immediately that the 2x2 and 3x3 games have far fewer states than the 4x4 game. We've managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(10^{16}\\). In the following sections, we'll see that these estimates can be reduced much further.
+We can see immediately that the 2x2 and 3x3 games have far fewer states than the 4x4 game. Using the argument above, we've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(10^{16}\\). In the following sections, we'll see how to reduce these estimates much further.
 
 ## Reachability: Can't Get There from Here
+
+Just because it is possible to write a state down doesn't mean that it can actually occur in the game. For example, hiding among the states we counted in the previous section was the state
+
+```
+   2 1024 1024 1024
+1024 1024 1024 1024
+1024 1024 1024 1024
+1024 1024 1024 1024
+```
+
+which is clearly not a state that could actually happen in the game --- any move in the previous state would have had to merge some of those `1024` tiles.
+
+The simplest way to count reachable states is basically a brute force approach: generate each possible start state, then for each of those states find all possible successor states, and so on. Based on the combinatorial bounds in the previous section, we can be confident that this is feasible for at least the 2x2 game and possibly the 3x3 game.
+
+For example, one of the start states for the 2x2 game is <img src="/assets/2048/2x2_s1_0_0_1.svg" style="height: 2em;" alt="The state (2, -, -, 2)" />. The possible successors include those for any of the possible moves (`left`, `right`, `up` or `down`) --- we're not committing to any particular moves, just counting all of the possibilities. Here they are:
+
+<p align="center">
+<img src="/assets/2048/2x2_successors_example.svg" alt="All successors of the state (2, -, 2, -)" />
+</p>
+
+If the player moves `up`, for example, the `2` tile on the bottom row slides up. This leaves two available cells in the bottom row, and the game places a `2` or `4` tile into one of them, for a total of four possible successors. It's worth noting that one of these successors, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, is also reachable if the player moves `left`, and the game places a `2` tile in the top right.
+
+The search process continues from each one of the successor states, until we reach either a winning state (with a `2048` tile) or a losing state. A losing state effectively has no successor states, because there is no move that will change the board.
+
+Let's see how many states we count when we take into account reachability.
+
+<table>
+  <thead>
+    <tr>
+      <th>Maximum Tile</th>
+      <th colspan="4">Board Size / Bound</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th align="right">2x2 Reachable</th>
+      <th align="right">2x2 Upper Bound</th>
+      <th align="right">3x3 Reachable</th>
+      <th align="right">3x3 Upper Bound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="right">8</td>
+      <td align="right">70</td>
+      <td align="right">73</td>
+      <td align="right">8461</td>
+      <td align="right">19,665</td>
+    </tr>
+    <tr>
+      <td align="right">16</td>
+      <td align="right">198</td>
+      <td align="right">233</td>
+      <td align="right">128,889</td>
+      <td align="right">261,615</td>
+    </tr>
+    <tr>
+      <td align="right">32</td>
+      <td align="right">350</td>
+      <td align="right">537</td>
+      <td align="right">975,045</td>
+      <td align="right">1,933,425</td>
+    </tr>
+    <tr>
+      <td align="right">64</td>
+      <td align="right">477</td>
+      <td align="right">1,033</td>
+      <td align="right">4,702,960</td>
+      <td align="right">9,815,535</td>
+    </tr>
+    <tr>
+      <td align="right">128</td>
+      <td align="right">477</td>
+      <td align="right">1,769</td>
+      <td align="right">16,418,531</td>
+      <td align="right">38,400,465</td>
+    </tr>
+    <tr>
+      <td align="right">256</td>
+      <td align="right">477</td>
+      <td align="right">2,793</td>
+      <td align="right">44,971,485</td>
+      <td align="right">124,140,015</td>
+    </tr>
+    <tr>
+      <td align="right">512</td>
+      <td align="right">477</td>
+      <td align="right">4,153</td>
+      <td align="right">102,037,195</td>
+      <td align="right">347,066,865</td>
+    </tr>
+    <tr>
+      <td align="right">1024</td>
+      <td align="right">477</td>
+      <td align="right">5,897</td>
+      <td align="right">201,032,939</td>
+      <td align="right">865,782,255</td>
+    </tr>
+    <tr>
+      <td align="right">2048</td>
+      <td align="right">477</td>
+      <td align="right">8,073</td>
+      <td align="right">330,122,597</td>
+      <td align="right">1,970,527,185</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## Canonicalization: By Any Other Name
 
@@ -128,11 +235,6 @@ We can see immediately that the 2x2 and 3x3 games have far fewer states than the
 
 
 The game of 2048 is ordinarily played on a 4x4 board, but it will be helpful to start with smaller boards: 2x2 and 3x3.
-
-By
-
-
-
 
 
 a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
