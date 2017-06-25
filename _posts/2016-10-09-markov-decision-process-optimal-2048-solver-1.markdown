@@ -15,33 +15,37 @@ In future parts, we'll explore how many moves it can take to win the game, and t
 
 ## The Name of the Game
 
-Let's start with a recap of the rules of the game and some terminology. The board comprises 16 *cells* in a 4x4 grid. Each cell can be empty or can contain a *tile* with a value that is a power of 2 between 2 and 2048 (that is, 2, 4, 8, 16, &hellip; up to 2048). The game dynamics, which we can discover by reading [its freely available source code](https://github.com/gabrielecirulli/2048) are:
+Let's start with a recap of the rules of the game and some useful properties.
 
-1. The game starts with two randomly selected tiles in two randomly selected cells.
+The board comprises 16 cells in a 4x4 grid. Each cell can be empty or can contain a tile with a value that is a power of 2 between 2 and 2048. There are 11 such powers of 2, namely 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 and 2048.
 
-1. The player moves `left`, `right`, `up` or `down`, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
+Twice at the beginning of the game and then after each move, the game places a random tile on the board. We can see exactly how by [reading the game's source code](https://github.com/gabrielecirulli/2048): it selects an empty cell uniformly at random and then places there a `2` tile with probability 0.9 or a `4` tile with probability 0.1. The game therefore starts with two randomly placed tiles on the board, each of which is either a `2` or a `4`.
 
-1. The game places a single randomly selected tile in a randomly selected available cell.
+The player moves `left`, `right`, `up` or `down`, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
 
-1. Go to step 2.
+The game continues until either (a) a `2048` tile is obtained, in which case the player wins, or (b) the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the primary objective, which is to reach the `2048` tile.
 
-When the game places a tile at random, it always applies the same rule: choose an available cell uniformly at random, and place either a `2` tile, with probability 0.9, or a `4` tile, with probability 0.1. At the start, the game applies this rule twice on an empty board to place the two initial tiles. Then it applies it again after each turn.
+## Brain Power
 
-The game continues until either (a) a `2048` tile is obtained, in which case the player wins, or (b) the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the primary objective of reaching the `2048` tile, which will make our lives a bit easier.
+### Let Me Count the Ways: Combinatorics
 
-## Combinatorics: Let Me Count the Ways
+We're now ready to start counting the number of possible board positions, which here we'll call *states*. We will start with some very coarse estimates and then refine them. It will also help to generalize to 2048-like games played on different sized boards (not just 4x4) and up to different tiles (not just the 2048 tile). We'll see that the smaller games are much more tractable, and we'll use them to develop the key ideas in later sections.
 
 The most basic way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\) possible states that we can write in this way. That is 184 quadrillion (~\\(10^{17}\\)) states, which won't fit on my laptop any time soon.
 
-In this section, we'll see how to refine this estimate slightly and also generalize the process to cover 2048-like games played on different sized boards (not just 4x4) and up to different tiles (not just the 2048 tile). We'll see that the smaller games are much more tractable, and we'll use them to develop the key ideas in later sections. Let's begin with some notation.
+More generally, let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). For convenience, let \\(C\\) denote the number of cells on the board, so \\(C=B^2\\). For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
 
-Let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). For convenience, let \\(C\\) denote the number of cells on the board, so \\(C=B^2\\). For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
+First, since the game ends when we obtain a \\(2^K\\) tile, we don't particularly care about where that tile is or what else is on the board. We can therefore condense all of the states with a \\(2^K\\) tile into a special "win" state. In the remaining states, each cell can either be blank or hold one of \\(K - 1\\) tiles. This reduces the number of states we have to worry about to \\[K^C + 1\\] where the \\(1\\) is for the win state.
 
-First, since the game ends when we obtain a \\(2^K\\) tile, we don't particularly care about where that tile is or what else is on the board. We can therefore condense all of the states with a \\(2^K\\) tile into a special "win" state. In the remaining states, each cell can either be blank or have one of \\(K - 1\\) tiles. This reduces the number of states we have to worry about to \\[K^C + 1\\] where the \\(1\\) is for the win state.
+Second, we can observe that some of those \\(K^C\\) states can never occur in the game. In particular, the rules of the game imply two important properties:
 
-Second, we can observe that some of those \\(K^C\\) states can never occur in the game. In particular, we can use the following fact: every state must contain at least two non-empty cells, and at least one of those must be a `2` or `4` tile. To see why this is true, we can observe that it holds at the start of the game, when there are two tiles on the board, each of which must be either a `2` or a `4`; then it remains true after each move, because even if tiles are merged, there is always at least one tile left, namely the merged one, and then the game adds a random `2` or `4` tile after the move. This ensures that we always have at least two tiles, one of which is either a `2` or a `4`.
+**Property 1:** There are always at least two tiles on the board.
 
-To account for this constraint, we can subtract all states with no `2` or `4` tile, of which are \\((K-2)^C\\), and also the states with just one `2` tile and all other cells empty, of which there are \\(C\\), and the states with only one `4` tile and all other cells empty, of which there are again \\(C\\). This gives an estimate of
+**Property 2:** There is always at least one `2` or `4` tile on the board.
+
+The first property holds because even if you start with two tiles and merge them, there is still one left, and then the game adds a random tile, leaving two tiles. The second property holds because the game always adds a `2` or `4` tile after each move.
+
+We therefore know that in any valid state there must be at least two tiles on the board, and that one of them must be a `2` or `4` tile. To account for this, we can subtract all states with no `2` or `4` tile, of which are \\((K-2)^C\\), and also the states with just one `2` tile and all other cells empty, of which there are \\(C\\), and the states with only one `4` tile and all other cells empty, of which there are again \\(C\\). This gives an estimate of
 \\[K^C - (K-2)^C - 2C + 1\\]
 states in total. Of course, when \\(K\\) or \\(C\\) is large, this looks pretty much just like \\(K^C\\), which is the dominant term, but this correction is more significant for smaller values.
 
@@ -118,9 +122,274 @@ Let's use this formula to tabulate the estimated number of states various board 
   </tbody>
 </table>
 
-We can see immediately that the 2x2 and 3x3 games have far fewer states than the 4x4 game. Using the argument above, we've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(10^{16}\\). In the following sections, we'll see how to reduce these estimates much further.
+We can see immediately that the 2x2 and 3x3 games have far fewer states than the 4x4 game. Using the argument above, we've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(10^{16}\\).
 
-## Reachability: Can't Get There from Here
+### Don't Look Back: Non-Recurrence
+
+The rules of the game also imply another important property:
+
+**Property 3:** The sum of the tiles on the board increases by either 2 or 4 with each move.
+
+This holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile.
+
+An important consequence of Property 3 is that states never repeat in the course of a game --- that is, states do not recur. This means that we can organize the states into *layers* according to the sum of their tiles. If the game is in a state in the layer with sum 10, we know that the next state must be in the layer with sum 12 or sum 14. We can also therefore count the number of states in each layer, to get an idea of how the game progresses over time.
+
+Let \\(S\\) denote the sum of the tiles on the board. We want to count the number of ways that up to \\(C\\) numbers, each of which is a power of 2 between 2 and \\(2^{K-1}\\), can be added together to produce \\(S\\).
+
+Fortunately, this turns out to be a variation on a well-studied problem in combinatorics: counting the [compositions of an integer](TODO). In general, a composition of an integer \\(S\\) is an ordered collection of integers that sum to \\(S\\); each integer in the collection is called a *part*. For example, there are four compositions of the integer \\(3\\), namely \\(1 + 1 + 1\\), \\(1 + 2\\), \\(2 + 1\\) and \\(3\\). When there are restrictions on the parts, such as being a power of two and only having a certain number of parts, the term is a *restricted* composition.
+
+Even more fortunately, Chinn and Niederhausen (XXXX) have already studied exactly this kind of restricted composition and derived a recurrence that allows us count the number of compositions in which there are a specific number of parts, and each part is a power of 2. Let \\(N(s, c)\\) denote the number of compositions of a (positive) integer \\(s\\) into exactly \\(c\\) parts where each part is a power of 2. It then holds that
+\\[
+N(s, c) = \\begin{cases}
+\\sum_{i = 0}^{\\lfloor \\log_2 s \\rfloor} N(s - 2^i, c - 1), & 2 \\le c \\le s \\\\\\\\
+1, & c = 1 \\textrm{ and } s \\textrm{ is a power of 2} \\\\\\\\
+0, & \\textrm{otherwise}
+\\end{cases}
+\\]
+because for every composition of \\(s - 2^i\\) into \\(c - 1\\) parts, we can obtain a composition of \\(s\\) with \\(c\\) parts by adding one part with value \\(2^i\\).
+
+We now just need to make a few minor adjustments to the summation bounds: we would like to use powers of 2 starting at 2 and at most \\(2^{K-1}\\), since if we have a \\(2^K\\) tile the game is won. To this end, let \\(N_m(s, c)\\) denote the number of compositions of \\(s\\) into exactly \\(c\\) parts where each part is a power of 2 between \\(2^m\\) and \\(2^{K-1}\\). This is given by
+\\[
+N_m(s, c) = \\begin{cases}
+\\sum_{i = m}^{K - 1} N(s - 2^i, c - 1), & 2 \\le c \\le s \\\\\\\\
+1, & c = 1 \\textrm{ and }
+     s = 2^i \\textrm{ for some } i \\in \\{ m, \\ldots, K-1 \\} \\\\\\\\
+0, & \\textrm{otherwise}
+\\end{cases}
+\\]
+following the same logic as above.
+
+Now we have a formula for exactly \\(c\\) parts, but we want a formula for up to \\(c\\) parts. We can follow the same rationale as in the previous section: subtract off the states with no 2 or 4 tile, of which there are \\(N_3(s, c)\\). According to property 1, we need at least 2 parts, so we start summing at \\(c=2\\). This gives
+\\[
+\\sum_{c = 2}^{C} {C \\choose c} \\left( N_1(s, c) - N_3(s, c) \\right)
+\\]
+as our estimate for the number of states with sum \\(s\\). Here \\(C \\choose c\\) is a [binomial coefficient](TODO) that gives the number ways of choosing \\(c\\) of the possible \\(C\\) cells into which to place the tiles. Let's plot it out.
+
+<p align="center">
+<img src="/assets/2048/layers_summary.png" alt="Number of states by sum of tiles (with K=11)" />
+</p>
+
+We can have \\(C\\) values, each up to \\(2^{K-1}\\), so the maximum achievable sum is \\(C 2^{K-1}\\). If we sum over all of the possible sums from 4 to \\(C 2^{K-1}\\), and add one for the special win state, we get the same number of states as we estimated in the previous section, which is a helpful sanity check.
+
+In terms of magnitude, we can see that the 2x2 game never has more than 60 states with a given sum, the 3x3 game peaks at about 3 million states, and the 4x4 game peaks at about 32 trillion states (\\(10^{13}\\)). The number of states grows rapidly early in the game but then tapers off and eventually decreases as the board fills up. On the decreasing portion of the curve, we see discontinuities: particularly for higher sums, it may happen that there are no tiles that will fit on the board and sum to that value.
+
+### A Bridge too Far: Layer Reachability
+
+Another useful consequence of Property 3 is that if two consecutive layers have no states, it's not possible to reach later layers. This is because the sum can increase by at most 4 per turn; if there are two adjacent zeros, then the sum would have to increase by 6 in order to reach the subsequent layer. If we calculate which layers have zero states, we find that the largest reachable layer sums without ever attaining a `2048` tile are:
+
+<table style="width: auto;">
+  <thead>
+    <tr>
+      <th>Board Size</th>
+      <th>Largest Tile Sum from Layers</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2x2</td>
+      <td align="right">60</td>
+    </tr>
+    <tr>
+      <td>3x3</td>
+      <td align="right">2,044</td>
+    </tr>
+    <tr>
+      <td>4x4</td>
+      <td align="right">9,212</td>
+    </tr>
+  </tbody>
+</table>
+
+This gives us another nice result: it is not possible to reach the `2048` tile on a 2x2 or 3x3 board, because the largest achievable sum is less than 2048. Essentially, there is not enough room on the board. The highest tile we can reach on the 2x2 board is the `32` tile, and the highest on the 3x3 board is the `1024` tile.
+
+This also allows us to tighten up our estimates for the total number of states, by discarding unreachable states in layers after the largest reachable layer.
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Maximum Tile</th>
+      <th>Method</th>
+      <th colspan="3">Board Size</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th align="right">2x2</th>
+      <th align="right">3x3</th>
+      <th align="right">4x4</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">8</th>
+      <td>Baseline</td>
+      <td align="right">82</td><td align="right">19,684</td><td align="right">43,046,722</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">73</td><td align="right">19,665</td><td align="right">43,046,689</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">73</td><td align="right">19,665</td><td align="right">43,046,689</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">70</td><td align="right">8,461</td><td align="right">675,154</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">16</th>
+      <td>Baseline</td>
+      <td align="right">257</td><td align="right">262,145</td><td align="right">4,294,967,297</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">233</td><td align="right">261,615</td><td align="right">4,294,901,729</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">233</td><td align="right">261,615</td><td align="right">4,294,901,729</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">198</td><td align="right">128,889</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">32</th>
+      <td>Baseline</td>
+      <td align="right">626</td><td align="right">1,953,126</td><td align="right">152,587,890,626</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">537</td><td align="right">1,933,425</td><td align="right">152,544,843,873</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">529</td><td align="right">1,933,407</td><td align="right">152,544,843,841</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">350</td><td align="right">975,045</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">64</th>
+      <td>Baseline</td>
+      <td align="right">1,297</td><td align="right">10,077,697</td><td align="right">2,821,109,907,457</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">1,033</td><td align="right">9,815,535</td><td align="right">2,816,814,940,129</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">9,814,437</td><td align="right">2,816,814,934,817</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">4,702,959</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">128</th>
+      <td>Baseline</td>
+      <td align="right">2,402</td><td align="right">40,353,608</td><td align="right">33,232,930,569,602</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">1,769</td><td align="right">38,400,465</td><td align="right">33,080,342,678,945</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">38,369,571</td><td align="right">33,080,342,314,753</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">16,418,531</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">256</th>
+      <td>Baseline</td>
+      <td align="right">4,097</td><td align="right">134,217,729</td><td align="right">281,474,976,710,657</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">2,793</td><td align="right">124,140,015</td><td align="right">278,653,866,803,169</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">123,560,373</td><td align="right">278,653,849,430,401</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">44,971,485</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">512</th>
+      <td>Baseline</td>
+      <td align="right">6,562</td><td align="right">387,420,490</td><td align="right">1,853,020,188,851,842</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">4,153</td><td align="right">347,066,865</td><td align="right">1,819,787,258,282,209</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">339,166,485</td><td align="right">1,819,786,604,950,209</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">102,037,195</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">1024</th>
+      <td>Baseline</td>
+      <td align="right">10,001</td><td align="right">1,000,000,001</td><td align="right">10,000,000,000,000,001</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">5,897</td><td align="right">865,782,255</td><td align="right">9,718,525,023,289,313</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">786,513,819</td><td align="right">9,718,504,608,259,073</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">201,032,939</td><td align="right">?</td>
+    </tr>
+
+    <tr>
+      <th align="right" valign="top" rowspan="4">2048</th>
+      <td>Baseline</td>
+      <td align="right">14,642</td><td align="right">2,357,947,692</td><td align="right">45,949,729,863,572,162</td>
+    </tr>
+    <tr>
+      <td>Improved</td>
+      <td align="right">8,073</td><td align="right">1,970,527,185</td><td align="right">44,096,709,674,720,289</td>
+    </tr>
+    <tr>
+      <td>Truncated</td>
+      <td align="right">905</td><td align="right">1,400,665,575</td><td align="right">44,096,167,159,459,777</td>
+    </tr>
+    <tr>
+      <td>Reachable</td>
+      <td align="right">478</td><td align="right">330,122,597</td><td align="right">?</td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Machine Power
+
+### Can't Get There from Here: State Reachability
 
 Just because it is possible to write a state down doesn't mean that it can actually occur in the game. For example, hiding among the states we counted in the previous section was the state
 
@@ -228,14 +497,9 @@ Let's see how many states we count when we take into account reachability.
   </tbody>
 </table>
 
-
-## Canonicalization: By Any Other Name
-
-## Non-Recurrence: Don't Look Back
-
+### By Any Other Name: Canonicalization
 
 The game of 2048 is ordinarily played on a 4x4 board, but it will be helpful to start with smaller boards: 2x2 and 3x3.
-
 
 a mathematical framework called a Markov Decision Process (MDP). MDPs are a way of solving problems that involve making sequences of decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/sutton/book/the-book.html).
 
