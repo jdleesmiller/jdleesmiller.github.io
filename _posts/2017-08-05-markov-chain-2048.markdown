@@ -1,33 +1,152 @@
 ---
 layout: post
-title: "Markov Chains for 2048"
+title: "The Mathematics of 2048: Minimum Moves to Win with Markov Chains"
 date: 2017-08-05 09:00:00 +0000
 categories: articles
 ---
 
 <img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
-For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048). Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
+As part of a recent revamp, [2048](http://gabrielecirulli.github.io/2048)'s "You Win!" screen started reporting the number of moves elapsed. This made me wonder: what's a good number of moves in which to win? In this post, we'll answer this question by modelling 2048 as a Markov chain.
+
+<!-- one sentence intro to 2048? -->
+
+The number of moves needed to win depends both on random chance, because the game adds `2` and `4` tiles at random, and on the player's skill, because they must arrange the tiles such that like tiles can be merged.
+
+We'll see that no matter how well the player plays, the average number of moves required to win the game is at least 940, with a standard deviation of 60 moves. We'll also see that the distribution of this minimum number of moves to win is well-approximated by a mixture of binomial distributions.
+
+To obtain these results, we'll use a simplified version of 2048: instead of placing the tiles on a board, we'll&hellip; throw them into a bag. That is, we'll ignore the geometric constraints imposed by the board on which tiles can be merged together. This simplification makes our job much easier, because the player no longer has to make any decisions [^mdp], and because we don't have to keep track of where the tiles are on the board.
+
+<!-- note: can't lose in the MC model -->
+The price of relaxing the geometric constraints is that we can only compute a lower bound on the expected number of moves to win; it might be that the geometric constraints make it impossible to attain that bound. However, I played and won several games of 2048 (for science!) to show that we can get close to this lower bound in practice.
+
+# 2048 Primer
+
+If you haven't played 2048, or it's been a while, here is a short recap of the rules.
+
+2048 is played on a board with 16 cells arranged in a 4x4 grid. Each cell can be empty or can contain a tile with a value that is a power of 2 between 2 and 2048, namely 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 or 2048.
+
+The player swipes left, right, up or down, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
+
+Twice at the beginning of the game and then after each move, the game places a random tile on the board. We can see exactly how by [reading the game's source code](https://github.com/gabrielecirulli/2048): it selects an empty cell uniformly at random and then places there a `2` tile with probability 0.9 or a `4` tile with probability 0.1. The game therefore starts with two randomly placed tiles on the board, each of which is either a `2` or a `4`.
+
+The game continues until either a `2048` tile is obtained, in which case the player wins, or the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the game's eponymous objective, which is to reach the `2048` tile.
+
+# Markov Chain Primer
+
+[Markov chains](https://en.wikipedia.org/wiki/Markov_chain) are a mathematical framework for modelling systems that evolve over time in a way that depends on random chance. In particular, we assume that time proceeds in discrete steps, and at any given time step, the system can be in one of a finite set of states [^generality]. The system starts in a known state, and then for the next time step it then transitions to a successor state at random but according to a known probability distribution. It then transitions again for the next time step, and so on.
+
+The most important property of a Markov chain is that the next state depends only on the current state, and not on any previous history of the system or external factors. This means that to define a Markov chain it suffices to define a set of states, \\(S\\), the transition probabilities, \\(p_{ij}\\), for each pair of states \\(i\\) and \\(j\\) in \\(S\\), and which state is the start state. Once we have these, we'll see that we can apply lots of useful results from the theory of Markov chains.
+
+# 2048 in a Bag
+
+To represent our simplified '2048 in a bag' game as a Markov chain, each state will encode the set of tiles that are currently in the bag. Initially, there will be no tiles, so the bag will be empty; this is the start state. The game then adds two tiles, each of which is either a `2` with probability 0.9, or a `4` with probability 0.1. This gives three possible successor states to the start states:
+
+<p align="center">
+<img src="/assets/2048/initial_states.png" alt="Montage of a sample of eight starting states." />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_0.svg" alt="Directed graph showing the start state and its immediate successors: {2, 2}, {2, 4}, {4, 4}" />
+</p>
+
+For example, we reach \\(\\{2, 2\\}\\) when the game places two `2` tiles, which occurs with probability \\(0.9 \\times 0.9 = 0.81\\). We reach \\(\\{2, 4\\}\\) when the game places either a `2` tile and then a `4` tile, or a `4` tile and then a `2` tile; in total, that gives probability \\(2 \\times 0.9 \\times 0.1 = 0.18\\).
+
+After the placement of the first two tiles, we generate successors by repeating the following two operations:
+
+- *Merge Like Tiles*: Find all of the pairs of tiles in the bag that have the same value and remove them; then replace each pair of tiles with a single tile with twice the value.
+
+- *Add a new Tile*: Put a new tile in the bag where, just like in the real game, the new tile has either value `2`, with probability 0.9, or value `4`, with probability 0.1.
+
+From \\(\\{2, 2\\}\\), for example, we merge the two `2` tiles into a `4` tile and then add a `2` tile with probability 0.9, which leads to the state \\(\\{2, 4\\}\\), or a `4` tile with probability 0.1, which leads to the state \\(\\{4, 4\\}\\). With these transitions shown, we don't reach any new states, but we do add some new arrows:
+
+<p align="center">
+<img src="/assets/2048/markov_chain_1.svg" alt="Directed graph showing transitions from the {2, 2} state" />
+</p>
+
+As we continue to fill in the successor states, it is helpful to group them into layers by the sum of their tiles:
+
+<p align="center">
+<img src="/assets/2048/markov_chain_2.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_3.svg" alt="Directed graph showing states up to layer sum 12" />
+</p>
+
+<p align="center">
+<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="TODO" style="border: 0;"/></a>
+</p>
+
+<p align="center">
+<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end.svg" alt="TODO" style="border: 0;"/></a>
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_loop.svg" alt="TODO" />
+</p>
+
+After the first two tiles, all of the transitions have probability 0.9 (solid) or 0.1 (dashed), so they are omitted in later layers.
+We can see another pattern in these edges: the sum of the tiles always increases by 2 or 4 with each move, so our progress through the chain is usually one layer, when a `2` tile appears, but sometimes we get to skip a layer, namely when a `4` tile appears.
+
+Continuing in this way, reach states that have a `2048` tile. When we see such a state, we have 'won', and we can stop playing. In the terminology of Markov chains, we can say that these states are 'absorbing' states. In total, this Markov chain contains 3487 states, of which 26 are absorbing. That is, there are 26 possible ways to win.
+
+The full chain is quite large, but if your device can handle a 5MB SVG file, <a href="/assets/2048/markov_chain_big.svgz">here is the full chain</a>.
+
+<p align="center">
+<a href="/assets/2048/markov_chain_big.svgz"><img src="/assets/2048/markov_chain_big_thumbnail.png" alt="Zoomed out view of the whole chain" style="border: 0;" /></a>
+</p>
+
+Treating the full game of 2048 as a Markov chain is difficult, mainly because of the player: the player gets
+
+The first challenge we have in treating 2048 as a Markov chain is the player: the
+
+ In particular, we'll assume that the system can be in one of a finite set of *states* at any given time. It starts in a given state and then jumps to another state
+
+, \\(S\\) at any given time. The system starts in a given state \\(s_0 \\in S\\)  . system starts in a given *state*, and then jumps to another *state* with a given probability .
+
+States and transitions.
+
+States = board positions.
+
+Transitions: difficulty is that the next board position depends on the action of the player. We'll consider a simpler model in which instead of playing on a board, we just throw the tiles into a bag.  
+
+
+
+is a very general mathematical concept for modeling systems that . For this post, we'll use a particularly nice kind of Markov chain: a * discrete space*, *discrete time*, *absorbing* Markov chain.
+
+Finite space means that the system is
+
+Discrete time means that the
+
+
+
+
+If you're already familiar with Markov chains, this blog post can be summarized in one sentence: we'll model the game as an absorbing Markov chain in discrete time and with finite state space and use its fundamental matrix to calculate the first and second moments of the distribution of its number of steps and also its absorbing probabilities.
+
+If you're not familiar with Markov chains, let's get started!
+
+
+Fortunately, our purposes here will only require on  
+
+
+mathematical formalism for modelling systems
+
+
+using a mathematical tool will let us estimate this quantity,
+
+How many moves does it take to win 2048? We
+
+In this article, we'll try to answer the question, 'how many moves does it take to win 2048?'
+
+For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048).
+
+Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
 
 To better understand what makes the game work so well, I have been trying to analyze it mathematically. In this first post of what will be a series, we will develop a model of the 2048 as a Markov Chain. Using this model, we'll show that:
 
 1. It takes at least 940 moves on average to win.
 
-1. The distribution of the number of moves to win is closely related to the binomial distribution.
-
-1. The 4x4 board is the smallest board on which you can reach the 2048 tile.
-
-## The Name of the Game
-
-Let's start with a recap of the rules of the game.
-
-2048 is played on a board with 16 cells arranged in a 4x4 grid. Each cell can be empty or can contain a tile with a value that is a power of 2 between 2 and 2048, namely 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 or 2048.
-
-The player moves `left`, `right`, `up` or `down`, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
-
-Twice at the beginning of the game and then after each move, the game places a random tile on the board. We can see exactly how by [reading the game's source code](https://github.com/gabrielecirulli/2048): it selects an empty cell uniformly at random and then places there a `2` tile with probability 0.9 or a `4` tile with probability 0.1. The game therefore starts with two randomly placed tiles on the board, each of which is either a `2` or a `4`.
-
-The game continues until either (a) a `2048` tile is obtained, in which case the player wins, or (b) the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the primary objective, which is to reach the `2048` tile.
 
 ## The Bag Process
 
@@ -55,13 +174,6 @@ This is the sort of thing we can model as a Markov Chain. In particular, it is a
 
 It is probably best seen from a picture. Here are the first few layers:
 
-<p align="center">
-<img src="/assets/2048/markov_chain_0.svg" alt="TODO" />
-</p>
-
-<p align="center">
-<img src="/assets/2048/markov_chain_1.svg" alt="TODO" />
-</p>
 
 One consequence of this is that it's not possible to lose, because there's no constraint on the bag size.
 
@@ -79,300 +191,12 @@ What's interesting?
 
 - Connection with the binomial model.
 
-<style>
 
-.node circle {
-  fill: #999;
-}
+## Footnotes
 
-.node text {
-  font: 10px sans-serif;
-}
+[^mdp]: If we do allow the player to make decisions, we have a [Markov Decision Process](TODO), rather than a Markov chain. That will be the subject of a later blog post.
 
-.node--internal circle {
-  fill: #555;
-}
-
-.node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-}
-
-.link {
-  fill: none;
-  stroke: #555;
-  stroke-opacity: 0.4;
-  stroke-width: 1.5px;
-}
-
-</style>
-
-<div id="container" style="width: 100%; overflow: scroll;">
-  <svg></svg>
-  <!-- <canvas></canvas> -->
-</div>
-<script src="/assets/d3/d3.v4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-<script type="text/javascript">
-
-(function () {
-  var NODE_HEIGHT = 20;
-  var LAYER_WIDTH = 60;
-
-  var svg = d3.select('svg')
-  var g = svg.append('g')
-
-  function convertTransitionsToGraph (transitions) {
-    var nodes = {}
-    var links = []
-
-    function addNode (stateString) {
-      var state = JSON.parse(stateString)
-      var id = '{' + state.join(', ') + '}'
-      if (nodes.hasOwnProperty(id)) return id
-      nodes[id] = {
-        id: id,
-        state: state,
-        sum: _.sum(state),
-        size: state.length
-      }
-      return id
-    }
-
-    _.forIn(transitions, function (successors, node0) {
-      var id0 = addNode(node0)
-      _.forIn(successors, function (pr, node1) {
-        var id1 = addNode(node1)
-        links.push({ source: id0, target: id1, pr: pr })
-      })
-    })
-
-    return { nodes: nodes, links: links }
-  }
-
-  // idea...
-  // probably have to hard code the first few
-  // maybe do a greedy optimization where we fix each layer as we go but
-  // calculate the minimum-crossing solution for the next layer.
-  //
-  // In most cases, n! would be OK, but we have n=20 for one, so that's out. 
-  // What if we just generate the successors in order?
-
-  function layoutNodesInLayer (nodes, _sum) {
-    // 1 -> 0; 2 -> 0, 1; 3 -> -1, 0, 1; 4 -> -1, 0, 1, 2, etc.
-    var offset = -Math.floor((nodes.length - 1) / 2)
-    _(nodes).sortBy('size').reverse().each(function (node, index) {
-      node.x = Math.max(0, node.sum - 2) * LAYER_WIDTH
-      var y;
-      if (node.sum == 4) {
-        y = 1
-      } else if (node.sum == 6) {
-        y = -1
-      } else {
-        y = offset + index
-      }
-      node.y = y * NODE_HEIGHT
-    })
-  }
-
-  function layoutNodes (nodes) {
-    _(nodes).values().groupBy('sum').each(layoutNodesInLayer)
-  }
-
-  function getExtent (nodes, dimension) {
-    var values = _(nodes).values().map(dimension)
-    return values.max() - values.min()
-  }
-
-  function centerNodes (nodes, height) {
-    _(nodes).each(function (node) { node.y += height / 2 })
-  }
-
-  d3.json("/assets/2048/transitions_11.json", function (err, data) {
-    if (err) throw err
-
-    var graph = convertTransitionsToGraph(data)
-    layoutNodes(graph.nodes)
-
-    var width = getExtent(graph.nodes, 'x') + LAYER_WIDTH;
-    svg.attr('width', width)
-
-    var height = getExtent(graph.nodes, 'y') + 2 * NODE_HEIGHT;
-    svg.attr('height', height)
-
-    centerNodes(graph.nodes, height)
-
-    var node = g
-      .selectAll('.node')
-      .data(_.values(graph.nodes))
-      .enter().append('g')
-
-    node.attr('class', function (d) { return 'node' })
-    node.attr('transform', function (d) {
-      return 'translate(' + d.x + ',' + d.y + ')'
-    })
-
-    node.append('text')
-      .attr('dy', 3)
-      .attr('x', function(d) { return 8 })
-      .text(function(d) { return d.id })
-
-    var link = g
-      .selectAll('.link')
-      .data(graph.links)
-      .enter().append('path')
-
-    link.attr("class", "link")
-    link.attr("d", function(d) {
-      var source = graph.nodes[d.source]
-      var target = graph.nodes[d.target]
-      return "M" + target.x + "," + target.y
-          + "C" + (source.x + 100) + "," + target.y
-          + " " + (source.x + 100) + "," + source.y
-          + " " + source.x + "," + source.y;
-    });
-  })
-})()
-
-
-// (function () {
-//   var LAYER_SPACING = 30
-// 
-//   function convertTransitionsToD3Graph (transitions) {
-//     var nodes = {}
-//     var links = []
-// 
-//     function addNode (node) {
-//       var state = JSON.parse(node)
-//       var id = state.join(', ')
-//       var stateSum = _.sum(state);
-//       if (nodes.hasOwnProperty(id)) return id
-//       nodes[id] = {
-//         id: id,
-//         fx: LAYER_SPACING * stateSum / 2
-//       }
-//       return id
-//     }
-// 
-//     _.forIn(transitions, function (successors, node0) {
-//       var id0 = addNode(node0)
-//       _.forIn(successors, function (pr, node1) {
-//         var id1 = addNode(node1)
-//         links.push({ source: id0, target: id1, pr: pr })
-//       })
-//     })
-// 
-//     return { nodes: _.values(nodes), links: links }
-//   }
-// 
-//   var container = document.getElementById('container')
-//   var canvas = document.querySelector('canvas')
-// 
-//   var simulation = d3.forceSimulation()
-//     .force('link',
-//       d3.forceLink()
-//         .id(function(d) { return d.id; })
-//         .strength(function(d) { return d.pr; }))
-//     .force('charge',
-//       d3.forceManyBody()
-//         .strength(function () { return -10; }))
-// 
-//   d3.json("/assets/2048/transitions_11.json", function (err, data) {
-//     if (err) throw err
-// 
-//     var graph = convertTransitionsToD3Graph(data)
-// 
-//     var width = _(graph.nodes).map('fx').max()
-//     var height = container.offsetHeight
-// 
-//     canvas.width = width
-//     canvas.height = height
-//     var context = canvas.getContext('2d')
-// 
-//     simulation.force('center', d3.forceCenter(width / 2, height / 2))
-//     simulation.force('y',
-//       d3.forceY()
-//         .y(function () { return height / 2 })
-//         .strength(function () { return 0.1 }))
-// 
-//     function ticked() {
-//       context.clearRect(0, 0, width, height);
-// 
-//       context.beginPath();
-//       graph.links.forEach(drawLink);
-//       context.strokeStyle = "#aaa";
-//       context.stroke();
-// 
-//       context.beginPath();
-//       graph.nodes.forEach(drawNode);
-//       context.fill();
-//       context.strokeStyle = "#fff";
-//       context.stroke();
-//     }
-// 
-//     function drawLink(d) {
-//       context.moveTo(d.source.x, d.source.y);
-//       context.lineTo(d.target.x, d.target.y);
-//     }
-// 
-//     function drawNode(d) {
-//       context.moveTo(d.x + 3, d.y);
-//       context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
-//     }
-//     
-//     simulation.nodes(graph.nodes).on('tick', ticked)
-// 
-//     simulation.force('link').links(graph.links)
-//   })
-// })()
-
-
-// var svg = d3.select("svg"),
-//     width = +svg.attr("width"),
-//     height = +svg.attr("height"),
-//     g = svg.append("g").attr("transform", "translate(40,0)");
-// 
-// var tree = d3.cluster()
-//     .size([height, width - 160]);
-// 
-// var stratify = d3.stratify()
-//     .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
-// 
-// d3.csv("/assets/2048/flare.csv", function(error, data) {
-//   if (error) throw error;
-// 
-//   var root = stratify(data)
-//       .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
-// 
-//   tree(root);
-// 
-//   var link = g.selectAll(".link")
-//       .data(root.descendants().slice(1))
-//     .enter().append("path")
-//       .attr("class", "link")
-//       .attr("d", function(d) {
-//         return "M" + d.y + "," + d.x
-//             + "C" + (d.parent.y + 100) + "," + d.x
-//             + " " + (d.parent.y + 100) + "," + d.parent.x
-//             + " " + d.parent.y + "," + d.parent.x;
-//       });
-// 
-//   var node = g.selectAll(".node")
-//       .data(root.descendants())
-//     .enter().append("g")
-//       .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-//       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-// 
-//   node.append("circle")
-//       .attr("r", 2.5);
-// 
-//   node.append("text")
-//       .attr("dy", 3)
-//       .attr("x", function(d) { return d.children ? -8 : 8; })
-//       .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-//       .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
-// });
-
-</script>
+[^generality]: Markov chains [can be defined more generally](https://en.wikipedia.org/wiki/Markov_chain), but the discrete-space, discrete-time case is the most common, and it's all we'll need for this blog post.
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -380,4 +204,3 @@ MathJax.Hub.Config({
 });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
- 

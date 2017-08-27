@@ -1,0 +1,9 @@
+digraph {
+  rankdir=LR;
+
+  previous [label="..."];
+  s_2_4_4_8_2048 [label="{2, 4, 4, 8, 2048}"];
+
+  previous -> s_2_4_4_8_2048;
+  s_2_4_4_8_2048 -> s_2_4_4_8_2048 [label="1.0", dir=back];
+}
