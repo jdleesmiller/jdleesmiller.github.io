@@ -86,6 +86,26 @@ As we continue to fill in the successor states, it is helpful to group them into
 <img src="/assets/2048/markov_chain_loop.svg" alt="TODO" />
 </p>
 
+<p align="center">
+<img src="/assets/2048/markov_chain_moves_histogram.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_canonical.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_canonical_lower_right.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="TODO" />
+</p>
+
+<p align="center">
+<img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="TODO" />
+</p>
+
 After the first two tiles, all of the transitions have probability 0.9 (solid) or 0.1 (dashed), so they are omitted in later layers.
 We can see another pattern in these edges: the sum of the tiles always increases by 2 or 4 with each move, so our progress through the chain is usually one layer, when a `2` tile appears, but sometimes we get to skip a layer, namely when a `4` tile appears.
 
