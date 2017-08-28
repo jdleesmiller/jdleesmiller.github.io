@@ -7,216 +7,259 @@ categories: articles
 
 <img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
-As part of a recent revamp, [2048](http://gabrielecirulli.github.io/2048)'s "You Win!" screen started reporting the number of moves elapsed. This made me wonder: what's a good number of moves in which to win? In this post, we'll answer this question by modelling 2048 as a Markov chain.
-
-<!-- one sentence intro to 2048? -->
+As part of a recent revamp, [2048](http://gabrielecirulli.github.io/2048)'s "You Win!" screen started reporting the number of moves elapsed. This made me wonder: what's the minimum number of moves needed to win? In this post, we'll answer this question by modeling 2048 as a Markov chain.
 
 The number of moves needed to win depends both on random chance, because the game adds `2` and `4` tiles at random, and on the player's skill, because they must arrange the tiles such that like tiles can be merged.
 
-We'll see that no matter how well the player plays, the average number of moves required to win the game is at least 940, with a standard deviation of 60 moves. We'll also see that the distribution of this minimum number of moves to win is well-approximated by a mixture of binomial distributions.
+The main result will be that, no matter how well the player plays, **the minimum number of moves required to win the game is 938.8 on average, with a standard deviation of 8.3 moves**. We'll also see that the distribution of this minimum number of moves to win is well-approximated by a mixture of binomial distributions.
 
 To obtain these results, we'll use a simplified version of 2048: instead of placing the tiles on a board, we'll&hellip; throw them into a bag. That is, we'll ignore the geometric constraints imposed by the board on which tiles can be merged together. This simplification makes our job much easier, because the player no longer has to make any decisions [^mdp], and because we don't have to keep track of where the tiles are on the board.
 
-<!-- note: can't lose in the MC model -->
-The price of relaxing the geometric constraints is that we can only compute a lower bound on the expected number of moves to win; it might be that the geometric constraints make it impossible to attain that bound. However, I played and won several games of 2048 (for science!) to show that we can get close to this lower bound in practice.
+The price we pay for relaxing the geometric constraints is that we can only compute a lower bound on the expected number of moves to win; it might be that the geometric constraints make it impossible to attain that bound. However, I played and won several games of 2048 (for science!) to show that we can get close to this lower bound in practice.
 
-# 2048 Primer
+If you're not familiar with 2048 or with Markov Chains, that's fine --- I'll describe the necessary parts as we go [^tldr].
 
-If you haven't played 2048, or it's been a while, here is a short recap of the rules.
+## 2048 as a Markov Chain
 
-2048 is played on a board with 16 cells arranged in a 4x4 grid. Each cell can be empty or can contain a tile with a value that is a power of 2 between 2 and 2048, namely 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 or 2048.
+To represent our simplified '2048 in a bag' game as a Markov chain, we need to define the *states* and the *transition probabilities* of the chain. Each state is like a snapshot of the game at a moment in time, and the transition probabilities specify, for each state, which state is likely to come next.
 
-The player swipes left, right, up or down, and all of the tiles slide as far as possible in that direction. If two tiles with the same value slide together, they merge into a single tile with twice that value. For example, if two `8` tiles merge, the result is a single `16` tile.
-
-Twice at the beginning of the game and then after each move, the game places a random tile on the board. We can see exactly how by [reading the game's source code](https://github.com/gabrielecirulli/2048): it selects an empty cell uniformly at random and then places there a `2` tile with probability 0.9 or a `4` tile with probability 0.1. The game therefore starts with two randomly placed tiles on the board, each of which is either a `2` or a `4`.
-
-The game continues until either a `2048` tile is obtained, in which case the player wins, or the board is full and it is not possible to move any tile, in which case the player loses. The game will let you play past the `2048` tile, but for now we'll restrict our attention to the game's eponymous objective, which is to reach the `2048` tile.
-
-# Markov Chain Primer
-
-[Markov chains](https://en.wikipedia.org/wiki/Markov_chain) are a mathematical framework for modelling systems that evolve over time in a way that depends on random chance. In particular, we assume that time proceeds in discrete steps, and at any given time step, the system can be in one of a finite set of states [^generality]. The system starts in a known state, and then for the next time step it then transitions to a successor state at random but according to a known probability distribution. It then transitions again for the next time step, and so on.
-
-The most important property of a Markov chain is that the next state depends only on the current state, and not on any previous history of the system or external factors. This means that to define a Markov chain it suffices to define a set of states, \\(S\\), the transition probabilities, \\(p_{ij}\\), for each pair of states \\(i\\) and \\(j\\) in \\(S\\), and which state is the start state. Once we have these, we'll see that we can apply lots of useful results from the theory of Markov chains.
-
-# 2048 in a Bag
-
-To represent our simplified '2048 in a bag' game as a Markov chain, each state will encode the set of tiles that are currently in the bag. Initially, there will be no tiles, so the bag will be empty; this is the start state. The game then adds two tiles, each of which is either a `2` with probability 0.9, or a `4` with probability 0.1. This gives three possible successor states to the start states:
+For 2048 in a bag, we will define each state to encode which tiles are currently in the bag. We don't care about the order of the tiles, so we can think of it as a set of tiles. Initially, there are no tiles, so our initial state is simply the empty set. In diagram form, which we'll add to below, this initial state looks like:
 
 <p align="center">
-<img src="/assets/2048/initial_states.png" alt="Montage of a sample of eight starting states." />
+<img src="/assets/2048/markov_chain_initial_state.svg" alt="The initial state for the Markov chain" />
 </p>
+
+### Setting up the Board
 
 <p align="center">
-<img src="/assets/2048/markov_chain_0.svg" alt="Directed graph showing the start state and its immediate successors: {2, 2}, {2, 4}, {4, 4}" />
+<img src="/assets/2048/initial_states.png" alt="Montage of a sample of eight setup states." style="height: 200px;" /><br />
+A sample of a dozen new game boards.
 </p>
 
-For example, we reach \\(\\{2, 2\\}\\) when the game places two `2` tiles, which occurs with probability \\(0.9 \\times 0.9 = 0.81\\). We reach \\(\\{2, 4\\}\\) when the game places either a `2` tile and then a `4` tile, or a `4` tile and then a `2` tile; in total, that gives probability \\(2 \\times 0.9 \\times 0.1 = 0.18\\).
+When we start a new game of 2048, the game places two random tiles on the board (see examples above). To represent this in the Markov chain, we need to work out the transition probabilities from the initial state to each of the possible successor states.
 
-After the placement of the first two tiles, we generate successors by repeating the following two operations:
+Fortunately, we can look at [the game's source code](https://github.com/gabrielecirulli/2048) to find out how the game does this. Whenever the game places a random tile on the board, it always follows the same process: *pick an available cell uniformly at random, then add a new tile either with value `2`, with probability 0.9, or value `4`, with probability 0.1*.
 
-- *Merge Like Tiles*: Find all of the pairs of tiles in the bag that have the same value and remove them; then replace each pair of tiles with a single tile with twice the value.
+For 2048 in a bag, we don't care about finding an available cell, because we haven't put any capacity constraint on the bag; we just care about adding either a `2` or `4` tile with the given probabilities. This leads to three possible successor states for the initial state:
 
-- *Add a new Tile*: Put a new tile in the bag where, just like in the real game, the new tile has either value `2`, with probability 0.9, or value `4`, with probability 0.1.
+- \\(\\{2, 2\\}\\) when both of the new tiles are `2`s. This happens with probability \\(0.9 \\times 0.9 = 0.81\\).
+- \\(\\{4, 4\\}\\) when both of the new tiles are `4`s. This happens with probability \\(0.1 \\times 0.1 = 0.01\\) --- that is, you are pretty lucky if you start with two `4`s.
+- \\(\\{2, 4\\}\\) when the new tiles are `2` and then `4`, which happens with probability \\(0.9 \\times 0.1 = 0.09\\), or `4` and then `2`, which happens with probability \\(0.1 \\times 0.9 = 0.09\\). We don't care about order, so both cases lead to the same state, with total probability \\(0.09 + 0.09 = 0.18\\).
 
-From \\(\\{2, 2\\}\\), for example, we merge the two `2` tiles into a `4` tile and then add a `2` tile with probability 0.9, which leads to the state \\(\\{2, 4\\}\\), or a `4` tile with probability 0.1, which leads to the state \\(\\{4, 4\\}\\). With these transitions shown, we don't reach any new states, but we do add some new arrows:
+We can add these successor states and their transition probabilities to the Markov chain diagram as follows, where the transition probabilities are written on the edge labels:
 
 <p align="center">
-<img src="/assets/2048/markov_chain_1.svg" alt="Directed graph showing transitions from the {2, 2} state" />
+<img src="/assets/2048/markov_chain_0.svg" alt="Directed graph showing the initial state and its immediate successors: {2, 2}, {2, 4}, {4, 4}" />
 </p>
 
-As we continue to fill in the successor states, it is helpful to group them into layers by the sum of their tiles:
+### Playing the Game
+
+Now we're ready to play the game. In the real game, this means that we get to swipe left, right, up or down to try to merge tiles together. In the bag game, we will just assume that we can always merge pairs of like tiles.
+
+In particular, the rule for merging tiles in the bag game is: *find all of the pairs of tiles in the bag that have the same value and remove them; then replace each pair of tiles with a single tile with twice the value* [^merge].
+
+Once pairs of like tiles have been merged the game adds a single new tile at random using the same process as above --- that is, a `2` tile with probability 0.9, or a `4` tile with probability 0.1 --- to arrive at the successor state.
+
+For example, for the state \\(\\{2, 2\\}\\), the two `2` tiles are merged into a single `4` tile, and then the game will add either a `2` tile or a `4` tile. The possible successors are therefore \\(\\{2, 4\\}\\) and \\(\\{4, 4\\}\\), which, as it happens, we have already encountered. The diagram including these two transitions from \\(\\{2, 2\\}\\), which have probability 0.9 and 0.1 respectively, is then:
 
 <p align="center">
-<img src="/assets/2048/markov_chain_2.svg" alt="TODO" />
+<img src="/assets/2048/markov_chain_1.svg" alt="Directed graph showing the additional transitions from the {2, 2} state" />
 </p>
 
+If we follow the same process for the successors of \\(\\{2, 4\\}\\), we see that no merging is possible, because there is no pair of like tiles, and the successor state will either be \\(\\{2, 2, 4\\}\\) or \\(\\{2, 4, 4\\}\\), depending on whether the new tile is a `2` or `4`. The updated diagram is then:
+
 <p align="center">
-<img src="/assets/2048/markov_chain_3.svg" alt="Directed graph showing states up to layer sum 12" />
+<img src="/assets/2048/markov_chain_2.svg" alt="Directed graph showing the additional transitions from the {2, 4} state" />
 </p>
+
+### Skipping Along
+
+We can continue adding transitions in this way. However, as we add more states and transitions, the diagrams can become quite complicated [^dot]. We can make the diagrams a bit more orderly by using the following observation: **the sum of the tiles in the bag increases by either 2 or 4 with each transition**. This is because merging pairs of like tiles does not change the sum of the tiles in the bag (or on the board --- this property also holds in the real game), and the game always adds either a `2` tile or a `4` tile.
+
+If we group states together into 'layers' by their sum, the first few layers look like this:
+
+<p align="center">
+<img src="/assets/2048/markov_chain_3.svg" alt="Directed graph showing states up to sum 12" />
+</p>
+
+For later layers, I've also omitted the labels for transitions with probability 0.9 (solid lines, unless otherwise labelled) and 0.1 (dashed lines), to reduce clutter.
+
+Grouping the states into layers by sum makes another pattern clear: each transition (other than those from the initial state) is either to the next layer, with probability 0.9, or the layer after, with probability 0.1. (This is particularly clear if you look at the layers with sums 8, 10 and 12 in the diagram above.) That is, most of the time the game gives us a `2`, and we'll transition to the next layer, but sometimes we get lucky, and the game gives us a `4`, which means we get to skip a layer, getting us slightly closer to our goal of reaching the 2048 tile.
+
+### The End Game
+
+The process could continue on forever, but since we are only interested in reaching the `2048` tile, we'll stop it at that point. The first state that contains a `2048` tile is in the layer with sum 2066. Here's what the graph looks like around it (click to see more):
 
 <p align="center">
 <a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="TODO" style="border: 0;"/></a>
 </p>
 
-<p align="center">
-<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end.svg" alt="TODO" style="border: 0;"/></a>
-</p>
+When we reach a state that includes a `2048` tile, we can end the game by making that state an *absorbing* state. I've colored the absorbing states red to cut down on clutter, but strictly speaking each absorbing state should be drawn with a transition to itself with probability \\(1\\) --- that is, once you reach that state, you can never leave:
 
 <p align="center">
 <img src="/assets/2048/markov_chain_loop.svg" alt="TODO" />
 </p>
 
-<p align="center">
-<img src="/assets/2048/markov_chain_moves_histogram.svg" alt="TODO" />
-</p>
+If we continue to add transitions until there are no non-absorbing states left, we eventually end up with 3487 states, of which 26 are absorbing; this completes the definition of the Markov chain.
 
-<p align="center">
-<img src="/assets/2048/markov_chain_canonical.svg" alt="TODO" />
-</p>
+One important point to note is that there is no way to 'lose' the bag game --- unlike the real game, we cannot get into a situation where the board (or bag) is full, so all of the absorbing states are 'win' states.
 
-<p align="center">
-<img src="/assets/2048/markov_chain_canonical_lower_right.svg" alt="TODO" />
-</p>
-
-<p align="center">
-<img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="TODO" />
-</p>
-
-<p align="center">
-<img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="TODO" />
-</p>
-
-After the first two tiles, all of the transitions have probability 0.9 (solid) or 0.1 (dashed), so they are omitted in later layers.
-We can see another pattern in these edges: the sum of the tiles always increases by 2 or 4 with each move, so our progress through the chain is usually one layer, when a `2` tile appears, but sometimes we get to skip a layer, namely when a `4` tile appears.
-
-Continuing in this way, reach states that have a `2048` tile. When we see such a state, we have 'won', and we can stop playing. In the terminology of Markov chains, we can say that these states are 'absorbing' states. In total, this Markov chain contains 3487 states, of which 26 are absorbing. That is, there are 26 possible ways to win.
-
-The full chain is quite large, but if your device can handle a 5MB SVG file, <a href="/assets/2048/markov_chain_big.svgz">here is the full chain</a>.
+The full chain is quite large, but if your device can handle a 5MB SVG file, <a href="/assets/2048/markov_chain_big.svgz">here is a diagram of the full chain</a>:
 
 <p align="center">
 <a href="/assets/2048/markov_chain_big.svgz"><img src="/assets/2048/markov_chain_big_thumbnail.png" alt="Zoomed out view of the whole chain" style="border: 0;" /></a>
 </p>
 
-Treating the full game of 2048 as a Markov chain is difficult, mainly because of the player: the player gets
+## Analysis of the Markov Chain
 
-The first challenge we have in treating 2048 as a Markov chain is the player: the
+Now that we have put in the effort to model 2048 (in a bag) as a Markov chain, we can bring some powerful mathematical machinery to bear. In particular, we'll see that our Markov chain is a special type of Markov chain called an [absorbing Markov chain](https://en.wikipedia.org/wiki/Absorbing_Markov_chain).
 
- In particular, we'll assume that the system can be in one of a finite set of *states* at any given time. It starts in a given state and then jumps to another state
+The criteria for being an absorbing Markov chain are that:
 
-, \\(S\\) at any given time. The system starts in a given state \\(s_0 \\in S\\)  . system starts in a given *state*, and then jumps to another *state* with a given probability .
+1. There must be at least one absorbing state. As we've seen above, there are 26 absorbing states, one for each winning state with a `2048` tile.
 
-States and transitions.
+2. For any state, it is possible to reach an absorbing state in a finite number of transitions. One way to see that this holds for our chain is to use our observation that the sum of the tiles in the bag can only increase with each transition; if the sum always increases, and we always merge like tiles, we must eventually reach a state with a `2048` tile, which is absorbing.
 
-States = board positions.
+### The Transition Matrix
 
-Transitions: difficulty is that the next board position depends on the action of the player. We'll consider a simpler model in which instead of playing on a board, we just throw the tiles into a bag.  
+Now that we have established that we have an absorbing Markov chain, the next step is to write out its *transition matrix* in *canonical form*. A transition matrix is a matrix that organizes the transition probabilities, which we defined for our chain above, such that the \\((i, j)\\) entry is the probability of transitioning from state \\(i\\) to state \\(j\\).
 
+For the transition matrix, \\(\\mathbf{P}\\), of an absorbing chain with \\(r\\) absorbing states and \\(t\\) *transient* (which means non-absorbing) states, to be in canonical form, it must be possible to write it in terms of four smaller matrices, \\(\\mathbf{Q}\\), \\(\\mathbf{R}\\), \\(\\mathbf{0}\\) and \\(\\mathbf{I}_r\\), such that:
+\\[
+\\mathbf{P} = \\left(
+\\begin{array}{cc}
+ \\mathbf{Q} & \\mathbf{R} \\\\\\\\
+ \\mathbf{0} & \\mathbf{I}_r
+\\end{array}
+\\right)
+\\]
+where \\(\\mathbf{Q}\\) is a \\(t \\times t\\) matrix that describes the probability of transitioning from one transient state to another transient state, \\(\\mathbf{R}\\) is a \\(t \\times r\\) matrix that describes the probability of transitioning from a transient state to an absorbing state, \\(\\mathbf{0}\\) denotes an \\(r \\times t\\) matrix of zeros, and \\(\\mathbf{I}_r\\) is the transition matrix for the absorbing states, which is an \\(r \\times r\\) identity matrix.
 
+To get a transition matrix in canonical form for our chain, we need to decide on an ordering of the states. It suffices to order states by (1) whether they are absorbing, with absorbing states last, and then (2) by the sum of their tiles, in ascending order. If we do this, we obtain the following matrix:
 
-is a very general mathematical concept for modeling systems that . For this post, we'll use a particularly nice kind of Markov chain: a * discrete space*, *discrete time*, *absorbing* Markov chain.
+<p align="center">
+<img src="/assets/2048/markov_chain_canonical.svg" alt="The full transition matrix for the absorbing Markov chain" />
+</p>
 
-Finite space means that the system is
+It's quite large, namely \\(3487 \\times 3487\\), so when zoomed out it just looks pretty much diagonal, but if we zoom in on the lower right hand corner, we can see that it does have some structure, and in particular it has the canonical form that we're after:
 
-Discrete time means that the
+<p align="center">
+<img src="/assets/2048/markov_chain_canonical_lower_right.svg" alt="The lower right hand corner of the transition matrix for the absorbing Markov chain, which shows more structure" />
+</p>
 
+### The Fundamental Matrix
 
+The original question we sought to answer was 'what's the minimum number of moves needed to win (on average)?'. We can now make that more precise: it is the expected number of transitions before being absorbed, which we can obtain from \\(\\mathbf{Q}\\), as follows.
 
+First, we observe that, just as the \\((i, j)\\) entry of \\(\\mathbf{Q}\\) is the probability of transitioning from state \\(i\\) to state \\(j\\) in a single transition, the \\((i, j)\\) entry of the matrix product \\(\\mathbf{Q} \\times \\mathbf{Q}\\), or \\(\\mathbf{Q}^2\\), is the probability of doing the same in two transitions. More generally, the \\((i, j)\\) entry of \\(\\mathbf{Q}^k\\) is the probability of entering state \\(j\\) exactly \\(k\\) transitions after entering state \\(i\\) for any \\(k \\geq 0\\). If we let
+\\[
+\\mathbf{N} = \\sum_{k=0}^{\\infty} \\mathbf{Q}^k
+\\]
+denote the sum of these probabilities, the result is that the \\((i, j)\\) entry of \\(\\mathbf{N}\\) is then the expected number of times that the times that the chain enters state \\(j\\) if it started in state \\(i\\). This matrix \\(\\mathbf{N}\\) is called the fundamental matrix.
 
-If you're already familiar with Markov chains, this blog post can be summarized in one sentence: we'll model the game as an absorbing Markov chain in discrete time and with finite state space and use its fundamental matrix to calculate the first and second moments of the distribution of its number of steps and also its absorbing probabilities.
+Fortunately, the fundamental matrix can also be calculated directly, without the awkward infinite, summation as the inverse of the matrix \\(\\mathbf{I}_t - \\mathbf{Q}\\), where \\(\\mathbf{I}_t\\) is the \\(t \\times t\\) identity matrix; that is, \\(\\mathbf{N} = (\\mathbf{I}_t - \\mathbf{Q})^{-1}\\). (The proof of this identity is left as an exercise for the reader!)
 
-If you're not familiar with Markov chains, let's get started!
+### Moves to Win
 
+Once we have the fundamental matrix, we can finally find the expected number of transitions from any state \\(i\\) to an absorbing state by summing up all of the entries in row \\(i\\) --- in other words, the number of transitions before we reach an absorbing state is the total number of transitions that we spend in all of the transient states along the way.
 
-Fortunately, our purposes here will only require on  
+We can obtain this number for each state by solving the linear system of equations
+\\[
+(\\mathbf{I}_t - \\mathbf{Q})\\mathbf{t} = \\mathbf{1}
+\\]
+for \\(\\mathbf{t}\\), where \\(\\mathbf{1}\\) denotes a column vector of all ones. The entry in \\(\\mathbf{t}\\) that corresponds to the initial state (the empty set, \\(\\{\\}\\)) is the number of transitions. In this case, the number that comes out is 939.809917. To finish up, we just need to subtract \\(1\\), because the transition from the initial state doesn't count as a move. This gives our final answer as **938.8 moves**.
 
+We can also obtain the variance for the minimum number of moves using the identity
+\\[
+2(\\mathbf{N} - \\mathbf{I}_t) \\mathbf{t} - \\mathbf{t} \\circ \\mathbf{t}
+\\]
+where \\(\\circ\\) denotes the [Hadamard (elementwise) product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)). For the initial state, the variance comes out as 69.4766751, which gives a standard deviation of **8.3 moves**.
 
-mathematical formalism for modelling systems
+Finally, setting aside all of the clever mathematics, we can just simulate the chain and see how many moves it takes before we get absorbed. After one million simulations, the following distribution emerges, with the mean highlighted by the blue vertical line:
 
+<p align="center">
+<img src="/assets/2048/markov_chain_moves_histogram.svg" alt="Distribution of the number of moves to win, with the mean of 938.8 highlighted" />
+</p>
 
-using a mathematical tool will let us estimate this quantity,
+## The Shape of the Moves-to-Win Distribution
 
-How many moves does it take to win 2048? We
+So far we've managed to calculate the mean and variance of the moves-to-win distribution using properties of Markov chains, which is nice, but it would be even nicer to have some insight into why the distribution is the shape that it is. The approach I'll suggest here is only approximate, but it does match the empirical results from the simulation quite closely, and it provides some useful insights.
 
-In this article, we'll try to answer the question, 'how many moves does it take to win 2048?'
+We'll begin by revisiting an observation that we made above: the sum of the tiles on the board increases by either 2 or 4 with each transition (other than the first transition from the initial state). If we were interested in hitting a specific sum for the tiles on the board, rather than hitting a `2048` tile, then it's relatively straightforward to calculate the required number of transitions using the binomial distribution, as we'll see below.
 
-For several months in early 2014, everyone was addicted to [2048](http://gabrielecirulli.github.io/2048).
+So, the next question is, which sum should we aim to hit? From the Markov chain analysis above, we determined that there are 26 absorbing (winning) states, and we've also seen that they are in different 'sum layers', so there isn't a single target sum --- there are several target sums. What we need to know is the probability of being absorbed in each of these states; this is called an *absorbing probability*. We can then add up the absorbing probabilities for each of the absorbing states in a particular sum layer to find a probability of winning with a given target sum.
 
-Like the Rubik's cube, it is a very simple game, and yet it is very compelling. It seems to strike the right balance along so many dimensions --- not too easy but not too hard; not too predictable but comfortingly familiar; not too demanding but still absorbing.
+### Absorbing Probabilities
 
-To better understand what makes the game work so well, I have been trying to analyze it mathematically. In this first post of what will be a series, we will develop a model of the 2048 as a Markov Chain. Using this model, we'll show that:
+Fortunately, the absorbing probabilities can also be found from the fundamental matrix. In particular, we can obtain them by solving the linear equations
+\\[
+(\\mathbf{I}_t - \\mathbf{Q}) \\mathbf{B} = \\mathbf{R}
+\\]
+for the \\(t \\times r\\) matrix \\(\\mathbf{B}\\), whose \\((i, j)\\) entry is the probability of being absorbed in state \\(j\\) when starting from state \\(i\\). As before, we are interested in the absorbing probabilities when we start from the initial state. Plotting out the absorbing probabilities, there are 15 absorbing states for which the probabilities are at least \\(10^{-3})\\); the absorbing probabilities for the other 11 absorbing states are much smaller.
 
-1. It takes at least 940 moves on average to win.
+<p align="center">
+<img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="TODO" />
+</p>
 
+In particular, most games end in either the \\(\\{2,2,8,8,2048\\}\\) state, which has sum 2068, or the \\(\\{2,4,16,2048\\}\\) state, which has sum 2070. Summing up all of the absorbing states by layers sum gives the complete layer sum probabilities:
 
-## The Bag Process
+| Sum of Tiles | Total Absorbing Probability |
+|:----:|:------------:|
+| 2066 | 3.522004e-02 |
+| 2068 | 3.557224e-01 |
+| 2070 | 3.678538e-01 |
+| 2072 | 1.782018e-01 |
+| 2074 | 5.169472e-02 |
+| 2076 | 9.882655e-03 |
+| 2078 | 1.298203e-03 |
+| 2080 | 1.185619e-04 |
+| 2082 | 7.429909e-06 |
+| 2084 | 3.056818e-07 |
+| 2086 | 7.454545e-09 |
+| 2088 | 8.181818e-11 |
 
-It's quite complicated to model all of that, so we'll start with a much simpler game in which we just throw the tiles into a bag instead of placing them on a board. It is much less fun, but we'll see that this bag process still preserves some important properties of the real game.
+### Binomial Probabilities
 
-The bag process can be described with just two operations:
+Now that we have some sums to aim for, how many moves does it take to hit a particular sum? As noted above, we can think of this in terms of the [Binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution), which gives the probability of a given number of "successes" out of a given number of "trials".
 
-- *Add Tile*: Put a new tile in the bag where, just like in the real game, the new tile has either value `2`, with probability 0.9, or value `4`, with probability 0.1.
+In particular, we'll consider a trial to be a move, and a success to be a move in which the game gives us a `4` tile; as we've seen above, this happens with probability 0.1. A "failure" in this case, is a move in which the game gives us a `2` tile, which happens with probability 0.9.
 
-- *Merge Tiles*: Find all of the pairs of tiles in the bag that have the same value and remove them; then replace each pair of tiles with a single tile with twice the value.
+In general, to hit a given sum \\(S\\) in \\(M\\) moves, we need \\(\\frac{S}{2} - M\\) successes out of \\(M\\) moves. This is because each move counts \\(2\\) toward the sum, which contributes a total of \\(2M\\), and each success counts an additional \\(2\\) toward the sum, for a total contribution of \\(2 \\left(\\frac{S}{2} - M\\right) = S - 2M\\); adding these contributions together leaves the desired sum, \\(S\\).
 
-Unlike in the real game, where we can only merge tiles that are adjacent on the board, the bag process lets us merge any tiles that we like. Also unlike in the real game, there are no decisions to make; the process just proceeds on its own. In particular, it evolves as follows:
+If we consider the sum \\(S\\) and number of moves \\(M\\) as random variables, then their joint distribution is Binomial, and in particular
+\\[
+\\mathrm{Pr}(M=m, S=s) = B\\left(\\frac{s}{2} - m; m, 0.1\\right)
+\\]
+where \\(B(k; n, p)\\) is the probability mass function for the binomial distribution, which gives the probability of exactly \\(k\\) successes in \\(n\\) trials, where the probability of success is \\(p)\\), namely
+\\[
+B(k; n, p) = {n\\choose k}p^k(1-p)^{n-k}
+\\]
+where \\(n \\choose k\\) denotes a [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient).
 
-1. Start with an empty bag.
+Finally, we can calculate the conditional probability, \\(\\mathrm{Pr}(M \| S)\\), that we hit a given target sum \\(S\\) in \\(M\\) moves, from the joint distribution, namely as
+\\[
+\\mathrm{Pr}(M \| S) = \\frac{\\mathrm{Pr}(M, S)}{\\mathrm{Pr}(S)}.
+\\]
 
-2. Perform the *Add Tile* operation twice, to simulate adding the two initial tiles.
+Calculating these conditional probabilities for each target sum, and then adding them together using the weights from the layer sum absorbing probabilities from the table above, we obtain a fairly good match to the distribution from the simulation:
 
-3. Perform the *Merge Tiles* operation.
+<p align="center">
+<img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="TODO" />
+</p>
 
-4. Perform the *Add Tile* operation once.
+## Playing 2048 for Science
 
-5. If the bag contains a tile with value 2048, we've won. Otherwise, go back to step 3.
-
-This is the sort of thing we can model as a Markov Chain. In particular, it is a discrete time absorbing Markov chain.
-
-It is probably best seen from a picture. Here are the first few layers:
-
-
-One consequence of this is that it's not possible to lose, because there's no constraint on the bag size.
-
-Sum of tiles in the bag increases by either 2 or 4 on each transition (after the first one).
-
-To model 2048 as a Markov Chain, the first simplification we'll make is to collapse the board into a list.
-
-What's interesting?
-
-- Picture of the Markov Chain.
-
-- Distribution of the number of moves.
-
-- Results for absorbing Markov chains.
-
-- Connection with the binomial model.
-
+TODO: Write up results. Still playing.
 
 ## Footnotes
 
-[^mdp]: If we do allow the player to make decisions, we have a [Markov Decision Process](TODO), rather than a Markov chain. That will be the subject of a later blog post.
+[^mdp]: If we do allow the player to make decisions, we have a [Markov Decision Process](https://en.wikipedia.org/wiki/Markov_decision_process), rather than a Markov chain. That will be the subject of a later blog post.
 
-[^generality]: Markov chains [can be defined more generally](https://en.wikipedia.org/wiki/Markov_chain), but the discrete-space, discrete-time case is the most common, and it's all we'll need for this blog post.
+[^tldr]: If you are familiar with Markov chains, the TLDR for this post is: we'll model the game as an discrete time, finite state space, absorbing Markov chain and use its canonical matrix to calculate the first and second moments of the distribution of its number of steps and also its absorbing probabilities.
+
+[^merge]: This rule is written in this somewhat awkward way to capture a nuance in the real game: if you have, for example, four `2` tiles in a row, and you swipe to merge them, the result is two `4` tiles, not a single `8` tile. That is, you can't merge newly merged tiles on a single swipe.
+
+[^dot]: The diagrams come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/).
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
