@@ -1,0 +1,16 @@
+digraph {
+  nodesep=1;
+  node [fontname="Courier"];
+  s1_1_1_0 [shape=record, label="{{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s2_1_1_0 [shape=record, label="{{&nbsp;4|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s2_1_2_0 [shape=record, label="{{&nbsp;4|&nbsp;4}|{&nbsp;2|&nbsp;&nbsp;}}"];
+  s2_1_0_1 [shape=record, label="{{&nbsp;4|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}}"];
+  s2_1_0_2 [shape=record, label="{{&nbsp;4|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;4}}"];
+
+  left [label="left"]
+  s1_1_1_0 -> left
+  left -> s2_1_1_0 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  left -> s2_1_2_0 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+  left -> s2_1_0_1 [labeldistance=2.5, taillabel=" 0.45 ", color=grey];
+  left -> s2_1_0_2 [labeldistance=2.5, taillabel=" 0.05 ", color=grey];
+}

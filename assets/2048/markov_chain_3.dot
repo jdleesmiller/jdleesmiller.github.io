@@ -1,0 +1,55 @@
+digraph {
+  rankdir=LR;
+  subgraph cluster_4 {
+    label="sum: 4";
+    style=filled; color=grey95; margin=16;
+    s_2_2;
+  }
+  subgraph cluster_6 {
+    label="sum: 6";
+    style=filled; color=grey95; margin=16;
+    s_2_4;
+  }
+  subgraph cluster_8 {
+    label="sum: 8";
+    style=filled; color=grey95; margin=16;
+    s_2_2_4;
+    s_4_4;
+  }
+  subgraph cluster_10 {
+    label="10";
+    style=filled; color=grey95; margin=16;
+    s_2_4_4;
+    s_2_8;
+  }
+  subgraph cluster_12 {
+    label="12";
+    style=filled; color=grey95; margin=16;
+    s_2_2_8;
+    s_4_4_4;
+    s_4_8;
+  }
+  s_ [label="{}"];
+  s_2_2 [label="{2, 2}"];
+  s_2_4 [label="{2, 4}"];
+  s_2_2_4 [label="{2, 2, 4}"];
+  s_4_4 [label="{4, 4}"];
+  s_2_4_4 [label="{2, 4, 4}"];
+  s_2_8 [label="{2, 8}"];
+  s_2_2_8 [label="{2, 2, 8}"];
+  s_4_4_4 [label="{4, 4, 4}"];
+  s_4_8 [label="{4, 8}"];
+  s_ -> s_2_2 [label="0.81"]
+  s_ -> s_2_4 [label="0.18"]
+  s_ -> s_4_4 [label="0.01"]
+  s_2_2 -> s_2_4 [label="0.90"]
+  s_2_2 -> s_4_4 [style=dashed, label="0.10"]
+  s_2_4 -> s_2_2_4 []
+  s_2_4 -> s_2_4_4 [style=dashed]
+  s_2_2_4 -> s_2_4_4 []
+  s_2_2_4 -> s_4_4_4 [style=dashed]
+  s_4_4 -> s_2_8 []
+  s_4_4 -> s_4_8 [style=dashed]
+  s_2_4_4 -> s_2_2_8 []
+  s_2_8 -> s_2_2_8 []
+}

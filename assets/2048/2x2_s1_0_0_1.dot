@@ -1,0 +1,4 @@
+digraph {
+  node [fontname="Courier"];
+  s1_0_0_1 [shape=record, label="{{&nbsp;2|&nbsp;0}|{&nbsp;0|&nbsp;2}}"];
+}

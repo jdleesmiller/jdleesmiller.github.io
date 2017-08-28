@@ -1,0 +1,10 @@
+digraph {
+  rankdir=LR;
+  s_ [label="{}"];
+  s_2_2 [label="{2, 2}"];
+  s_2_4 [label="{2, 4}"];
+  s_4_4 [label="{4, 4}"];
+  s_ -> s_2_2 [label="0.81"]
+  s_ -> s_2_4 [label="0.18"]
+  s_ -> s_4_4 [label="0.01"]
+}

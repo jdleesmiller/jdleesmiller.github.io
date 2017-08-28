@@ -1,0 +1,4 @@
+digraph {
+  rankdir=LR;
+  s_ [label="{}"];
+}
