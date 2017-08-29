@@ -159,7 +159,7 @@ denote the sum of these probabilities, the result is that the \\((i, j)\\) entry
 
 Fortunately, the fundamental matrix can also be calculated directly, without the awkward infinite summation, as the inverse of the matrix \\(\\mathbf{I}_t - \\mathbf{Q}\\), where \\(\\mathbf{I}_t\\) is the \\(t \\times t\\) identity matrix; that is, \\(\\mathbf{N} = (\\mathbf{I}_t - \\mathbf{Q})^{-1}\\). (The proof of this identity is left as an exercise for the reader!)
 
-### Moves to Win
+### Expected Moves to Win
 
 Once we have the fundamental matrix, we can finally find the expected number of transitions from any state \\(i\\) to an absorbing state by summing up all of the entries in row \\(i\\) --- in other words, the number of transitions before we reach an absorbing state is the total number of transitions that we spend in all of the transient states along the way.
 
@@ -175,13 +175,35 @@ We can also obtain the variance for the minimum number of moves using the formul
 \\]
 where \\(\\circ\\) denotes the [Hadamard (elementwise) product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)). For the initial state, the variance comes out as 69.4766751, which gives a standard deviation of **8.3 moves**.
 
-Finally, setting aside all of the clever mathematics, we can just simulate the chain and see how many moves it takes before we get absorbed. After one million simulations, the following distribution emerges, with the mean highlighted by the blue vertical line:
+### Checking in Simulation
+
+Clever mathematics aside, we can also just simulate the chain and see how many moves it takes before we get absorbed. After one million simulations, the following distribution emerges for the number of moves to win:
 
 <p align="center">
 <img src="/assets/2048/markov_chain_moves_histogram.svg" alt="Distribution of the number of moves to win, with the mean of 938.8 highlighted" />
 </p>
 
-## The Shape of the Moves-to-Win Distribution
+Fortunately, the empirical mean from the simulation matches the expectation we calculated from the fundamental matrix --- the blue vertical line marks the calculated expectation on the plot above.
+
+Having run the simulation, we might also wonder why the distribution has the shape that it does. In [the Appendix](#appendix-the-shape-of-the-distribution), I'll offer at least a partial explanation based on a mixture of binomial distributions.
+
+## Putting Theory to the Test
+
+Finally, to test out these results in real life, I played a lot of 2048 (for science!) and, for the 28 games in which I won, recorded the number of moves it took:
+
+<p align="center">
+<img src="/assets/2048/wins.png" alt="Montage of 28 winning games of 2048" />
+</p>
+
+For each screenshot, I recorded the number of moves and the sum of the tiles on the board. The sum of the tiles on the board is important, because when it's large, that means that I made some embarrassing blunder) unable
+
+<p align="center">
+<img src="/assets/2048/markov_chain_human.svg" alt="TODO" />
+</p>
+
+TODO: Write up results.
+
+## Appendix: The Shape of the Distribution
 
 So far we've managed to calculate the mean and variance of the moves-to-win distribution using properties of Markov chains, which is nice, but it would be even nicer to have some insight into why the distribution is the shape that it is. The approach I'll suggest here is only approximate, but it does match the empirical results from the simulation quite closely, and it provides some useful insights.
 
@@ -246,10 +268,6 @@ Calculating these conditional probabilities for each target sum, and then adding
 <p align="center">
 <img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="TODO" />
 </p>
-
-## Playing 2048 for Science
-
-TODO: Write up results. Still playing.
 
 ## Footnotes
 
