@@ -135,7 +135,7 @@ For the transition matrix, \\(\\mathbf{P}\\), of an absorbing chain with \\(r\\)
 \\]
 where \\(\\mathbf{Q}\\) is a \\(t \\times t\\) matrix that describes the probability of transitioning from one transient state to another transient state, \\(\\mathbf{R}\\) is a \\(t \\times r\\) matrix that describes the probability of transitioning from a transient state to an absorbing state, \\(\\mathbf{0}\\) denotes an \\(r \\times t\\) matrix of zeros, and \\(\\mathbf{I}_r\\) is the transition matrix for the absorbing states, which is an \\(r \\times r\\) identity matrix.
 
-To get a transition matrix in canonical form for our chain, we need to decide on an ordering of the states. It suffices to order states by (1) whether they are absorbing, with absorbing states last, and then (2) by the sum of their tiles, in ascending order. If we do this, we obtain the following matrix:
+To get a transition matrix in canonical form for our chain, we need to decide on an ordering of the states. It suffices to order states by (1) whether they are absorbing, with absorbing states last, and then by (2) the sum of their tiles, in ascending order. If we do this, we obtain the following matrix:
 
 <p align="center">
 <img src="/assets/2048/markov_chain_canonical.svg" alt="The full transition matrix for the absorbing Markov chain" />
@@ -157,7 +157,7 @@ First, we observe that, just as the \\((i, j)\\) entry of \\(\\mathbf{Q}\\) is t
 \\]
 denote the sum of these probabilities, the result is that the \\((i, j)\\) entry of \\(\\mathbf{N}\\) is then the expected number of times that the times that the chain enters state \\(j\\) if it started in state \\(i\\). This matrix \\(\\mathbf{N}\\) is called the fundamental matrix.
 
-Fortunately, the fundamental matrix can also be calculated directly, without the awkward infinite, summation as the inverse of the matrix \\(\\mathbf{I}_t - \\mathbf{Q}\\), where \\(\\mathbf{I}_t\\) is the \\(t \\times t\\) identity matrix; that is, \\(\\mathbf{N} = (\\mathbf{I}_t - \\mathbf{Q})^{-1}\\). (The proof of this identity is left as an exercise for the reader!)
+Fortunately, the fundamental matrix can also be calculated directly, without the awkward infinite summation, as the inverse of the matrix \\(\\mathbf{I}_t - \\mathbf{Q}\\), where \\(\\mathbf{I}_t\\) is the \\(t \\times t\\) identity matrix; that is, \\(\\mathbf{N} = (\\mathbf{I}_t - \\mathbf{Q})^{-1}\\). (The proof of this identity is left as an exercise for the reader!)
 
 ### Moves to Win
 
@@ -169,7 +169,7 @@ We can obtain this number for each state by solving the linear system of equatio
 \\]
 for \\(\\mathbf{t}\\), where \\(\\mathbf{1}\\) denotes a column vector of all ones. The entry in \\(\\mathbf{t}\\) that corresponds to the initial state (the empty set, \\(\\{\\}\\)) is the number of transitions. In this case, the number that comes out is 939.809917. To finish up, we just need to subtract \\(1\\), because the transition from the initial state doesn't count as a move. This gives our final answer as **938.8 moves**.
 
-We can also obtain the variance for the minimum number of moves using the identity
+We can also obtain the variance for the minimum number of moves using the formula
 \\[
 2(\\mathbf{N} - \\mathbf{I}_t) \\mathbf{t} - \\mathbf{t} \\circ \\mathbf{t}
 \\]
@@ -230,13 +230,13 @@ If we consider the sum \\(S\\) and number of moves \\(M\\) as random variables, 
 \\[
 \\mathrm{Pr}(M=m, S=s) = B\\left(\\frac{s}{2} - m; m, 0.1\\right)
 \\]
-where \\(B(k; n, p)\\) is the probability mass function for the binomial distribution, which gives the probability of exactly \\(k\\) successes in \\(n\\) trials, where the probability of success is \\(p)\\), namely
+where \\(B(k; n, p)\\) is the probability mass function for the binomial distribution, which gives the probability of exactly \\(k\\) successes in \\(n\\) trials, where the probability of success is \\(p\\), namely
 \\[
 B(k; n, p) = {n\\choose k}p^k(1-p)^{n-k}
 \\]
 where \\(n \\choose k\\) denotes a [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient).
 
-Finally, we can calculate the conditional probability, \\(\\mathrm{Pr}(M \| S)\\), that we hit a given target sum \\(S\\) in \\(M\\) moves, from the joint distribution, namely as
+Finally, we can calculate the conditional probability, \\(\\mathrm{Pr}(M \| S)\\), that we hit a given target sum \\(S\\) in \\(M\\) moves from the joint distribution, namely as
 \\[
 \\mathrm{Pr}(M \| S) = \\frac{\\mathrm{Pr}(M, S)}{\\mathrm{Pr}(S)}.
 \\]
