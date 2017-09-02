@@ -167,13 +167,13 @@ We can obtain this number for each state by solving the linear system of equatio
 \\[
 (\\mathbf{I}_t - \\mathbf{Q})\\mathbf{t} = \\mathbf{1}
 \\]
-for \\(\\mathbf{t}\\), where \\(\\mathbf{1}\\) denotes a column vector of all ones. The entry in \\(\\mathbf{t}\\) that corresponds to the initial state (the empty set, \\(\\{\\}\\)) is the number of transitions. In this case, the number that comes out is 939.809917. To finish up, we just need to subtract \\(1\\), because the transition from the initial state doesn't count as a move. This gives our final answer as **938.8 moves**.
+for \\(\\mathbf{t}\\), where \\(\\mathbf{1}\\) denotes a column vector of all ones. The entry in \\(\\mathbf{t}\\) that corresponds to the initial state (the empty set, \\(\\{\\}\\)) is the number of transitions. In this case, the number that comes out is 939.8. To finish up, we just need to subtract \\(1\\), because the transition from the initial state doesn't count as a move. This gives our final answer as **938.8 moves**.
 
-We can also obtain the variance for the minimum number of moves using the formula
-\\[
+We can also obtain the [variance](https://en.wikipedia.org/wiki/Absorbing_Markov_chain#Variance_on_number_of_steps) for the minimum number of moves as
+\\(
 2(\\mathbf{N} - \\mathbf{I}_t) \\mathbf{t} - \\mathbf{t} \\circ \\mathbf{t}
-\\]
-where \\(\\circ\\) denotes the [Hadamard (elementwise) product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)). For the initial state, the variance comes out as 69.4766751, which gives a standard deviation of **8.3 moves**.
+\\),
+where \\(\\circ\\) denotes the [Hadamard (elementwise) product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)). For the initial state, the variance comes out as 69.5, which gives a standard deviation of **8.3 moves**.
 
 ### Checking in Simulation
 
@@ -295,8 +295,6 @@ Calculating these conditional probabilities for each target sum, and then adding
 
 [^changes]: The appearance of the game's win screen changed several times over the months in which I collected this data. For the record, playing 2048 was not the only thing I did during these months.
 
-- finish human section
-- remove variance formula?
 - better explanation of binomial weights and probs
 
 <script type="text/x-mathjax-config">
