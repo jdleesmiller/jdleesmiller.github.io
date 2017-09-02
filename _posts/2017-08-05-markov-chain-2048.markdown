@@ -219,7 +219,7 @@ The main simplification that enabled this approach was to ignore the structure o
 
 ## Appendix: The Shape of the Distribution
 
-So far we've managed to calculate the mean and variance of the moves-to-win distribution using properties of Markov chains, which is nice, but it would be even nicer to have some insight into why the distribution is the shape that it is. The approach I'll suggest here is only approximate, but it does match the empirical results from the simulation quite closely, and it provides some useful insights.
+Perhaps remarkably, we were able to calculate both the mean and the variance of the moves-to-win distribution using the fundamental matrix from the Markov chain. It would however be nice to have some insight into why the distribution is the shape that it is. The approach I'll suggest here is only approximate, but it does match the empirical results from the simulation of the chain quite closely, and it provides some useful insights.
 
 We'll begin by revisiting an observation that we made above: the sum of the tiles on the board increases by either 2 or 4 with each transition (other than the first transition from the initial state). If we were interested in hitting a specific sum for the tiles on the board, rather than hitting a `2048` tile, then it's relatively straightforward to calculate the required number of transitions using the binomial distribution, as we'll see below.
 
@@ -231,38 +231,27 @@ Fortunately, the absorbing probabilities can also be found from the fundamental 
 \\[
 (\\mathbf{I}_t - \\mathbf{Q}) \\mathbf{B} = \\mathbf{R}
 \\]
-for the \\(t \\times r\\) matrix \\(\\mathbf{B}\\), whose \\((i, j)\\) entry is the probability of being absorbed in state \\(j\\) when starting from state \\(i\\). As before, we are interested in the absorbing probabilities when we start from the initial state. Plotting out the absorbing probabilities, there are 15 absorbing states for which the probabilities are at least \\(10^{-3})\\); the absorbing probabilities for the other 11 absorbing states are much smaller.
+for the \\(t \\times r\\) matrix \\(\\mathbf{B}\\), whose \\((i, j)\\) entry is the probability of being absorbed in state \\(j\\) when starting from state \\(i\\). As before, we are interested in the absorbing probabilities when we start from the initial state. Plotting out the absorbing probabilities, there are 15 absorbing states for which the probabilities are large enough to plot (at least \\(10^{-3}\\)):
 
 <p align="center">
 <img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="Absorbing probabilities for the Markov chain" />
 </p>
 
-In particular, most games end in either the \\(\\{2,2,8,8,2048\\}\\) state, which has sum 2068, or the \\(\\{2,4,16,2048\\}\\) state, which has sum 2070. Summing up all of the absorbing states by layers sum gives the complete layer sum probabilities:
+In particular, most games end in either the \\(\\{2,2,8,8,2048\\}\\) state, which has sum 2068, or the \\(\\{2,4,16,2048\\}\\) state, which has sum 2070. Summing up all of the absorbing states by layer sum gives the complete layer sum probabilities:
 
-| Sum of Tiles | Total Absorbing Probability |
-|:----:|:------------:|
-| 2066 | 3.522004e-02 |
-| 2068 | 3.557224e-01 |
-| 2070 | 3.678538e-01 |
-| 2072 | 1.782018e-01 |
-| 2074 | 5.169472e-02 |
-| 2076 | 9.882655e-03 |
-| 2078 | 1.298203e-03 |
-| 2080 | 1.185619e-04 |
-| 2082 | 7.429909e-06 |
-| 2084 | 3.056818e-07 |
-| 2086 | 7.454545e-09 |
-| 2088 | 8.181818e-11 |
+<p align="center">
+<img src="/assets/2048/markov_chain_sum_probabilities.svg" alt="Total absorbing probabilities by sum of tiles" />
+</p>
 
 ### Binomial Probabilities
 
-Now that we have some sums to aim for, how many moves does it take to hit a particular sum? As noted above, we can think of this in terms of the [Binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution), which gives the probability of a given number of "successes" out of a given number of "trials".
+Now that we have some sums to aim for, and we know how often we are aiming for each one, he next question is how many moves does it take to hit a particular sum? As noted above, we can think of this in terms of the [Binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution), which lets us calculate the probability of a given number of "successes" out of a given number of "trials".
 
-In particular, we'll consider a trial to be a move, and a success to be a move in which the game gives us a `4` tile; as we've seen above, this happens with probability 0.1. A "failure" in this case, is a move in which the game gives us a `2` tile, which happens with probability 0.9.
+In this case, we'll consider a "trial" to be a move, and a "success" to be a move in which the game gives us a `4` tile; as we've seen above, this happens with probability 0.1. A "failure" here is a move in which the game gives us a `2` tile, which happens with probability 0.9.
 
-In general, to hit a given sum \\(S\\) in \\(M\\) moves, we need \\(\\frac{S}{2} - M\\) successes out of \\(M\\) moves. This is because each move counts \\(2\\) toward the sum, which contributes a total of \\(2M\\), and each success counts an additional \\(2\\) toward the sum, for a total contribution of \\(2 \\left(\\frac{S}{2} - M\\right) = S - 2M\\); adding these contributions together leaves the desired sum, \\(S\\).
+With this interpretation of successes, in order to hit a given sum \\(S\\) in \\(M\\) moves, we need \\(\\frac{S}{2} - M\\) successes out of \\(M\\) moves. This is because each move counts at least \\(2\\) toward the sum, which contributes a total of \\(2M\\), and each success counts an additional \\(2\\) toward the sum, for a total contribution of \\(2 \\left(\\frac{S}{2} - M\\right) = S - 2M\\); adding these contributions together leaves the desired sum, \\(S\\).
 
-If we consider the sum \\(S\\) and number of moves \\(M\\) as random variables, then their joint distribution is Binomial, and in particular
+The joint probability of obtaining a sum \\(S\\) in a number of moves \\(M\\) is then Binomial, and in particular
 \\[
 \\mathrm{Pr}(M=m, S=s) = B\\left(\\frac{s}{2} - m; m, 0.1\\right)
 \\]
@@ -272,16 +261,21 @@ B(k; n, p) = {n\\choose k}p^k(1-p)^{n-k}
 \\]
 where \\(n \\choose k\\) denotes a [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient).
 
-Finally, we can calculate the conditional probability, \\(\\mathrm{Pr}(M \| S)\\), that we hit a given target sum \\(S\\) in \\(M\\) moves from the joint distribution, namely as
+Now if we know the target sum \\(S\\) that we are aiming for, we can compute the conditional distribution of the number of moves given that sum, which is what we are interested in, from the joint distribution. That is, we can find \\(\\mathrm{Pr}(M \| S)\\) as
 \\[
 \\mathrm{Pr}(M \| S) = \\frac{\\mathrm{Pr}(M, S)}{\\mathrm{Pr}(S)}.
 \\]
+where \\(\\mathrm{Pr}(S)\\) is obtained from the joint distribution by summing out \\(M\\) for each possible sum \\(S\\). It's worth noting that \\(\\mathrm{P}(S)\\) is less than one for each possible sum, because there's always a chance that the game 'skips' the sum by placing a `4` tile.
 
-Calculating these conditional probabilities for each target sum, and then adding them together using the weights from the layer sum absorbing probabilities from the table above, we obtain a fairly good match to the distribution from the simulation:
+With these conditional distributions for each target sum in hand, we can then add them up, weighted by the total absorbing probability for the target sum, to obtain the overall distribution. This gives a fairly good match to the distribution from the simulation:
 
 <p align="center">
 <img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="Simulated and binomial mixture model distributions for minimum moves to win" />
 </p>
+
+Here the simulated distribution is shown with the grey bars, and the colored areas show each of the conditional distributions, which are stacked. Each conditional distribution is scaled according to the total absorbing probability for its sum, and also shifted a few moves, with larger sums requiring more moves on average.
+
+One interpretation of this result is that, if playing optimally, the number of moves to win is essentially determined by how quickly the player can get to a sum large enough to have a 2048 tile, which is in turn governed by the number of `4` tiles, which follows a binomial distribution.
 
 ## Footnotes
 
@@ -294,8 +288,6 @@ Calculating these conditional probabilities for each target sum, and then adding
 [^dot]: The diagrams come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/).
 
 [^changes]: The appearance of the game's win screen changed several times over the months in which I collected this data. For the record, playing 2048 was not the only thing I did during these months.
-
-- better explanation of binomial weights and probs
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
