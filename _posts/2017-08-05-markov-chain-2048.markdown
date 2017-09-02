@@ -91,13 +91,13 @@ Grouping the states into layers by sum makes another pattern clear: each transit
 The process could continue on forever, but since we are only interested in reaching the `2048` tile, we'll stop it at that point. The first state that contains a `2048` tile is in the layer with sum 2066. Here's what the graph looks like around it (click to see more):
 
 <p align="center">
-<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="TODO" style="border: 0;"/></a>
+<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="Screenshot of the end of the Markov chain" style="border: 0;"/></a>
 </p>
 
 When we reach a state that includes a `2048` tile, we can end the game by making that state an *absorbing* state. I've colored the absorbing states red to cut down on clutter, but strictly speaking each absorbing state should be drawn with a transition to itself with probability \\(1\\) --- that is, once you reach that state, you can never leave:
 
 <p align="center">
-<img src="/assets/2048/markov_chain_loop.svg" alt="TODO" />
+<img src="/assets/2048/markov_chain_loop.svg" alt="Diagram showing a 'self loop' for an absorbing state" />
 </p>
 
 If we continue to add transitions until there are no non-absorbing states left, we eventually end up with 3487 states, of which 26 are absorbing; this completes the definition of the Markov chain.
@@ -189,19 +189,33 @@ Having run the simulation, we might also wonder why the distribution has the sha
 
 ## Putting Theory to the Test
 
-Finally, to test out these results in real life, I played a lot of 2048 (for science!) and, for the 28 games in which I won, recorded the number of moves it took:
+Finally, to test these results in real life, I played a lot of 2048 (for science!) and, for the 28 games I won, recorded the number of moves it took and also the sum of the tiles on the board when I reached the 2048 tile [^changes]:
 
 <p align="center">
 <img src="/assets/2048/wins.png" alt="Montage of 28 winning games of 2048" />
 </p>
 
-For each screenshot, I recorded the number of moves and the sum of the tiles on the board. The sum of the tiles on the board is important, because when it's large, that means that I made some embarrassing blunder) unable
+Transcribing these numbers into a spreadsheet and plotting them leads to the following graph:
 
 <p align="center">
-<img src="/assets/2048/markov_chain_human.svg" alt="TODO" />
+<img src="/assets/2048/markov_chain_human.svg" alt="Moves to Win and Tiles on Board for the 28 games I won" />
 </p>
 
-TODO: Write up results.
+I've marked the minimum expected number of moves, plus or minus one standard deviation, in blue, and the tile sum 2066, which we found to be the lowest sum of tiles for which it was possible to have a 2048 tile, in red.
+
+The sum of the tiles on the board is important, because when it's large, that typically means that I made a mistake that left a large tile stranded somewhere I could not merge it with any other tile. It then takes a lot more moves to build up that tile again in a place where it can be merged (or to set up the board to try to get into the right place to merge) with another large tile.
+
+If I were very good at playing 2048, we'd predict my results would cluster in the bottom left corner of the graph, and that most of them would lie between the dashed blue lines. In fact, we see that, while I sometimes get close to this ideal, I am not very consistent --- there are plenty of points in the top right.
+
+This plot also highlights the fact that this analysis gives us only the minimum *expected* number of moves. There were a few games where I got lucky and won in less than 938.8 moves, including one win with 927 moves and a tile sum of 2076. (It is the second from the left in the bottom row of the montage above.) This is essentially because I got a lot of `4` tiles in that game, just by chance, and also because I didn't make any major blunders that required extra moves.
+
+In principle, there is non-zero probability that we could win the game in only 519 moves. We can find this by walking through the chain, always taking the transition for the `4`, and counting the number of transitions required to reach a 2048 tile. However, the probability of this occurring is \\(0.1^{521}\\), or \\(10^{-521}\\); there are only about \\(10^{80}\\) atoms in the observable universe, so you shouldn't hold your breath waiting for such a game to happen to you. Similarly, if we are very unlucky and always get `2` tiles, but we play optimally, we should still win in only 1032 moves. Such a game is much more likely, with a probability of \\(0.9^{1034}\\), which is about \\(10^{-48}\\), but you probably don't want to hold your breath for that one either. The average of 938.8 moves is much closer to 1032 than 519, because `2` tiles are much more likely than `4` tiles.
+
+## Conclusion
+
+In this post we have seen how to construct a Markov chain that models how a game of 2048 evolves if it is always possible to merge like tiles. By doing so, we've been able to apply techniques from the theory of absorbing Markov chains to calculate interesting properties of the game, and in particular that it takes at least 938.8 moves to win, on average.
+
+The main simplification that enabled this approach was to ignore the structure of the board, effectively assuming that we threw tiles into a bag, rather than placing them onto the board. In my next post, I plan to look at what happens when we do consider the structure of the board. We'll see that the number of states we need to consider becomes many orders of magnitude larger (though perhaps not as large as one might think), and also that we will need to leave the world of Markov chains and enter the world of Markov Decision Processes, which allow us to bring the player back into the equation, and in principle may allow us to 'solve' the game completely --- to find a provably optimal way of playing.
 
 ## Appendix: The Shape of the Distribution
 
@@ -220,7 +234,7 @@ Fortunately, the absorbing probabilities can also be found from the fundamental 
 for the \\(t \\times r\\) matrix \\(\\mathbf{B}\\), whose \\((i, j)\\) entry is the probability of being absorbed in state \\(j\\) when starting from state \\(i\\). As before, we are interested in the absorbing probabilities when we start from the initial state. Plotting out the absorbing probabilities, there are 15 absorbing states for which the probabilities are at least \\(10^{-3})\\); the absorbing probabilities for the other 11 absorbing states are much smaller.
 
 <p align="center">
-<img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="TODO" />
+<img src="/assets/2048/markov_chain_absorbing_probabilities.svg" alt="Absorbing probabilities for the Markov chain" />
 </p>
 
 In particular, most games end in either the \\(\\{2,2,8,8,2048\\}\\) state, which has sum 2068, or the \\(\\{2,4,16,2048\\}\\) state, which has sum 2070. Summing up all of the absorbing states by layers sum gives the complete layer sum probabilities:
@@ -266,7 +280,7 @@ Finally, we can calculate the conditional probability, \\(\\mathrm{Pr}(M \| S)\\
 Calculating these conditional probabilities for each target sum, and then adding them together using the weights from the layer sum absorbing probabilities from the table above, we obtain a fairly good match to the distribution from the simulation:
 
 <p align="center">
-<img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="TODO" />
+<img src="/assets/2048/markov_chain_weighted_mixture.svg" alt="Simulated and binomial mixture model distributions for minimum moves to win" />
 </p>
 
 ## Footnotes
@@ -278,6 +292,12 @@ Calculating these conditional probabilities for each target sum, and then adding
 [^merge]: This rule is written in this somewhat awkward way to capture a nuance in the real game: if you have, for example, four `2` tiles in a row, and you swipe to merge them, the result is two `4` tiles, not a single `8` tile. That is, you can't merge newly merged tiles on a single swipe.
 
 [^dot]: The diagrams come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/).
+
+[^changes]: The appearance of the game's win screen changed several times over the months in which I collected this data. For the record, playing 2048 was not the only thing I did during these months.
+
+- finish human section
+- remove variance formula?
+- better explanation of binomial weights and probs
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
