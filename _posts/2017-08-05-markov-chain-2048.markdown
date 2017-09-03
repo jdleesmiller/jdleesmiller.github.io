@@ -19,7 +19,7 @@ To obtain these results, we'll use a simplified version of 2048: instead of plac
 
 The price we pay for relaxing the geometric constraints is that we can only compute a lower bound on the expected number of moves to win; it might be that the geometric constraints make it impossible to attain that bound. However, by playing many games of 2048 (for science!), I'll also show that we can often get close to this lower bound in practice.
 
-If you're not familiar with 2048 or with Markov chains, that's OK --- I'll introduce the necessary ideas as we go. The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty_48), in case you'd like to see the code to generate [the chain](https://github.com/jdleesmiller/twenty48/blob/27c30f5e42861c87a2162efed38003a9db9e8b29/bin/markov_chain) and [the plots](https://github.com/jdleesmiller/twenty48/blob/27c30f5e42861c87a2162efed38003a9db9e8b29/data/markov_chain/plot.R).
+If you're not familiar with 2048 or with Markov chains, that's OK --- I'll introduce the necessary ideas as we go. The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48), in case you'd like to see the code to generate [the chain](https://github.com/jdleesmiller/twenty48/blob/27c30f5e42861c87a2162efed38003a9db9e8b29/bin/markov_chain) and [the plots](https://github.com/jdleesmiller/twenty48/blob/27c30f5e42861c87a2162efed38003a9db9e8b29/data/markov_chain/plot.R).
 
 ## 2048 as a Markov Chain
 
