@@ -2,6 +2,17 @@
 
   <div class="wrapper">
     <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
-  </div>
 
+    {% if page.title %}
+      <div class="share-links">
+        {% if site.twitter_username %}
+          <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}&via={{ site.twitter_username }}&related={{ site.twitter_username }}" rel="nofollow noopener" target="_blank" title="Share on Twitter" class="share-links-twitter">
+            {%- capture icon_twitter %}{% include icon-twitter.svg %}{% endcapture -%}
+            {{- icon_twitter | strip_newlines -}}
+          </a>
+        {% endif %}
+        <a href="https://facebook.com/sharer.php?u={{ site.url }}{{ page.url }}" rel="nofollow noopener" target="_blank" title="Share on Facebook">{% include icon-facebook.svg %}</a>
+      </div>
+    {% endif %}
+  </div>
 </header>

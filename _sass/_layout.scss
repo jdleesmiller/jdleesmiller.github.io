@@ -8,6 +8,24 @@
 
     // Positioning context for the mobile navigation icon
     position: relative;
+
+    .share-links {
+      float: right;
+      line-height: 56px;
+      white-space: nowrap;
+
+      svg {
+          width: 18px;
+          height: 15px;
+          margin-bottom: -3px;
+      }
+
+      .share-links-twitter {
+        path {
+          fill: #4099ff;
+        }
+      }
+    }
 }
 
 .site-title {
