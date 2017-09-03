@@ -90,25 +90,69 @@ Grouping the states into layers by sum makes another pattern clear: each transit
 
 ### The End Game
 
-We could continue this process forever, but since we are only interested in reaching the `2048` tile, we'll stop it at that point by making any state with a `2048` tile an *absorbing* state. An absorbing state has a single transition, which is to itself with probability 1 --- that is, once you reach that state, you can never leave.
+We could continue this process forever, but since we are only interested in reaching the `2048` tile, we'll stop it at that point by making any state with a `2048` tile an *absorbing* state. An absorbing state has a single transition, which is to itself with probability 1 --- that is, once you reach an absorbing state, you can never leave.
 
-It's interesting to note that there is no way to 'lose' the bag game --- unlike the real game, we cannot get into a situation where the board (or bag) is full, so all of these absorbing states are in effect 'win states'.
+In this case all of the absorbing states are 'win states' --- you have a `2048` tile and have therefore won the game. There is no way to 'lose' the bag game, because unlike in the real game, we cannot get into a situation where the board (or bag) is full.
 
-The first state that contains a `2048` tile is in the layer with sum 2066. Here's what the graph looks like around it (<a href="/assets/2048/markov_chain_end.svg">see more</a>), with the absorbing states colored red:
+The first state that contains a `2048` tile is in the layer with sum 2066. It's notable that you can't get a `2048` tile on its own on the board --- it takes a few moves to merge the `1024` tiles, the `512` tiles, and so on, during which you accumulate more `2` and `4` tiles. This is why the sum of the tiles for the first state with a `2048` tile is higher than 2048.
+
+Here's what the graph looks like around this first winning state (<a href="/assets/2048/markov_chain_end.svg">see more</a>), with the absorbing states colored red:
 
 <p align="center">
-<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="Screenshot of the end of the Markov chain" style="border: 0;"/></a>
+<a href="/assets/2048/markov_chain_end.svg"><img src="/assets/2048/markov_chain_end_screenshot.png" alt="Screenshot of the end of the Markov chain" style="border: 1px dotted grey; margin: 10px;"/></a>
 </p>
 
-If we continue to add transitions until there are no non-absorbing states left, we eventually end up with 3487 states, of which 26 are absorbing; this completes the definition of the Markov chain. The diagram for the full chain is quite large, but if your device can handle a 5MB SVG file, <a href="/assets/2048/markov_chain_big.svg">here is a diagram of the full chain</a>:
+If we continue to add transitions until there are no non-absorbing states left, we eventually end up with 3487 states, of which 26 are absorbing; this completes the definition of the Markov chain. The diagram for the full chain is quite large, but if your device can handle a 5MB SVG file, <a href="/assets/2048/markov_chain_big.svg">here is a diagram of the full chain</a> (you may need to scroll down a bit to see the start). When very zoomed out, it looks like this:
 
 <p align="center">
 <a href="/assets/2048/markov_chain_big.svg"><img src="/assets/2048/markov_chain_big_thumbnail.png" alt="Zoomed out view of the whole chain" style="border: 0;" /></a>
 </p>
 
-## Analysis of the Markov Chain
+### Sampling from the Chain
 
-Now that we have put in the effort to model 2048 (in a bag) as a Markov chain, we can bring some powerful mathematical machinery to bear on our question about the minimum number of moves required to win. In particular, we'll see that our Markov chain is a special type of Markov chain called an [absorbing Markov chain](https://en.wikipedia.org/wiki/Absorbing_Markov_chain).
+Now that we have put in the effort to model 2048 (in a bag) as a Markov chain, the simplest way to find out how many moves it takes before we are absorbed is to run simulations. In each simulation, we generate a single trajectory through the chain by starting at the initial state, then choosing a successor state at random in proportion to the transition probabilities, then repeating from that state. After one million simulation runs, the following distribution emerges for the number of moves to win:
+
+<p align="center">
+<img src="/assets/2048/markov_chain_moves_histogram.svg" alt="Distribution of the number of moves to win, with the mean of 938.8 highlighted" />
+</p>
+
+The mean, which is marked by the vertical blue line, comes out at **938.8 moves**, excluding the first transition from the initial state, with a standard deviation of **8.3 moves**. So, that's our answer for the minimum expected number of moves to win the game!
+
+The theory of Markov chains also lets us calculate some of these properties directly using clever mathematics. In [Appendix A](#appendix-a-analysis-of-the-markov-chain), I'll show how to calculate the mean and standard deviation for the number of moves without relying on simulation. Then, in [Appendix B](#appendix-b-the-shape-of-the-distribution), I'll use some of properties of the chain to offer at least a partial explanation of the shape of the distribution.
+
+## Putting Theory to the Test
+
+Finally, to test these results in real life, I played a lot of 2048 (for science!) and, for the 28 games I won, recorded the number of moves it took and also the sum of the tiles on the board when I reached the 2048 tile [^changes]:
+
+<p align="center">
+<img src="/assets/2048/wins.png" alt="Montage of 28 winning games of 2048" />
+</p>
+
+Transcribing these numbers into a spreadsheet and plotting them leads to the following scatter plot:
+
+<p align="center">
+<img src="/assets/2048/markov_chain_human.svg" alt="Moves to Win and Tiles on Board for the 28 games I won" />
+</p>
+
+I've marked the minimum expected number of moves, plus or minus one standard deviation, in blue, and the tile sum 2066, which we found to be the lowest sum of tiles for which it was possible to have a 2048 tile, in red.
+
+The sum of the tiles on the board is important, because when it's large, that typically means that I made a mistake that left a large tile stranded somewhere I could not merge it with any other tile. It then took many more moves to build up that tile again in a place where it could be merged (or to set up the board to try to get into the right place to merge) with another large tile.
+
+If I were very good at playing 2048, we'd predict my results would cluster in the bottom left corner of the graph, and that most of them would lie between the dashed blue lines. In fact, we see that, while I sometimes get close to this ideal, I am not very consistent --- there are plenty of points in the top right, with lots of extra moves and extra tiles.
+
+This plot also highlights the fact that this analysis gives us only the minimum *expected* number of moves. There were a few games where I got lucky and won in less than 938.8 moves, including one win with 927 moves and a tile sum of 2076. (It is the second from the left in the bottom row of the montage above.) This is essentially because I got a lot of `4` tiles in that game, just by chance, and also because I didn't make any major blunders that required extra moves.
+
+In principle, there is non-zero probability that we could win the game in only 519 moves. We can find this by walking through the chain, always taking the transition for the `4`, and counting the number of transitions required to reach a 2048 tile. However, the probability of this occurring is \\(0.1^{521}\\), or \\(10^{-521}\\); there are only about \\(10^{80}\\) atoms in the observable universe, so you shouldn't hold your breath waiting for such a game to happen to you. Similarly, if we are very unlucky and always get `2` tiles, we should still be able to win in only 1032 moves. Such a game is much more likely, with a probability of \\(0.9^{1034}\\), which is about \\(10^{-48}\\), but you probably shouldn't hold your breath waiting for that game either. The average of 938.8 moves is much closer to 1032 than 519, because `2` tiles are much more likely than `4` tiles.
+
+## Conclusion
+
+In this post we have seen how to construct a Markov chain that models how a game of 2048 evolves if it is always possible to merge like tiles. By doing so, we've been able to apply techniques from the theory of absorbing Markov chains to calculate interesting properties of the game, and in particular that it takes at least 938.8 moves to win, on average.
+
+The main simplification that enabled this approach was to ignore the structure of the board, effectively assuming that we threw tiles into a bag, rather than placing them onto the board. In my next post, I plan to look at what happens when we do consider the structure of the board. We'll see that the number of states we need to consider becomes many orders of magnitude larger (though perhaps not as large as one might think), and also that we will need to leave the world of Markov chains and enter the world of Markov Decision Processes, which allow us to bring the player back into the equation, and in principle may allow us to 'solve' the game completely --- to find a provably optimal way of playing.
+
+## Appendix A: Analysis of the Markov Chain
+
+Once that we've defined our Markov chain, we can bring some powerful mathematical machinery to bear to calculate its properties without simulation. Many of these calculations are possible only because our Markov chain is a special type of Markov chain called an [absorbing Markov chain](https://en.wikipedia.org/wiki/Absorbing_Markov_chain).
 
 The criteria for being an absorbing Markov chain are that:
 
@@ -173,49 +217,7 @@ We can also obtain the [variance](https://en.wikipedia.org/wiki/Absorbing_Markov
 \\),
 where \\(\\circ\\) denotes the [Hadamard (elementwise) product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)). For the initial state, the variance comes out as 69.5, which gives a standard deviation of **8.3 moves**.
 
-### Checking in Simulation
-
-Clever mathematics aside, we can also just simulate the chain and see how many moves it takes before we get absorbed. After one million simulations, the following distribution emerges for the number of moves to win:
-
-<p align="center">
-<img src="/assets/2048/markov_chain_moves_histogram.svg" alt="Distribution of the number of moves to win, with the mean of 938.8 highlighted" />
-</p>
-
-Fortunately, the empirical mean from the simulation matches the expectation we calculated from the fundamental matrix. The blue vertical line marks the calculated (and simulated) expectation on the plot above.
-
-Having run the simulation, we might also wonder why the distribution has the shape that it does. In [the Appendix](#appendix-the-shape-of-the-distribution), I'll offer at least a partial explanation based on a mixture of binomial distributions.
-
-## Putting Theory to the Test
-
-Finally, to test these results in real life, I played a lot of 2048 (for science!) and, for the 28 games I won, recorded the number of moves it took and also the sum of the tiles on the board when I reached the 2048 tile [^changes]:
-
-<p align="center">
-<img src="/assets/2048/wins.png" alt="Montage of 28 winning games of 2048" />
-</p>
-
-Transcribing these numbers into a spreadsheet and plotting them leads to the following scatter plot:
-
-<p align="center">
-<img src="/assets/2048/markov_chain_human.svg" alt="Moves to Win and Tiles on Board for the 28 games I won" />
-</p>
-
-I've marked the minimum expected number of moves, plus or minus one standard deviation, in blue, and the tile sum 2066, which we found to be the lowest sum of tiles for which it was possible to have a 2048 tile, in red.
-
-The sum of the tiles on the board is important, because when it's large, that typically means that I made a mistake that left a large tile stranded somewhere I could not merge it with any other tile. It then took many more moves to build up that tile again in a place where it could be merged (or to set up the board to try to get into the right place to merge) with another large tile.
-
-If I were very good at playing 2048, we'd predict my results would cluster in the bottom left corner of the graph, and that most of them would lie between the dashed blue lines. In fact, we see that, while I sometimes get close to this ideal, I am not very consistent --- there are plenty of points in the top right, with lots of extra moves and extra tiles.
-
-This plot also highlights the fact that this analysis gives us only the minimum *expected* number of moves. There were a few games where I got lucky and won in less than 938.8 moves, including one win with 927 moves and a tile sum of 2076. (It is the second from the left in the bottom row of the montage above.) This is essentially because I got a lot of `4` tiles in that game, just by chance, and also because I didn't make any major blunders that required extra moves.
-
-In principle, there is non-zero probability that we could win the game in only 519 moves. We can find this by walking through the chain, always taking the transition for the `4`, and counting the number of transitions required to reach a 2048 tile. However, the probability of this occurring is \\(0.1^{521}\\), or \\(10^{-521}\\); there are only about \\(10^{80}\\) atoms in the observable universe, so you shouldn't hold your breath waiting for such a game to happen to you. Similarly, if we are very unlucky and always get `2` tiles, we should still be able to win in only 1032 moves. Such a game is much more likely, with a probability of \\(0.9^{1034}\\), which is about \\(10^{-48}\\), but you probably shouldn't hold your breath waiting for that game either. The average of 938.8 moves is much closer to 1032 than 519, because `2` tiles are much more likely than `4` tiles.
-
-## Conclusion
-
-In this post we have seen how to construct a Markov chain that models how a game of 2048 evolves if it is always possible to merge like tiles. By doing so, we've been able to apply techniques from the theory of absorbing Markov chains to calculate interesting properties of the game, and in particular that it takes at least 938.8 moves to win, on average.
-
-The main simplification that enabled this approach was to ignore the structure of the board, effectively assuming that we threw tiles into a bag, rather than placing them onto the board. In my next post, I plan to look at what happens when we do consider the structure of the board. We'll see that the number of states we need to consider becomes many orders of magnitude larger (though perhaps not as large as one might think), and also that we will need to leave the world of Markov chains and enter the world of Markov Decision Processes, which allow us to bring the player back into the equation, and in principle may allow us to 'solve' the game completely --- to find a provably optimal way of playing.
-
-## Appendix: The Shape of the Distribution
+## Appendix B: The Shape of the Distribution
 
 Perhaps remarkably, we were able to calculate both the mean and the variance of the moves-to-win distribution using the fundamental matrix from the Markov chain. It would however be nice to have some insight into why the distribution is the shape that it is. The approach I'll suggest here is only approximate, but it does match the empirical results from the simulation of the chain quite closely, and it provides some useful insights.
 
@@ -279,7 +281,7 @@ One interpretation of this result is that, if playing optimally, the number of m
 
 &nbsp;
 
-Thanks to Nate Stemen for reviewing drafts of this article.
+Thanks to [Hope Thomas](https://twitter.com/h0peth0mas) and [Nate Stemen](https://natestemen.github.io/) for reviewing drafts of this article.
 
 If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
 
