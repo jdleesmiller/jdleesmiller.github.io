@@ -3,6 +3,8 @@ layout: post
 title: "Evaluating Compression with Pareto, Docker and Gnuplot"
 date: 2017-05-01 13:00:00 +0000
 categories: articles
+image: /assets/compare_compressors/homo_sapiens_cd.jpg
+description: Fun with trying various compression algorithms on human genome data using Pareto frontiers, Docker and Gnuplot.
 ---
 
 &nbsp;

@@ -3,6 +3,8 @@ layout: post
 title: "How a Technical Co-founder Spends their Time: Minute-by-minute Data for a Year"
 date: 2016-07-04 18:00:00 +0000
 categories: articles
+image: /assets/metime/metime.png
+description: From August 2014 to December 2015, I manually tracked all of my work time, minute-by-minute, and analysed the data in R.
 ---
 
 **Updates**

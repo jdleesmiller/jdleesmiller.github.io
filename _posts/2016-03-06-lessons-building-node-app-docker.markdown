@@ -3,6 +3,8 @@ layout: post
 title: "Lessons from Building a Node App in Docker"
 date: 2016-03-06 19:54:56 +0000
 categories: articles
+image: /assets/docker_chat_demo/chat.png
+description: Here are some tips and tricks that I learned the hard way when developing and deploying web applications written for node.js using Docker.
 ---
 
 **Updates**
