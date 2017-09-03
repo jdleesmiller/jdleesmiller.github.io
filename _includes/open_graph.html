@@ -24,3 +24,7 @@
 {% if page.image %}
   <meta content="{{ site.url }}{{ page.image }}" property="og:image">
 {% endif %}
+
+{% if page.description %}
+  <meta content="{{ page.description | strip_html | strip_newlines | truncate: 160 }}" property="og:description">
+{% endif %}
