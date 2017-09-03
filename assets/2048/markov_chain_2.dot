@@ -3,15 +3,15 @@ digraph {
   s_ [label="{}"];
   s_2_2 [label="{2, 2}"];
   s_2_4 [label="{2, 4}"];
-  s_2_2_4 [label="{2, 2, 4}"];
+  s_2_2_4 [label="{2, 2, 4}", color=blue];
   s_4_4 [label="{4, 4}"];
-  s_2_4_4 [label="{2, 4, 4}"];
+  s_2_4_4 [label="{2, 4, 4}", color=blue];
 
   s_ -> s_2_2 [label="0.81"]
   s_ -> s_2_4 [label="0.18"]
   s_ -> s_4_4 [label="0.01"]
   s_2_2 -> s_2_4 [label="0.90"]
   s_2_2 -> s_4_4 [style=dashed, label="0.10"]
-  s_2_4 -> s_2_2_4 [label="0.90"]
-  s_2_4 -> s_2_4_4 [style=dashed, label="0.10"]
+  s_2_4 -> s_2_2_4 [label="0.90", color=blue]
+  s_2_4 -> s_2_4_4 [style=dashed, label="0.10", color=blue]
 }

@@ -71,27 +71,27 @@
 <!-- s_2_2_4 -->
 <g id="node4" class="node">
 <title>s_2_2_4</title>
-<ellipse fill="none" stroke="#000000" cx="403.6505" cy="-107.5729" rx="40.9108" ry="18"/>
+<ellipse fill="none" stroke="#0000ff" cx="403.6505" cy="-107.5729" rx="40.9108" ry="18"/>
 <text text-anchor="middle" x="403.6505" y="-103.3729" font-family="Times,serif" font-size="14.00" fill="#000000">{2, 2, 4}</text>
 </g>
 <!-- s_2_4&#45;&gt;s_2_2_4 -->
 <g id="edge6" class="edge">
 <title>s_2_4&#45;&gt;s_2_2_4</title>
-<path fill="none" stroke="#000000" d="M300.779,-86.6996C317.2125,-90.0341 337.9125,-94.2342 356.428,-97.9912"/>
-<polygon fill="#000000" stroke="#000000" points="355.9523,-101.4659 366.4486,-100.0244 357.3444,-94.6057 355.9523,-101.4659"/>
+<path fill="none" stroke="#0000ff" d="M300.779,-86.6996C317.2125,-90.0341 337.9125,-94.2342 356.428,-97.9912"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="355.9523,-101.4659 366.4486,-100.0244 357.3444,-94.6057 355.9523,-101.4659"/>
 <text text-anchor="middle" x="332.6956" y="-97.3729" font-family="Times,serif" font-size="14.00" fill="#000000">0.90</text>
 </g>
 <!-- s_2_4_4 -->
 <g id="node6" class="node">
 <title>s_2_4_4</title>
-<ellipse fill="none" stroke="#000000" cx="403.6505" cy="-53.5729" rx="40.9108" ry="18"/>
+<ellipse fill="none" stroke="#0000ff" cx="403.6505" cy="-53.5729" rx="40.9108" ry="18"/>
 <text text-anchor="middle" x="403.6505" y="-49.3729" font-family="Times,serif" font-size="14.00" fill="#000000">{2, 4, 4}</text>
 </g>
 <!-- s_2_4&#45;&gt;s_2_4_4 -->
 <g id="edge7" class="edge">
 <title>s_2_4&#45;&gt;s_2_4_4</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M300.779,-74.4462C317.2125,-71.1117 337.9125,-66.9116 356.428,-63.1547"/>
-<polygon fill="#000000" stroke="#000000" points="357.3444,-66.5401 366.4486,-61.1214 355.9523,-59.6799 357.3444,-66.5401"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M300.779,-74.4462C317.2125,-71.1117 337.9125,-66.9116 356.428,-63.1547"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="357.3444,-66.5401 366.4486,-61.1214 355.9523,-59.6799 357.3444,-66.5401"/>
 <text text-anchor="middle" x="332.6956" y="-72.3729" font-family="Times,serif" font-size="14.00" fill="#000000">0.10</text>
 </g>
 </g>
