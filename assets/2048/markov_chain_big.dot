@@ -1,5 +1,6 @@
 digraph {
   rankdir=LR;
+  ranksep=1;
   subgraph cluster_4 {
     label="4";
     style=filled; color=grey95; margin=16;
@@ -18068,4 +18069,30 @@ digraph {
   s_2_8_8_16_1024_1024 -> s_2_4_16_16_2048 [style=dashed]
   s_4_8_8_16_1024_1024 -> s_2_4_16_16_2048 []
   s_4_8_8_16_1024_1024 -> s_4_4_16_16_2048 [style=dashed]
+  s_2_4_4_8_2048 -> s_2_4_4_8_2048 [label="1.0", dir=back, color=red];
+  s_2_2_8_8_2048 -> s_2_2_8_8_2048 [label="1.0", dir=back, color=red];
+  s_2_2_16_2048 -> s_2_2_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_4_8_2048 -> s_4_4_4_8_2048 [label="1.0", dir=back, color=red];
+  s_2_4_8_8_2048 -> s_2_4_8_8_2048 [label="1.0", dir=back, color=red];
+  s_2_4_16_2048 -> s_2_4_16_2048 [label="1.0", dir=back, color=red];
+  s_2_2_4_16_2048 -> s_2_2_4_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_8_8_2048 -> s_4_4_8_8_2048 [label="1.0", dir=back, color=red];
+  s_4_4_16_2048 -> s_4_4_16_2048 [label="1.0", dir=back, color=red];
+  s_2_4_4_16_2048 -> s_2_4_4_16_2048 [label="1.0", dir=back, color=red];
+  s_2_8_16_2048 -> s_2_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_2_8_16_2048 -> s_2_2_8_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_4_16_2048 -> s_4_4_4_16_2048 [label="1.0", dir=back, color=red];
+  s_4_8_16_2048 -> s_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_4_8_16_2048 -> s_2_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_2_4_8_16_2048 -> s_2_2_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_8_16_2048 -> s_4_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_4_4_8_16_2048 -> s_2_4_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_8_8_16_2048 -> s_2_8_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_2_8_8_16_2048 -> s_2_2_8_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_2_16_16_2048 -> s_2_2_16_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_4_8_16_2048 -> s_4_4_4_8_16_2048 [label="1.0", dir=back, color=red];
+  s_4_8_8_16_2048 -> s_4_8_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_4_8_8_16_2048 -> s_2_4_8_8_16_2048 [label="1.0", dir=back, color=red];
+  s_2_4_16_16_2048 -> s_2_4_16_16_2048 [label="1.0", dir=back, color=red];
+  s_4_4_16_16_2048 -> s_4_4_16_16_2048 [label="1.0", dir=back, color=red];
 }
