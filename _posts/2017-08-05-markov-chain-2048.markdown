@@ -273,6 +273,14 @@ Here the simulated distribution is shown with the grey bars, and the colored are
 
 One interpretation of this result is that, if playing optimally, the number of moves to win is essentially determined by how quickly the player can get to a sum large enough to have a 2048 tile, which is in turn governed by the number of `4` tiles, which follows a binomial distribution.
 
+---
+
+&nbsp;
+
+Thanks to Nate Stemen for reviewing drafts of this article.
+
+If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
+
 ## Footnotes
 
 [^mdp]: If we do allow the player to make decisions, we have a [Markov Decision Process](https://en.wikipedia.org/wiki/Markov_decision_process), rather than a Markov chain. That will be the subject of a later blog post.
@@ -282,7 +290,6 @@ One interpretation of this result is that, if playing optimally, the number of m
 [^dot]: The diagrams here come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/). If we don't give `dot` a hint by grouping the states together into layers by sum, laying out the full graph can take quite a while.
 
 [^changes]: The appearance of the game's "You win!" screen changed several times over the months in which I collected this data. For the record, playing 2048 was not the only thing I did during these months.
-
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
