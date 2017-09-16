@@ -287,6 +287,94 @@ There are already [lots of good strategies](http://stackoverflow.com/a/22389702/
 Before we get too excited, however, I should point out the 'Towards' in the title. We will see that the full game of 2048 is in fact quite hard, and we won't get all the way to a provably optimal solution, at least not right now, and at least not on my laptop. Instead, we'll start with games with the same rules but on smaller boards, which we'll see are easier to solve.
 
 
+## Machine Power
+
+### Can't Get There from Here: State Reachability
+
+Just because it is possible to write a state down doesn't mean that it can actually occur in the game. For example, hiding among the states we counted in the previous section was the state
+
+```
+   2 1024 1024 1024
+1024 1024 1024 1024
+1024 1024 1024 1024
+1024 1024 1024 1024
+```
+
+which is clearly not a state that could actually happen in the game --- any move in the previous state would have had to merge some of those `1024` tiles.
+
+The simplest way to count reachable states is basically a brute force approach: generate each possible start state, then for each of those states find all possible successor states, and so on. Based on the combinatorial bounds in the previous section, we can be confident that this is feasible for at least the 2x2 game and possibly the 3x3 game.
+
+For example, one of the start states for the 2x2 game is <img src="/assets/2048/2x2_s1_0_0_1.svg" style="height: 2em;" alt="The state (2, -, -, 2)" />. The possible successors include those for any of the possible moves (`left`, `right`, `up` or `down`) --- we're not committing to any particular moves, just counting all of the possibilities. Here they are:
+
+<p align="center">
+<img src="/assets/2048/2x2_successors_example.svg" alt="All successors of the state (2, -, 2, -)" />
+</p>
+
+If the player moves `up`, for example, the `2` tile on the bottom row slides up. This leaves two available cells in the bottom row, and the game places a `2` or `4` tile into one of them, for a total of four possible successors. It's worth noting that one of these successors, <img src="/assets/2048/2x2_s1_1_1_0.svg" style="height: 2em;" alt="The state (2, 2, 2, -)" />, is also reachable if the player moves `left`, and the game places a `2` tile in the top right.
+
+The search process continues from each one of the successor states, until we reach either a winning state (with a `2048` tile) or a losing state. A losing state effectively has no successor states, because there is no move that will change the board.
+
+### By Any Other Name: Canonicalization
+
+Many states are distinct but equivalent to other states. For example,
+```
+4 2
+2
+```
+is the same as
+```
+2 4
+  2
+```
+because they are mirror images of each other. If we knew that the best action in the former state was to go left, the best action in the latter state would be go to right. We can find other states by reflecting through different axes (or by rotating):
+```
+  2
+2 4
+```
+and
+```
+2
+4 2
+```
+
+Rather than treating each of these equivalent states as a separate state, we can just pick one of them as the 'canonical' form of that group of states. One approach to finding the canonical form is as follows: given a state, generate all of its possible rotations and reflections, sort them into some kind of order, and then choose the smallest one as the canonical state.
+
+To define an ordering over the states, we can view each state as a number in which each cell contributes one digit. One way to do this is to start in the top left and read the cells by rows; for each cell, we write a \\(0\\) digit if the cell is empty, and the digit \\(i\\) for a cell that contains a \\(2^i\\) tile. For the four equivalent states above, the corresponding numbers would be:
+```
+2 1 1 0
+1 2 0 1
+0 1 1 2
+1 0 2 1
+```
+The smallest of these numbers is \\(0112\\), so the corresponding state
+```
+  2
+2 4
+```
+is the canonical state for this equivalence class of states.
+
+### Lookahead
+
+Just as we don't particularly care exactly what is on the board when we win,
+
+# SCRATCH
+
+- May be able to enumerate 4x4 to 6 or possibly 7; if we start with the last layer for which the max value was 5 (i.e. the last layer with max value < 6), then all of those states must be the same in the game to 6. It's only once we start getting some 6 tiles that the game to 6 starts looking different to the game to 11. Hopefully the number of states will start dropping as some of them become win states.
+
+- For canonicalization, it's interesting to plot the ratio of reachable to canonical states. It starts out low but then approaches 8 as the game gets larger (in terms of both max tile and board size). So, in the limit we can expect it to get us a factor of 8.
+
+- However... the big thing that's missing is reachability --- that seems to account for most of the orders of magnitude. I guess that's a result. So, getting those extra couple of points should help quite a bit with the story.
+
+- If we can get a few more points, we can perhaps do a cheesy extrapolation to get an estimate for the number of states.
+
+- The summary table is too large. Maybe we could have a table with the brain power limits in that section and then just carry forward the best one into the third section. Or I could try to break it up into methods and results. That would be more compact, but I feel like it would read better inline. OTOH maybe people will just want to skip to the results. The results could be presented quite compactly: a couple of graphs.
+
+- Should we split this article into two? The combinatorial bounds are one somewhat interesting idea, and there is something of a result: we cut down the 2x2 and 3x3 boards significantly. Part 2 could then talk about the computational approach (actually enumerating the states). There's quite a bit of interesting technical detail I could talk about: the idea of layers (already introduced in part 1), map-reduce, b-trees, vbyte encoding, and zstandard compression. I think trying to fit all of that into part 1 will make it too large. The other way of slicing it would be to present the computational results here and then talk about the methods in part 2, but then I'd probably end up repeating a lot of the results. So... maybe worth trying to split it up this way.
+
+- Another thing I would like to talk about is the length of the game. That doesn't necessarily fit with the 'counting states' title, but it also doesn't seem like quite enough for its own part. It does sort of fit after the idea of layers --- one way to truncate is to look for consecutive empty layers. Another is to look at the minimum and maximum number of moves.
+
+
+
 ---
 
 <sup><a name='footnote-mashups' href='#footnote-mashups-ref'>1</a></sup> Flappy Bird was released in May 2013, but it became popular in January 2014. And I should also mention [flappy 2048](https://hczhcz.github.io/Flappy-2048/), [Doge 2048](http://doge2048.com/) and, of course, [flappy Doge 2048](http://www.donaldguy.com/Flappy-Doge2048/)?
