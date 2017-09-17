@@ -7,6 +7,12 @@ image: /assets/2048/markov_chain_weighted_mixture.png
 description: How many moves does it take to win a game of 2048? Find out using Markov chains!
 ---
 
+*This post is the first in a series. Next: [Counting States with Combinatorics](/articles/2017/09/17/counting-states-combinatorics-2048.html).*
+
+---
+
+&nbsp;
+
 <img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
 As part of a recent revamp, [2048](http://gabrielecirulli.github.io/2048)'s "You win!" screen started reporting the number of moves it took to win, which made me wonder: how many moves should it take to win?
