@@ -7,11 +7,11 @@ categories: articles
 
 <img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
-In <a href="/articles/2017/08/05/markov-chain-2048.html">my last post</a>, I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
+In <a href="/articles/2017/08/05/markov-chain-2048.html">my last 2048 post</a>, I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
 
-In this post, without the 'bag' simplification, a *state* will be a possible configuration of the board; that is, a state specifies which tile, if any, is in each of the board's cells. We'd therefore expect there to be a lot more states, now that the positions of the tiles (and cells without tiles) are included in the state.
+In this post, we'll make a first cut at counting the number of states without the bag simplification. That is, in this post a *state* captures the complete configuration of the board by specifying which tile, if any, is in each of the board's cells. We would therefore expect there to be a lot more states of this kind, now that the positions of the tiles (and cells without tiles) are included.
 
-We'll make a first cut at calculating how many such states there are using some (simple) enumerative combinatorics techniques to exclude some states that are not possible. These results will also apply to 2048-like games on different boards (not just 4x4) and up to different tiles (not just the `2048` tile). We'll see that such games on smaller boards and/or to smaller tiles have far fewer states than the full 4x4 game to 2048, and that the enumerative combinatorics techniques are relatively much more effective at reducing the estimated number of states when the board size is small. As a bonus, we'll also see that the 4x4 board is the smallest square board on which it is possible to reach the `2048` tile.
+We will use some (simple) enumerative combinatorics techniques to exclude some states that we can write down but which can't actually occur in the game. The results will also apply to 2048-like games played on different boards (not just 4x4) and up to different tiles (not just the `2048` tile). We'll see that such games on smaller boards and/or to smaller tiles have far fewer states than the full 4x4 game to 2048, and that the enumerative combinatorics techniques are relatively much more effective at reducing the estimated number of states when the board size is small. As a bonus, we'll also see that the 4x4 board is the smallest square board on which it is possible to reach the `2048` tile.
 
 # Baseline
 
@@ -106,7 +106,6 @@ Let's use this formula to tabulate the estimated number of states various board 
   </tbody>
 </table>
 
-44_096_709_674_720_289
 We can see immediately that the 2x2 and 3x3 games have many orders of magnitude fewer states than the 4x4 game. We've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(~10^{16}\\).
 
 # Counting in Layers
