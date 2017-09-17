@@ -1,23 +1,27 @@
 ---
 layout: post
 title: "The Mathematics of 2048: Counting States with Combinatorics"
-date: 2016-10-09 16:00:00 +0000
+date: 2017-09-17 01:00:00 +0000
 categories: articles
+image: /assets/2048/2048_infeasible.png
+description: How many board configurations are there in the game of 2048? Let's estimate using combinatorics.
 ---
 
-<img src="/assets/2048/2048.png" alt="Screenshot of 2048" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
+<img src="/assets/2048/2048_infeasible.png" alt="Screenshot of 2048 with an infeasible board position" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
 In <a href="/articles/2017/08/05/markov-chain-2048.html">my last 2048 post</a>, I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
 
-In this post, we'll make a first cut at counting the number of states without the bag simplification. That is, in this post a *state* captures the complete configuration of the board by specifying which tile, if any, is in each of the board's cells. We would therefore expect there to be a lot more states of this kind, now that the positions of the tiles (and cells without tiles) are included.
+In this post, we'll make a first cut at counting the number of states without the bag simplification. That is, in this post a *state* captures the complete configuration of the board by specifying which tile, if any, is in each of the board's cells. We would therefore expect there to be a lot more states of this kind, now that the positions of the tiles (and cells without tiles) are included, and we will see that this is indeed the case.
 
-We will use some (simple) enumerative combinatorics techniques to exclude some states that we can write down but which can't actually occur in the game. The results will also apply to 2048-like games played on different boards (not just 4x4) and up to different tiles (not just the `2048` tile). We'll see that such games on smaller boards and/or to smaller tiles have far fewer states than the full 4x4 game to 2048, and that the enumerative combinatorics techniques are relatively much more effective at reducing the estimated number of states when the board size is small. As a bonus, we'll also see that the 4x4 board is the smallest square board on which it is possible to reach the `2048` tile.
+To do so, we will use some (simple) techniques from enumerative combinatorics to exclude some states that we can write down but which can't actually occur in the game. The results will also apply to 2048-like games played on different boards (not just 4x4) and up to different tiles (not just the `2048` tile). We'll see that such games on smaller boards and/or to smaller tiles have far fewer states than the full 4x4 game to 2048, and that the techniques used here are relatively much more effective at reducing the estimated number of states when the board size is small. As a bonus, we'll also see that the 4x4 board is the smallest square board on which it is possible to reach the `2048` tile.
+
+The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48), in case you would like to see the [implementation](https://github.com/jdleesmiller/twenty48/blob/4337c357f2cc14bdc3e14ddaa5207ad2a6a972e6/bin/combinatorics) or [code for the plots](https://github.com/jdleesmiller/twenty48/tree/4337c357f2cc14bdc3e14ddaa5207ad2a6a972e6/data/combinatorics).
 
 # Baseline
 
-The most basic way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\) possible states that we can write in this way. That is 184 quadrillion (~\\(10^{17}\\)) states, which won't fit on my laptop any time soon.
+The most straightforward way to estimate the number of states in 2048 is to observe that there are 16 cells, and each cell can either be blank or contain a tile with a value that is one of the 11 powers of 2 from 2 to 2048. That gives 12 possibilities for each of the 16 cells, for a total of \\(12^{16}\\), or 184 quadrillion (~\\(10^{17}\\)), possible states that we can write in this way. For comparison, [some estimates](https://tromp.github.io/chess/chess.html) put the number of possible board configurations for the game of chess at around \\(10^{45}\\) states, and [the latest estimates](https://en.wikipedia.org/wiki/Go_and_mathematics#Complexity_of_certain_Go_configurations) for the game of Go are around \\(10^{170}\\) states, so while \\(10^{17}\\) is large, it's certainly not the largest as games go.
 
-More generally, let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). For convenience, let \\(C\\) denote the number of cells on the board, so \\(C=B^2\\). For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
+For 2048-like games more generally, let \\(B\\) be the board size, and let \\(K\\) be the exponent of the winning tile with value \\(2^K\\). For convenience, let \\(C\\) denote the number of cells on the board, so \\(C=B^2\\). For the usual 4x4 game to 2048, \\(B=4\\), \\(C=16\\), and \\(K = 11\\), since \\(2^{11} = 2048\\), and our estimate for the number of states is \\[(K + 1)^C.\\] Now let's see how we can refine this estimate.
 
 First, since the game ends when we obtain a \\(2^K\\) tile, we don't particularly care about where that tile is or what else is on the board. We can therefore condense all of the states with a \\(2^K\\) tile into a special "win" state. In the remaining states, each cell can either be blank or hold one of \\(K - 1\\) tiles. This reduces the number of states we have to worry about to \\[K^C + 1\\] where the \\(1\\) is for the win state.
 
@@ -106,7 +110,7 @@ Let's use this formula to tabulate the estimated number of states various board 
   </tbody>
 </table>
 
-We can see immediately that the 2x2 and 3x3 games have many orders of magnitude fewer states than the 4x4 game. We've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or \\(~10^{16}\\).
+We can see immediately that the 2x2 and 3x3 games have many orders of magnitude fewer states than the 4x4 game. We've also also managed to reduce our estimate for the number of tiles in the 4x4 game to 2048 to "only" 44 quadrillion, or ~\\(10^{16}\\).
 
 # Counting in Layers
 
@@ -120,9 +124,9 @@ Property 3 implies that states never repeat in the course of a game. This means 
 
 Let \\(S\\) denote the sum of the tiles on the board. We want to count the number of ways that up to \\(C\\) numbers, each of which is a power of 2 between 2 and \\(2^{K-1}\\), can be added together to produce \\(S\\).
 
-Fortunately, this turns out to be a variation on a well-studied problem in combinatorics: counting the [compositions of an integer](TODO). In general, a composition of an integer \\(S\\) is an ordered collection of integers that sum to \\(S\\); each integer in the collection is called a *part*. For example, there are four compositions of the integer \\(3\\), namely \\(1 + 1 + 1\\), \\(1 + 2\\), \\(2 + 1\\) and \\(3\\). When there are restrictions on the parts, such as being a power of two and only having a certain number of parts, the term is a *restricted* composition.
+Fortunately, this turns out to be a variation on a well-studied problem in combinatorics: counting the [compositions of an integer](https://en.wikipedia.org/wiki/Composition_(combinatorics)). In general, a composition of an integer \\(S\\) is an ordered collection of integers that sum to \\(S\\); each integer in the collection is called a *part*. For example, there are four compositions of the integer \\(3\\), namely \\(1 + 1 + 1\\), \\(1 + 2\\), \\(2 + 1\\) and \\(3\\). When there are restrictions on the parts, such as being a power of two and only having a certain number of parts, the term is a *restricted* composition.
 
-Even more fortunately, Chinn and Niederhausen (XXXX) have already studied exactly this kind of restricted composition and derived a recurrence that allows us count the number of compositions in which there are a specific number of parts, and each part is a power of 2. Let \\(N(s, c)\\) denote the number of compositions of a (positive) integer \\(s\\) into exactly \\(c\\) parts where each part is a power of 2. It then holds that
+Even more fortunately, Chinn and Niederhausen (2004) [^Chinn] have already studied exactly this kind of restricted composition and derived a recurrence that allows us count the number of compositions in which there are a specific number of parts, and each part is a power of 2. Let \\(N(s, c)\\) denote the number of compositions of a (positive) integer \\(s\\) into exactly \\(c\\) parts where each part is a power of 2. It then holds that
 \\[
 N(s, c) = \\begin{cases}
 \\sum_{i = 0}^{\\lfloor \\log_2 s \\rfloor} N(s - 2^i, c - 1), & 2 \\le c \\le s \\\\\\\\
@@ -147,12 +151,10 @@ Now we have a formula for exactly \\(c\\) parts, but we want a formula for up to
 \\[
 \\sum_{c = 2}^{C} {C \\choose c} \\left( N_1(s, c) - N_3(s, c) \\right)
 \\]
-as our estimate for the number of states with sum \\(s\\). Here \\(C \\choose c\\) is a [binomial coefficient](TODO) that gives the number ways of choosing \\(c\\) of the possible \\(C\\) cells into which to place the tiles. Let's plot it out.
-
-TODO: Need to make it clear that this is for K=11.
+as our estimate for the number of states with sum \\(s\\). Here \\(C \\choose c\\) is a [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient) that gives the number ways of choosing \\(c\\) of the possible \\(C\\) cells into which to place the tiles. Let's plot it out.
 
 <p align="center">
-<img src="/assets/2048/layers_summary.png" alt="Number of states by sum of tiles (with K=11)" />
+<img src="/assets/2048/combinatorics_layers_summary.png" alt="Number of states by sum of tiles (with K=11)" />
 </p>
 
 In terms of magnitude, we can see that the 2x2 game never has more than 60 states in any layer, the 3x3 game peaks at about 3 million states per layer, and the 4x4 game peaks at about 32 trillion (\\(10^{13}\\)) states per layer. The number of states grows rapidly early in the game but then tapers off and eventually decreases as the board fills up. On the decreasing portion of the curve, we see discontinuities: particularly for higher sums, it may happen that there are no tiles that will fit on the board and sum to that value.
@@ -161,10 +163,9 @@ The upper limit on the horizontal axis arises because we can have \\(C\\) values
 
 Finally, it's worth noting that if we sum the number of states in each layer over all of the possible layer sums from 4 to \\(C 2^{K-1}\\), and add one for the special win state, we get the same number of states as we estimated in the previous section, which is a helpful sanity check.
 
-
 ### Layer Reachability
 
-Another useful consequence of Property 3 is that if two consecutive layers have no states, it's not possible to reach later layers. This is because the sum can increase by at most 4 per turn; if there are two adjacent zeros, then the sum would have to increase by 6 in a single move in order to reach the subsequent layer, which is not possible. Finding the layer sums that contain no states according to the calculation above therefore allows us to tighten up our estimate by excluding states in unreachable layers after the last reachable layer. The largest reachable layer sums (without ever attaining a `2048` tile) are:
+Another useful consequence of Property 3 is that if two consecutive layers have no states, it's not possible to reach later layers. This is because the sum can increase by at most 4 per turn; if there are two adjacent layers with no states, then the sum would have to increase by 6 in a single move in order to 'jump' to the subsequent layer, which is not possible. Finding the layer sums that contain no states according to the calculation above therefore allows us to tighten up our estimate by excluding states in unreachable layers after the last reachable layer. The largest reachable layer sums (without ever attaining a `2048` tile) are:
 
 <table style="width: auto;">
   <thead>
@@ -303,26 +304,60 @@ Taking into account layer reachability, the new estimates for the number of stat
   </tbody>
 </table>
 
-This has a large effect on the 2x2 board, since many states are clearly in unreachable layers, and it has some effect on the 3x3 board. On the 4x4 board, there is relatively little effect --- we remove "only" about 500 billion states from the total for the game to 2048.
+This has a large effect on the 2x2 board, reducing the number of states from 8,073 to 905 for the game up to 2048, and it's notable that the figure for the number of reachable states does not increase from 905 for maximum tiles over `32`, because it's not possible to reach tiles larger than `32` on a 2x2 board. It also has some effect on the 3x3 board, but on the 4x4 board, there is relatively little effect --- we remove "only" about 500 billion states from the total for the game to 2048.
+
+In graphical form, these data look like:
+
+<p align="center">
+<img src="/assets/2048/combinatorics_totals.svg" alt="Estimated number of states each for board size and maximum tile" />
+</p>
 
 # Conclusion
 
 We've obtained some rough estimates for the number of states in the game of 2048 and similar games on smaller boards and to lesser tiles. Our best estimate so far for the number of states in the 4x4 game to 2048 is roughly 44 quadrillion (~\\(10^{16}\\)).
 
-It is likely that this and the other estimates are substantial overestimates, because there are many reasons that states might be counted here but still not be reachable in the game. For example, a state like
-```
-- - - -
-- 2 - -
-- 2 2 -
-- - - -
-```
+It is likely that this and the other estimates are substantial overestimates, because there are many reasons that states might be counted here but still not be reachable in the game. For example, a state like the one in the cover image for this blog post:
+
+<p align="center">
+<img src="/assets/2048/2048_infeasible_board.png" alt="An infeasible board position with three 2 tiles in the middle with empty cells around" style="max-width: 10em;"/>
+</p>
+
 satisfies all of the restrictions we've considered here, but it is still not possible to reach it, because we must have swiped in some direction before getting to this state, and that would have moved two of the `2` tiles to the edge of the board. It may be possible to adapt the counting arguments above to take this (and likely other restrictions) into account, but I have not figured out how!
 
 In the next post, we'll see that the number of actually reachable states is much lower by actually enumerating them. There will still be a lot of them for the 3x3 and 4x4 boards, so we will need some computer science as well as mathematics.
+
+---
+
+&nbsp;
+
+If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
+
+# Footnotes
+
+[^Chinn]: Chinn, P. and Niederhausen, H., 2004. Compositions into powers of 2. *Congressus Numerantium*, 168, p.215. [(preprint)](http://math.fau.edu/Niederhausen/HTML/Papers/CompositionsIntoPowersOf2.doc)
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<!--
+To make the infeasible state diagram:
+
+Go to http://gabrielecirulli.github.io/2048/
+Open dev console
+gm = new GameManager(4, KeyboardInputManager, HTMLActuator, LocalStorageManager)
+// Remove the two random tiles (if needed); for me they were:
+gm.grid.removeTile(new Tile({x: 0, y: 2}))
+gm.grid.removeTile(new Tile({x: 3, y: 3}))
+gm.actuate()
+// Board should be empty
+gm.grid.insertTile(new Tile({x: 1, y: 1}, 2))
+gm.grid.insertTile(new Tile({x: 2, y: 1}, 2))
+gm.grid.insertTile(new Tile({x: 1, y: 2}, 2))
+gm.actuate()
+// Board should have the three faked tiles.
+-->
+
