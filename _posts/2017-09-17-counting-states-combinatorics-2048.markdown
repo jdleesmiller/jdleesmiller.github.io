@@ -7,9 +7,9 @@ image: /assets/2048/2048_infeasible.png
 description: How many board configurations are there in the game of 2048? Let's estimate using combinatorics.
 ---
 
-<img src="/assets/2048/2048_infeasible.png" alt="Screenshot of 2048 with an infeasible board position" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
+<img src="/assets/2048/2048_infeasible.png" alt="Screenshot of 2048 with an infeasible board configuration" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
-In <a href="/articles/2017/08/05/markov-chain-2048.html">my last 2048 post</a>, I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
+In [my last 2048 post](/articles/2017/08/05/markov-chain-2048.html), I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
 
 In this post, we'll make a first cut at counting the number of states without the bag simplification. That is, in this post a *state* captures the complete configuration of the board by specifying which tile, if any, is in each of the board's cells. We would therefore expect there to be a lot more states of this kind, now that the positions of the tiles (and cells without tiles) are included, and we will see that this is indeed the case.
 
@@ -190,7 +190,7 @@ Another useful consequence of Property 3 is that if two consecutive layers have 
   </tbody>
 </table>
 
-This table also tells us that the highest tile we can reach on the 2x2 board is the `32` tile, because the `64` tile can't occur in a layer with sum 60 or less, and similarly highest reachable tile on the 3x3 board is the `1024` tile. This means that the 4x4 board is the smallest square board on which it's possible to reach the `2048` tile. For the 4x4 board, the largest layer sum we can reach without reaching a `2048` tile (and therefore winning) is 9,212, but larger sums would be reachable if we did allow a `2048` tile.
+This table also tells us that the highest tile we can reach on the 2x2 board is the `32` tile, because the `64` tile can't occur in a layer with sum 60 or less, and similarly highest reachable tile on the 3x3 board is the `1024` tile. This means that the 4x4 board is the smallest square board on which it's possible to reach the `2048` tile [^smallest-board]. For the 4x4 board, the largest layer sum we can reach without reaching a `2048` tile (and therefore winning) is 9,212, but larger sums would be reachable if we did allow a `2048` tile.
 
 Taking into account layer reachability, the new estimates for the number of states are: 
 
@@ -335,6 +335,8 @@ If you've read this far, perhaps you should [follow me on twitter](https://twitt
 # Footnotes
 
 [^Chinn]: Chinn, P. and Niederhausen, H., 2004. Compositions into powers of 2. *Congressus Numerantium*, 168, p.215. [(preprint)](http://math.fau.edu/Niederhausen/HTML/Papers/CompositionsIntoPowersOf2.doc)
+
+[^smallest-board]: We could also have shown this using the Markov chain analysis from [my previous post](/articles/2017/08/05/markov-chain-2048.html) by removing all of the states with more than nine tiles, and seeing whether it was still possible to reach the `2048` tile. If we [do this](https://github.com/jdleesmiller/twenty48/blob/4337c357f2cc14bdc3e14ddaa5207ad2a6a972e6/bin/markov_chain#L382-L397), we find that [it is not](https://github.com/jdleesmiller/twenty48/blob/4337c357f2cc14bdc3e14ddaa5207ad2a6a972e6/data/markov_chain/minmax_cells.csv). Interestingly, if we allow the Markov chain to continue to larger maximum tile values, the same analysis shows that it is possible to reach the `32768` (that is, \\(2^{15}\\)) tile on a 4x4 board, if the structure of the board is ignored. Whether this is true when there are structural constraints is still open, but I suspect it is not. It is, however, possible to play to at least the `8192` tile, as shown by [this AI bot](https://www.youtube.com/watch?v=96ab_dK6JM0).
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
