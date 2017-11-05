@@ -7,6 +7,14 @@ image: /assets/2048/2048_infeasible.png
 description: How many board configurations are there in the game of 2048? Let's estimate using combinatorics.
 ---
 
+**Updates**
+
+**2017-09-25** There was some lively [discussion about this article on Hacker News](https://news.ycombinator.com/item?id=15327837).
+
+---
+
+&nbsp;
+
 <img src="/assets/2048/2048_infeasible.png" alt="Screenshot of 2048 with an infeasible board configuration" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
 
 In [my last 2048 post](/articles/2017/08/05/markov-chain-2048.html), I found that it takes at least 938.8 moves on average to win a game of [2048](http://gabrielecirulli.github.io/2048). The main simplification that enabled that calculation was to ignore the structure of the board --- essentially to throw the tiles into a bag instead of placing them on a board. With the 'bag' simplification, we were able to model the game as a Markov chain with only 3486 distinct states.
@@ -120,7 +128,7 @@ To gain some additional insight into these state counts, we can take advantage o
 
 This holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile.
 
-Property 3 implies that states never repeat in the course of a game. This means that we can organize the states into *layers* according to the sum of their tiles. If the game is in a state in the layer with sum 10, we know that the next state must be in the layer with either sum 12 or sum 14. It turns out we can also count the number of states in each layer, as follows. 
+Property 3 implies that states never repeat in the course of a game. This means that we can organize the states into *layers* according to the sum of their tiles. If the game is in a state in the layer with sum 10, we know that the next state must be in the layer with either sum 12 or sum 14. It turns out we can also count the number of states in each layer, as follows.
 
 Let \\(S\\) denote the sum of the tiles on the board. We want to count the number of ways that up to \\(C\\) numbers, each of which is a power of 2 between 2 and \\(2^{K-1}\\), can be added together to produce \\(S\\).
 
@@ -192,7 +200,7 @@ Another useful consequence of Property 3 is that if two consecutive layers have 
 
 This table also tells us that the highest tile we can reach on the 2x2 board is the `32` tile, because the `64` tile can't occur in a layer with sum 60 or less, and similarly highest reachable tile on the 3x3 board is the `1024` tile. This means that the 4x4 board is the smallest square board on which it's possible to reach the `2048` tile [^smallest-board]. For the 4x4 board, the largest layer sum we can reach without reaching a `2048` tile (and therefore winning) is 9,212, but larger sums would be reachable if we did allow a `2048` tile.
 
-Taking into account layer reachability, the new estimates for the number of states are: 
+Taking into account layer reachability, the new estimates for the number of states are:
 
 <table>
   <thead>
@@ -210,7 +218,7 @@ Taking into account layer reachability, the new estimates for the number of stat
     </tr>
   </thead>
   <tbody>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">8</th>
       <td>Baseline</td>
@@ -220,7 +228,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">73</td><td align="right">19,665</td><td align="right">43,046,689</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">16</th>
       <td>Baseline</td>
@@ -230,7 +238,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">233</td><td align="right">261,615</td><td align="right">4,294,901,729</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">32</th>
       <td>Baseline</td>
@@ -240,7 +248,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">529</td><td align="right">1,933,407</td><td align="right">152,544,843,841</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">64</th>
       <td>Baseline</td>
@@ -250,7 +258,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">9,814,437</td><td align="right">2,816,814,934,817</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">128</th>
       <td>Baseline</td>
@@ -260,7 +268,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">38,369,571</td><td align="right">33,080,342,314,753</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">256</th>
       <td>Baseline</td>
@@ -270,7 +278,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">123,560,373</td><td align="right">278,653,849,430,401</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">512</th>
       <td>Baseline</td>
@@ -280,7 +288,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">339,166,485</td><td align="right">1,819,786,604,950,209</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">1024</th>
       <td>Baseline</td>
@@ -290,7 +298,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">786,513,819</td><td align="right">9,718,504,608,259,073</td>
     </tr>
-    
+
     <tr>
       <th align="right" valign="top" rowspan="2">2048</th>
       <td>Baseline</td>
@@ -300,7 +308,7 @@ Taking into account layer reachability, the new estimates for the number of stat
       <td>Layer Reachability</td>
       <td align="right">905</td><td align="right">1,400,665,575</td><td align="right">44,096,167,159,459,777</td>
     </tr>
-    
+
   </tbody>
 </table>
 
@@ -362,4 +370,3 @@ gm.grid.insertTile(new Tile({x: 1, y: 2}, 2))
 gm.actuate()
 // Board should have the three faked tiles.
 -->
-
