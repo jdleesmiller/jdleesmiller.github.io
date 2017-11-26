@@ -1,0 +1,5 @@
+digraph {
+  node [fontname="Courier"];
+  rankdir=LR;
+  s1_2_0_3 [shape=record, label="{&nbsp;2|&nbsp;4}|{&nbsp;&nbsp;|&nbsp;8}"];
+}

@@ -1,0 +1,246 @@
+digraph {
+  node [fontname="Courier"];
+  rankdir=LR;
+  ranksep=1;
+  subgraph cluster_10_4 { label="10 / 4"; style=filled; color=grey95; margin=16; s0_1_2_2; s0_2_2_1; s1_1_1_2; }
+  subgraph cluster_10_8 { label="10 / 8"; style=filled; color=grey95; margin=16; s0_0_1_3; s0_1_3_0; }
+  subgraph cluster_12_4 { label="12 / 4"; style=filled; color=grey95; margin=16; s0_2_2_2; s1_1_2_2; }
+  subgraph cluster_12_8 { label="12 / 8"; style=filled; color=grey95; margin=16; s0_1_1_3; s0_1_3_1; s0_0_2_3; s0_2_3_0; }
+  subgraph cluster_14_4 { label="14 / 4"; style=filled; color=grey95; margin=16; s1_2_2_2; }
+  subgraph cluster_14_8 { label="14 / 8"; style=filled; color=grey95; margin=16; s0_1_2_3; s0_1_3_2; s1_1_1_3; s0_2_3_1; }
+  subgraph cluster_16_8 { label="16 / 8"; style=filled; color=grey95; margin=16; s0_2_2_3; s1_1_2_3; s0_2_3_2; }
+  subgraph cluster_18_8 { label="18 / 8"; style=filled; color=grey95; margin=16; s1_2_3_2; s0_1_3_3; }
+  subgraph cluster_20_16 { label="20 / 16"; style=filled; color=grey95; margin=16; s0_1_1_4; s0_1_4_1; }
+  subgraph cluster_20_8 { label="20 / 8"; style=filled; color=grey95; margin=16; s2_2_2_3; s1_1_3_3; s0_2_3_3; }
+  subgraph cluster_22_16 { label="22 / 16"; style=filled; color=grey95; margin=16; s0_1_2_4; s0_1_4_2; s1_1_1_4; s0_2_4_1; }
+  subgraph cluster_22_8 { label="22 / 8"; style=filled; color=grey95; margin=16; s1_2_3_3; }
+  subgraph cluster_24_16 { label="24 / 16"; style=filled; color=grey95; margin=16; s1_1_2_4; s0_2_2_4; s0_2_4_2; }
+  subgraph cluster_24_8 { label="24 / 8"; style=filled; color=grey95; margin=16; s2_2_3_3; }
+  subgraph cluster_26_16 { label="26 / 16"; style=filled; color=grey95; margin=16; s0_1_3_4; s0_1_4_3; s1_2_4_2; }
+  subgraph cluster_28_16 { label="28 / 16"; style=filled; color=grey95; margin=16; s0_2_3_4; s1_1_3_4; s0_2_4_3; s2_2_2_4; }
+  subgraph cluster_32_16 { label="32 / 16"; style=filled; color=grey95; margin=16; s2_2_3_4; }
+  subgraph cluster_34_16 { label="34 / 16"; style=filled; color=grey95; margin=16; s1_3_4_3; }
+  subgraph cluster_36_16 { label="36 / 16"; style=filled; color=grey95; margin=16; s2_3_4_3; s1_1_4_4; }
+  subgraph cluster_38_16 { label="38 / 16"; style=filled; color=grey95; margin=16; s1_2_4_4; }
+  subgraph cluster_40_16 { label="40 / 16"; style=filled; color=grey95; margin=16; s2_2_4_4; }
+  subgraph cluster_4_2 { label="4 / 2"; style=filled; color=grey95; margin=16; s0_1_1_0; s0_0_1_1; }
+  subgraph cluster_6_2 { label="6 / 2"; style=filled; color=grey95; margin=16; s0_1_1_1; }
+  subgraph cluster_6_4 { label="6 / 4"; style=filled; color=grey95; margin=16; s0_1_2_0; s0_0_1_2; }
+  subgraph cluster_8_4 { label="8 / 4"; style=filled; color=grey95; margin=16; s0_2_2_0; s0_0_2_2; s0_1_2_1; s0_1_1_2; }
+  s0_2_2_0 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;4|&nbsp;&nbsp;}"];
+  s0_2_2_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;4|&nbsp;4}"];
+  s0_2_2_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;4|&nbsp;8}"];
+  s2_2_2_3 [shape=record, label="{&nbsp;4|&nbsp;4}|{&nbsp;4|&nbsp;8}"];
+  s2_2_3_3 [shape=record, label="{&nbsp;4|&nbsp;4}|{&nbsp;8|&nbsp;8}"];
+  s0_2_3_4 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;8|16}"];
+  s2_2_3_4 [shape=record, label="{&nbsp;4|&nbsp;4}|{&nbsp;8|16}"];
+  s2_3_4_3 [shape=record, label="{&nbsp;4|&nbsp;8}|{16|&nbsp;8}"];
+  s2_2_4_4 [shape=record, label="{&nbsp;4|&nbsp;4}|{16|16}"];
+  s1_2_4_4 [shape=record, label="{&nbsp;2|&nbsp;4}|{16|16}"];
+  s1_3_4_3 [shape=record, label="{&nbsp;2|&nbsp;8}|{16|&nbsp;8}"];
+  s1_1_4_4 [shape=record, label="{&nbsp;2|&nbsp;2}|{16|16}"];
+  s0_1_3_4 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;8|16}"];
+  s1_1_3_4 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;8|16}"];
+  s0_2_4_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{16|&nbsp;8}"];
+  s0_1_4_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{16|&nbsp;8}"];
+  s1_2_3_3 [shape=record, label="{&nbsp;2|&nbsp;4}|{&nbsp;8|&nbsp;8}"];
+  s1_1_2_4 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;4|16}"];
+  s2_2_2_4 [shape=record, label="{&nbsp;4|&nbsp;4}|{&nbsp;4|16}"];
+  s1_2_4_2 [shape=record, label="{&nbsp;2|&nbsp;4}|{16|&nbsp;4}"];
+  s1_2_3_2 [shape=record, label="{&nbsp;2|&nbsp;4}|{&nbsp;8|&nbsp;4}"];
+  s1_1_3_3 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;8|&nbsp;8}"];
+  s0_2_2_4 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;4|16}"];
+  s0_1_2_4 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|16}"];
+  s0_2_4_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{16|&nbsp;4}"];
+  s0_1_4_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{16|&nbsp;4}"];
+  s0_1_2_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;8}"];
+  s1_1_2_3 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;4|&nbsp;8}"];
+  s0_2_3_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;8|&nbsp;4}"];
+  s0_2_3_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;8|&nbsp;8}"];
+  s0_1_3_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;8|&nbsp;8}"];
+  s0_1_1_4 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|16}"];
+  s1_1_1_4 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;2|16}"];
+  s0_2_4_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{16|&nbsp;2}"];
+  s0_1_4_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{16|&nbsp;2}"];
+  s0_1_3_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;8|&nbsp;4}"];
+  s0_1_2_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;4}"];
+  s1_2_2_2 [shape=record, label="{&nbsp;2|&nbsp;4}|{&nbsp;4|&nbsp;4}"];
+  s1_1_2_2 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;4|&nbsp;4}"];
+  s0_1_1_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;8}"];
+  s1_1_1_3 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;8}"];
+  s0_2_3_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;8|&nbsp;2}"];
+  s0_1_3_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;8|&nbsp;2}"];
+  s0_0_2_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;4|&nbsp;4}"];
+  s0_0_2_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;4|&nbsp;8}"];
+  s0_0_1_3 [shape=record, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;8}"];
+  s0_2_3_0 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;8|&nbsp;&nbsp;}"];
+  s0_1_3_0 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;8|&nbsp;&nbsp;}"];
+  s0_1_2_0 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;&nbsp;}"];
+  s0_2_2_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;4|&nbsp;2}"];
+  s0_1_2_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;2}"];
+  s1_1_1_2 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;4}"];
+  s0_1_1_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;4}"];
+  s0_1_1_0 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}"];
+  s0_1_1_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;2}"];
+  s0_0_1_2 [shape=record, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;4}"];
+  s0_0_1_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}"];
+  s0_2_2_0 -> s0_1_2_2 [];
+  s0_0_2_2 -> s0_1_2_2 [];
+  s0_1_2_0 -> s0_1_2_2 [];
+  s0_1_2_1 -> s0_1_2_2 [];
+  s0_1_1_1 -> s0_1_2_2 [];
+  s0_0_1_2 -> s0_1_2_2 [];
+  s0_2_2_0 -> s0_2_2_2 [];
+  s0_0_2_2 -> s0_2_2_2 [];
+  s0_1_2_1 -> s0_2_2_2 [];
+  s0_2_2_2 -> s0_1_3_2 [];
+  s1_1_2_2 -> s0_1_3_2 [];
+  s0_1_3_1 -> s0_1_3_2 [];
+  s0_0_2_3 -> s0_1_3_2 [];
+  s0_2_3_0 -> s0_1_3_2 [];
+  s0_2_2_2 -> s0_2_3_2 [];
+  s1_1_2_2 -> s0_2_3_2 [];
+  s0_1_3_1 -> s0_2_3_2 [];
+  s0_0_2_3 -> s0_2_3_2 [];
+  s0_2_3_0 -> s0_2_3_2 [];
+  s0_2_2_2 -> s0_1_2_3 [];
+  s0_1_2_2 -> s0_1_2_3 [];
+  s1_1_2_2 -> s0_1_2_3 [];
+  s0_1_3_1 -> s0_1_2_3 [];
+  s0_0_2_3 -> s0_1_2_3 [];
+  s0_0_1_3 -> s0_1_2_3 [];
+  s0_2_3_0 -> s0_1_2_3 [];
+  s0_1_3_0 -> s0_1_2_3 [];
+  s0_2_2_2 -> s0_2_2_3 [];
+  s1_1_2_2 -> s0_2_2_3 [];
+  s0_1_3_1 -> s0_2_2_3 [];
+  s0_0_2_3 -> s0_2_2_3 [];
+  s0_2_3_0 -> s0_2_2_3 [];
+  s0_2_2_3 -> s1_2_3_2 [];
+  s0_1_2_3 -> s1_2_3_2 [];
+  s1_1_2_3 -> s1_2_3_2 [];
+  s0_2_3_2 -> s1_2_3_2 [];
+  s0_1_3_2 -> s1_2_3_2 [];
+  s1_2_2_2 -> s1_2_3_2 [];
+  s1_1_1_3 -> s1_2_3_2 [];
+  s0_2_3_1 -> s1_2_3_2 [];
+  s0_2_2_3 -> s2_2_2_3 [];
+  s1_1_2_3 -> s2_2_2_3 [];
+  s0_2_3_2 -> s2_2_2_3 [];
+  s2_2_2_3 -> s1_2_3_3 [];
+  s1_2_3_2 -> s1_2_3_3 [];
+  s0_2_3_3 -> s1_2_3_3 [];
+  s0_1_3_3 -> s1_2_3_3 [];
+  s2_2_2_3 -> s2_2_3_3 [];
+  s0_2_3_3 -> s2_2_3_3 [];
+  s2_2_3_3 -> s0_1_4_3 [];
+  s0_2_4_2 -> s0_1_4_3 [];
+  s2_2_3_3 -> s0_2_4_3 [];
+  s0_2_4_2 -> s0_2_4_3 [];
+  s2_2_3_3 -> s0_1_3_4 [];
+  s0_2_4_2 -> s0_1_3_4 [];
+  s2_2_3_3 -> s0_2_3_4 [];
+  s0_2_4_2 -> s0_2_3_4 [];
+  s0_2_3_4 -> s2_2_3_4 [];
+  s1_1_3_4 -> s2_2_3_4 [];
+  s0_2_4_3 -> s2_2_3_4 [];
+  s2_2_2_4 -> s2_2_3_4 [];
+  s2_2_3_4 -> s1_3_4_3 [];
+  s2_2_3_4 -> s2_3_4_3 [];
+  s2_3_4_3 -> s1_2_4_4 [];
+  s1_3_4_3 -> s1_2_4_4 [];
+  s2_3_4_3 -> s2_2_4_4 [];
+  s1_3_4_3 -> s1_1_4_4 [];
+  s0_1_3_4 -> s1_1_3_4 [];
+  s0_1_4_3 -> s1_1_3_4 [];
+  s1_2_4_2 -> s1_1_3_4 [];
+  s1_2_3_3 -> s1_2_4_2 [];
+  s1_1_2_4 -> s1_2_4_2 [];
+  s0_2_2_4 -> s1_2_4_2 [];
+  s0_1_2_4 -> s1_2_4_2 [];
+  s0_2_4_2 -> s1_2_4_2 [];
+  s0_1_4_2 -> s1_2_4_2 [];
+  s1_1_1_4 -> s1_2_4_2 [];
+  s0_2_4_1 -> s1_2_4_2 [];
+  s1_2_3_3 -> s1_1_2_4 [];
+  s0_1_2_4 -> s1_1_2_4 [];
+  s0_1_4_2 -> s1_1_2_4 [];
+  s0_1_1_4 -> s1_1_2_4 [];
+  s1_1_1_4 -> s1_1_2_4 [];
+  s0_2_4_1 -> s1_1_2_4 [];
+  s0_1_4_1 -> s1_1_2_4 [];
+  s1_1_2_4 -> s2_2_2_4 [];
+  s0_2_2_4 -> s2_2_2_4 [];
+  s0_2_4_2 -> s2_2_2_4 [];
+  s1_2_3_2 -> s1_1_3_3 [];
+  s0_1_3_3 -> s1_1_3_3 [];
+  s1_1_3_3 -> s0_1_4_2 [];
+  s0_2_3_3 -> s0_1_4_2 [];
+  s0_1_4_1 -> s0_1_4_2 [];
+  s1_1_3_3 -> s0_2_4_2 [];
+  s0_2_3_3 -> s0_2_4_2 [];
+  s0_1_4_1 -> s0_2_4_2 [];
+  s1_1_3_3 -> s0_1_2_4 [];
+  s0_2_3_3 -> s0_1_2_4 [];
+  s0_1_3_3 -> s0_1_2_4 [];
+  s0_1_4_1 -> s0_1_2_4 [];
+  s1_1_3_3 -> s0_2_2_4 [];
+  s0_2_3_3 -> s0_2_2_4 [];
+  s0_1_4_1 -> s0_2_2_4 [];
+  s0_1_2_3 -> s1_1_2_3 [];
+  s0_1_3_2 -> s1_1_2_3 [];
+  s1_2_2_2 -> s1_1_2_3 [];
+  s0_1_1_3 -> s1_1_2_3 [];
+  s1_1_1_3 -> s1_1_2_3 [];
+  s0_2_3_1 -> s1_1_2_3 [];
+  s0_1_3_1 -> s1_1_2_3 [];
+  s0_2_3_2 -> s0_1_3_3 [];
+  s0_2_3_2 -> s0_2_3_3 [];
+  s0_1_3_3 -> s0_1_4_1 [];
+  s0_1_3_3 -> s0_2_4_1 [];
+  s0_1_3_3 -> s0_1_1_4 [];
+  s0_1_1_4 -> s1_1_1_4 [];
+  s0_1_4_1 -> s1_1_1_4 [];
+  s0_1_2_2 -> s0_1_3_1 [];
+  s0_0_1_3 -> s0_1_3_1 [];
+  s0_1_3_0 -> s0_1_3_1 [];
+  s0_1_2_2 -> s0_2_3_1 [];
+  s0_0_1_3 -> s0_2_3_1 [];
+  s0_1_3_0 -> s0_2_3_1 [];
+  s0_1_2_2 -> s0_1_1_3 [];
+  s0_0_1_3 -> s0_1_1_3 [];
+  s0_1_3_0 -> s0_1_1_3 [];
+  s0_1_2_2 -> s1_2_2_2 [];
+  s0_2_2_1 -> s1_2_2_2 [];
+  s1_1_1_2 -> s1_2_2_2 [];
+  s0_1_2_2 -> s1_1_2_2 [];
+  s0_2_2_1 -> s1_1_2_2 [];
+  s0_1_2_1 -> s1_1_2_2 [];
+  s1_1_1_2 -> s1_1_2_2 [];
+  s0_1_1_2 -> s1_1_2_2 [];
+  s0_1_1_3 -> s1_1_1_3 [];
+  s0_1_3_1 -> s1_1_1_3 [];
+  s0_0_2_2 -> s0_0_1_3 [];
+  s0_0_2_2 -> s0_0_2_3 [];
+  s0_0_2_2 -> s0_1_3_0 [];
+  s0_0_2_2 -> s0_2_3_0 [];
+  s0_1_2_0 -> s0_1_2_1 [];
+  s0_1_1_0 -> s0_1_2_1 [];
+  s0_1_1_1 -> s0_1_2_1 [];
+  s0_0_1_2 -> s0_1_2_1 [];
+  s0_0_1_1 -> s0_1_2_1 [];
+  s0_1_2_0 -> s0_2_2_1 [];
+  s0_1_1_1 -> s0_2_2_1 [];
+  s0_0_1_2 -> s0_2_2_1 [];
+  s0_1_2_0 -> s0_1_1_2 [];
+  s0_1_1_1 -> s0_1_1_2 [];
+  s0_0_1_2 -> s0_1_1_2 [];
+  s0_1_2_1 -> s1_1_1_2 [];
+  s0_1_1_2 -> s1_1_1_2 [];
+  s0_1_1_0 -> s0_1_1_1 [];
+  s0_0_1_1 -> s0_1_1_1 [];
+  s0_0_1_1 -> s0_0_1_2 [];
+  s0_0_1_1 -> s0_0_2_2 [];
+  s0_0_1_1 -> s0_1_2_0 [];
+  s0_0_1_1 -> s0_2_2_0 [];
+}
