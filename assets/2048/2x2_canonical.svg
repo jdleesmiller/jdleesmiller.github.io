@@ -27,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -42,17 +42,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1443"
-     inkscape:window-height="861"
+     inkscape:window-width="1440"
+     inkscape:window-height="856"
      id="namedview3823"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:zoom="1.0204215"
-     inkscape:cx="349.92943"
-     inkscape:cy="179.14031"
+     inkscape:zoom="1.4430939"
+     inkscape:cx="154.87691"
+     inkscape:cy="192.97563"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -126,7 +126,7 @@
          y="-233.30009"
          font-size="14.00"
          id="text3623"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          points="0,-226.5001 32.8027,-226.5001 "
          id="polyline3625"
@@ -156,7 +156,7 @@
          y="-211.30009"
          font-size="14.00"
          id="text3635"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
     </g>
     <g
        id="node3"
@@ -173,7 +173,7 @@
          y="-233.30009"
          font-size="14.00"
          id="text3651"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          points="84,-226.5001 116.8027,-226.5001 "
          id="polyline3653"
@@ -203,7 +203,7 @@
          y="-211.30009"
          font-size="14.00"
          id="text3663"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
     </g>
     <g
        id="node4"
@@ -230,7 +230,7 @@
          y="-211.30009"
          font-size="14.00"
          id="text3683"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          points="200.8027,-204.5001 200.8027,-248.5001 "
          id="polyline3685"
@@ -240,7 +240,7 @@
          y="-233.30009"
          font-size="14.00"
          id="text3687"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          points="200.8027,-226.5001 233.6055,-226.5001 "
          id="polyline3689"
@@ -277,7 +277,7 @@
          y="-211.30009"
          font-size="14.00"
          id="text3711"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          points="284.8027,-204.5001 284.8027,-248.5001 "
          id="polyline3713"
@@ -287,7 +287,7 @@
          y="-233.30009"
          font-size="14.00"
          id="text3715"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          points="284.8027,-226.5001 317.6055,-226.5001 "
          id="polyline3717"
@@ -340,7 +340,7 @@
          y="-315.80371"
          font-size="14.00"
          id="text3608"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          transform="translate(-25.966595,0)"
          points="242.8027,-309.0037 242.8027,-353.0037 "
@@ -351,7 +351,7 @@
          y="-337.80371"
          font-size="14.00"
          id="text3612"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          transform="translate(-25.966595,0)"
          points="242.8027,-331.0037 275.6055,-331.0037 "
@@ -386,7 +386,7 @@
          y="-109.3"
          font-size="14.00"
          id="text3767"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          points="368.8027,-102.5 368.8027,-146.5 "
          id="polyline3769"
@@ -396,7 +396,7 @@
          y="-131.3"
          font-size="14.00"
          id="text3771"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          points="368.8027,-124.5 401.6055,-124.5 "
          id="polyline3773"
@@ -425,7 +425,7 @@
          y="-233.30009"
          font-size="14.00"
          id="text3735"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
       <polyline
          points="336,-226.5001 368.8027,-226.5001 "
          id="polyline3737"
@@ -455,7 +455,7 @@
          y="-211.30009"
          font-size="14.00"
          id="text3747"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
     </g>
     <g
        id="node8"
@@ -472,7 +472,7 @@
          y="-29.299999"
          font-size="14.00"
          id="text3791"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
       <polyline
          points="366,-22.5 398.8027,-22.5 "
          id="polyline3793"
@@ -502,7 +502,7 @@
          y="-7.3000002"
          font-size="14.00"
          id="text3803"
-         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 2</text>
+         style="font-size:14px;font-family:Courier, monospace;text-anchor:middle;fill:#000000"> 8</text>
     </g>
     <!-- s0_1_3_2&#45;&gt;s3_0_2_1 -->
     <!-- s3_0_2_1&#45;&gt;s2_3_1_0 -->
