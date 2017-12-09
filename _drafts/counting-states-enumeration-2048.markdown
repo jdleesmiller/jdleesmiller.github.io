@@ -23,9 +23,9 @@ The (research quality) code behind this article is open source, in case you woul
 
 # Counting States
 
-Here a *state* captures a complete configuration of the board by specifying the value of the tile, if any, in each of the board's cells. When counting states, our overall goal is to find the smallest number of states that will adequately capture all of the 'interesting' features of the game as a whole. In the previous post, the estimates from (very basic) combinatorics counted many states that can't actually occur in the game and so clearly don't capture anything very interesting. By enumerating states systematically from each of the possible start states, we ensure that the states we count are actually reachable in play.
+Here a *state* captures a complete configuration of the board by specifying the value of the tile, if any, in each of the board's cells. Our overall goal is to count all of the states that can actually occur in the game and no more. In the previous post, the estimates from (very basic) combinatorics counted many states that can't actually occur in the game. By enumerating states systematically from each of the possible start states, we ensure that the states we count are actually reachable in play.
 
-We also have other kinds of freedom in choosing which states are interesting. Because the game ends when we obtain a `2048` tile, we won't care about where that tile is or what else is on the board, so we can condense all of the states with a `2048` tile into a special "win" state. Similarly, if we lose, we won't care exactly how we lost; we can condense all of losing states into a special "lose" state. 
+We also have some freedom in choosing which states are interesting enough to count. Because the game ends when we obtain a `2048` tile, we won't care about where that tile is or what else is on the board, so we can condense all of the states with a `2048` tile into a special "win" state. Similarly, if we lose, we won't care exactly how we lost; we can condense all of losing states into a special "lose" state.
 
 # Canonicalization and Symmetry
 
@@ -81,7 +81,7 @@ def enumerate(board_size, max_exponent)
   closed = Set[]
 
   while opened.any?
-    # Treat opened as a stack, so this is a depth-first traversal.
+    # Treat opened as a stack, so this is a depth-first search.
     state = opened.pop
 
     # If we've already processed the state, or if this is
@@ -92,11 +92,11 @@ def enumerate(board_size, max_exponent)
     # Process the state: open all of its possible canonicalized successors.
     [:left, :right, :up, :down].each do |direction|
       state.move(direction).random_successors.each do |successor|
-        opened << successor.canonicalize
+        opened.push(successor.canonicalize)
       end
     end
 
-    closed << state
+    closed.add(state)
   end
 
   closed
@@ -146,14 +146,14 @@ uint64_t reflect_horizontally(uint64_t state) {
 }
 ```
 
-While initially quite opaque, all this is doing is shuffling bits around. The role of first constant, `0xF000F000F000F000ULL`, becomes clearer if we omit the `0x` and `ULL`, which just tell the compiler that this is non-negative 64-bit integer in hexadecimal, and again add line breaks to make a 4x4 grid:
+While initially quite opaque, all this is doing is shuffling bits around. The role of first bit mask, `0xF000F000F000F000ULL`, becomes clearer if we omit the `0x` and `ULL`, which just tell the compiler that this is non-negative 64-bit integer in hexadecimal, and again add line breaks to make a 4x4 grid:
 ```
 F000
 F000
 F000
 F000
 ```
-The binary representation of the hexadecimal digit `F` is `1111`, so the effect of this bit mask is to make `c1` contain only the values in the first column of the board and zero bits everywhere else. The bit shift `c1 >> 12` at the end of the function moves the first column 12 bits, which is to say three cells, to the right, which makes it the last column. Similarly, `c2` selects the second column, and `c2 >> 4` moves it one cell to the right, and so on with the third and fourth columns to reverse the order of the columns.
+The binary representation of the hexadecimal digit `F` is `1111`, so the effect of this bit mask is to make `c1` contain only the values in the first column of the board and zero bits everywhere else. The bit shift `c1 >> 12` at the end of the function moves the first column 12 bits, which is to say three 4-bit cells, to the right, which makes it the last column. Similarly, `c2` selects the second column, and `c2 >> 4` moves it one cell to the right, and so on with the third and fourth columns to reverse the order of the columns.
 
 Some functions take a bit more work to decipher. If you're in the mood for a puzzle, here's a function that counts the number of cells available (value zero) in a 4x4 state (you can find [my explanation in comments here](https://github.com/jdleesmiller/twenty48/blob/479f646e81c38f1967e4fc5942617f9650d2c735/ext/twenty48/state.hpp#L68-L83)):
 ```cpp
@@ -171,13 +171,15 @@ Profiling (with [perf](https://en.wikipedia.org/wiki/Perf_(Linux))) showed that 
 
 # Layers and MapReduce for Parallelism
 
-The next challenge is that we can't keep the whole `closed` set in memory. To break up the state space into manageably sized pieces, we can use the following property of the game: *The sum of the tiles on the board increases by either 2 or 4 with each move.* This property holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a 2 or a 4 tile. [^property-3]
+The next challenge is that we can't keep the whole `closed` set in memory. To break up the state space into manageably sized pieces, we can use the following property of the game: *The sum of the tiles on the board increases by either 2 or 4 with each move.* This property holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile. [^property-3]
 
 This property is useful here because it means that we can organize the states into *layers* according to the sum of their tiles. We can therefore generate the whole state space by working through a single layer at a time, rather than having to deal with the whole state space at once.
 
-To parallelize the work within each layer, we can use the [MapReduce](https://en.wikipedia.org/wiki/MapReduce) concept made famous by Google. The 'map' step here is to take one complete layer of states with sum \\(s\\) and break it up into pieces; then, for each piece in parallel, generate all of the successor states, which will have either sum \\(s + 2\\) or \\(s + 4\\). The 'reduce' step is to merge all of the pieces for the layer with sum \\(s + 2\\) together into a complete layer, removing any duplicates. The pieces with sum \\(s + 4\\) are retained until the next layer, in which states have sum \\(s + 2\\), is processed, at which point they will be included in the merge.
+To parallelize the work within each layer, we can use the [MapReduce](https://en.wikipedia.org/wiki/MapReduce) concept made famous by Google. The 'map' step here is to take one complete layer of states with sum \\(s\\) and break it up into pieces; then, for each piece in parallel, generate all of the successor states, which will have either sum \\(s + 2\\) or \\(s + 4\\). The 'reduce' step is to merge all of the pieces for the layer with sum \\(s + 2\\) together into a complete layer, removing any duplicates. The pieces with sum \\(s + 4\\) are retained until the next layer, in which states have sum \\(s + 2\\), is processed, at which point they will be included in the merge. This may be easier to see in an animation (made with [d3](https://d3js.org)):
 
-In the map step for each piece, it is feasible to maintain the set of successor states in memory. To make the merge in the reduce step efficient, we want the map step to output a list of states for each piece in order by their state numbers so we can merge the pieces together in linear time. Here Google again comes to our aid: they have released a handy in-memory [B-tree implementation](https://code.google.com/archive/p/cpp-btree/) that plays well with the C++ standard template library. [B-trees](https://en.wikipedia.org/wiki/B-tree) are most commonly found in relational database systems, where they are often used to maintain indexes on columns, but they are useful data structures in their own right: they keep data in order and provide logarithmic lookup and also logarithmic insertion --- much better than logarithmic plus linear time insertion into a sorted list --- with relatively little memory overhead.
+<div id="map-reduce"></div>
+
+In the map step for each piece, it is feasible to maintain the set of successor states in memory. To make the merge in the reduce step efficient, we want the map step to output a list of states for each piece in order by their state numbers so we can merge the pieces together in linear time. Here Google again comes to our aid: they have released a handy in-memory [B-tree implementation](https://code.google.com/archive/p/cpp-btree/) that plays well with the C++ standard template library. [B-trees](https://en.wikipedia.org/wiki/B-tree) are most commonly found in relational database systems, where they are often used to maintain indexes on columns, but they are useful data structures in their own right: they keep data in order and provide logarithmic time lookup and also logarithmic time insertion --- much better than logarithmic plus linear time insertion into a sorted list --- with relatively little memory overhead.
 
 To break the state space up into even smaller pieces, which reduces the amount of work we need to do in each merge step, we can exploit an another property of the game: *the maximum tile value on the board must either stay the same or double with each move.* This property holds because the maximum tile value never decreases, and when it does increase, it can only increase as the result of merging two tiles --- that is, even if you have for example four `16` tiles in a row and you merge them, after one move the result is two `32` tiles, not one `64` tile.
 
@@ -540,3 +542,5 @@ MathJax.Hub.Config({
 });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="/assets/2048/map_reduce.js"></script>
