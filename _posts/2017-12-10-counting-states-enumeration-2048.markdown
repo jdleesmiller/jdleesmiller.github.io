@@ -161,48 +161,46 @@ The numbers of states for the various games we've looked at in this series of bl
       <th>4x4</th>
       <th>2048</th>
       <td align="right">44,096,167,159,459,777</td>
-      <td align="right">Unknown</td>
+      <td align="right">\(\gg\) 1.3 trillion</td>
     </tr>
   </tbody>
 </table>
 
 &nbsp;
 
-Just like the `32` tile is the highest reachable tile on the 2x2 board, the `1024` tile [is the highest](/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) on the 3x3 board. Exhaustive enumeration of states shows that the 3x3 game contains about 40.6 billion states, which is a factor of 31 lower than the rough 'Combinatorics Bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html). The factor for the game on the 4x4 board to the `64` tile, which is the largest game on the 4x4 board that I was able to completely enumerate, is even larger, at 69. As expected, the (very basic) combinatorics bounds were quite loose, because they count many states that can't occur in the game or are trivially related to each other.
+Just like the `32` tile is the highest reachable tile on the 2x2 board, the `1024` tile [is the highest](/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) on the 3x3 board. Exhaustive enumeration of states shows that the 3x3 game contains about 40.7 billion states, which is a factor of 31 lower than the rough 'Combinatorics Bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html). For the game on the 4x4 board to the `64` tile, which is the largest game on the 4x4 board that I was able to completely enumerate, the factor is even larger, at 69. As expected, the (very basic) combinatorics bounds were quite loose, because they count many states that can't occur in the game or are trivially related to each other.
 
-For the 3x3 game to the `1024` tile, there are too many states to draw a diagram like the one for the 2x2 game above. However, we can gain some insight into how the number of reachable states changes as the game progresses by using the following property of the game: *The sum of the tiles on the board increases by either 2 or 4 with each move.* This property holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile. [^property-3]
-
-We can therefore organize the states into 'layers' by the sum of their tiles, and with each move that sum will increase. Plotting out the number of states in each layer gives:
+For the 3x3 game to the `1024` tile, there are too many states to draw a diagram like the one for the 2x2 game above. However, we can gain some insight into that 40.7 billion figure by counting states in groups by (1) the sum of the tiles on the board and (2) the value of the maximum tile on the board. The sum of the tiles on the board increases by either 2 or 4 with each move [^property-3], so the game generally progresses from left to right on this graph:
 
 <p align="center">
-<a href="/assets/2048/enumeration_3x3_to_1024.svg"><img src="/assets/2048/enumeration_3x3_to_1024.svg" alt="Number of states per sum layer in the 3x3 game to 1024" /></a>
+<a href="/assets/2048/enumeration_3x3_to_1024.svg"><img src="/assets/2048/enumeration_3x3_to_1024.svg" alt="Number of states by tile sum and maximum tile value in the 3x3 game to 1024" /></a>
 </p>
 
-Early in the game, when the sum of the tiles is small, the number of states grows fairly smoothly and linearly with the sum of tiles. However, later in the game, there are sharp drops around where the sum of tiles reaches a larger power of two, for example at around sums 128 and 256. These drops indicate that the 3x3 game is tightly constrained by the small size of the board --- there are not many ways to survive past these drops without merging most of the tiles together into a larger one.
+Early in the game, when the sum of the tiles is small, the number of states grows fairly smoothly and linearly with the sum of tiles. However, later in the game when the board fills up, there are sharp drops around where the sum of tiles reaches a larger power of two, for example at around sums 128 and 256. These drops indicate that the 3x3 game is tightly constrained by the small size of the board --- there are not many ways to survive past these drops without merging most of the tiles together into a larger one.
 
-It's also notable that the same structure seems to repeat each time a larger maximum tile is reached (that is, each time the shade of blue in the plot gets darker). The 64, 128, 256 and 512 max tile curves each have a similar slope at the start and a 'step' at about 26,000 states per layer. In terms of gameplay, this repetition reflects the fact that once you merge most of the tiles together to get the next largest one, the board is mostly empty again, except for the newly merged tile, so the game sort of 'resets' at that point.
+It's also notable that the same structure seems to repeat each time a larger maximum tile is reached (that is, each time the shade of blue in the plot gets darker). The 64, 128, 256 and 512 max tile curves each have a similar slope at the start and a 'step' at about 26,000 states per tile sum. In terms of gameplay, this repetition reflects the fact that once you merge most of the tiles together to get the next largest one, the board is mostly empty again, except for the newly merged tile, so the game sort of 'resets' at that point.
 
-We might hope that the game on the 4x4 board would also show some of these characteristics, but at least up to layer sum 380, this is apparently not the case. After running for one month and enumerating over 1.3 trillion states, the results to date for the full game of 2048 look like:
+We might hope that the game on the 4x4 board would also show some of these characteristics, but at least up to tile sum 380, this is apparently not the case. After running the enumeration for one month and counting over 1.3 trillion states, the results to date for the full game of 2048 look like:
 
 <p align="center">
-<a href="/assets/2048/enumeration_4x4_to_2048_partial.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial.svg" alt="Number of states per sum layer in the 4x4 game to 2048" /></a>
+<a href="/assets/2048/enumeration_4x4_to_2048_partial.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial.svg" alt="Number of states by tile sum and maximum tile value in the 4x4 game to 2048" /></a>
 </p>
 
-We see smooth and uninterrupted growth in the total number of states. Whereas the game on the 3x3 board topped out at about 80 thousand states per layer, the game on the 4x4 board shows no sign of slowing down at 27 billion states per layer [^resolve].
+We see smooth and uninterrupted growth in the total number of states. Whereas the game on the 3x3 board topped out at about 80 thousand states per tile sum, the game on the 4x4 board shows no sign of slowing down at 27 billion states per tile sum [^resolve].
 
 We can still see the rise and fall in the number of states with each maximum tile value, and it becomes clearer if we unstack these counts and plot them on a logarithmic scale:
 
 <p align="center">
-<a href="/assets/2048/enumeration_4x4_to_2048_partial_log.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial_log.svg" alt="Number of states per sum layer in the 4x4 game to 2048 on a log scale" /></a>
+<a href="/assets/2048/enumeration_4x4_to_2048_partial_log.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial_log.svg" alt="Number of states by tile sum and maximum tile value in the 4x4 game to 2048 on a log scale" /></a>
 </p>
 
-The top line in black shows the total number of states, summing over all the maximum tile values, which are again shown in shades of blue. Each blue arc shows the growth and later decay in the number of states with a given maximum tile value, as the game progresses. The bending down of the total (black line) shows that the growth in the number of states per layer tapers off as the game progresses, but the numbers are already quite large.
+The top line in black shows the total number of states, summing over all the maximum tile values, which are again shown in shades of blue. Each blue arc shows the growth and later decay in the number of states with a given maximum tile value, as the game progresses. The bending down of the total (black line) shows that the growth in the number of states per tile sum tapers off as the game progresses, but the numbers are already quite large.
 
 # Conclusion
 
 We've improved our estimates for the number of states in the game of 2048 on the 2x2 and 3x3 boards by one to two orders of magnitude, compared to the previous (basic) combinatorial estimates. The number of states for the game on the 4x4 board remains too large to enumerate in full, but we have at least managed to completely enumerate the states for the 4x4 game to the `64` tile, and we've made an attempt at enumerating the states for the full game.
 
-The explicit enumeration of states counts only states that can be reached in actual game play, but even with that restriction there are still some surprising states included in the count. For example, in the last figure above, the arc that shows the number of states with at most a `32` tile does not stop until layer sum 348. That layer contains four states, one of which I chose for the cover image of this post: [^cover]
+The explicit enumeration of states counts only states that can be reached in actual game play, but even with that restriction there are still some surprising states included in the count. For example, in the last figure above, the arc that shows the number of states with at most a `32` tile does not stop until tile sum 348. There are four states with tile sum 348 and no `64` tile, one of which I chose for the cover image of this post: [^cover]
 
 <p align="center">
 <img src="/assets/2048/4x4_s2_3_4_5_4_5_4_5_5_4_5_4_4_5_4_5.svg" alt="State from layer 348 with no 64 tile; contains diagonal bands of 16s and 32s" />
@@ -332,6 +330,8 @@ Here closer to the origin is better; we see Zstandard performing best for relati
 ---
 
 &nbsp;
+
+Thanks to [Hope Thomas](https://twitter.com/h0peth0mas) for reviewing drafts of this article.
 
 If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
 
