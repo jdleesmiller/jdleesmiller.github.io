@@ -19,7 +19,7 @@ Enumeration of all states for the full game on a 4x4 board remains an open probl
 
 Overall, the results show that the combinatorial estimates from the last post were substantial overestimates, as suspected. However, the state space for the full game is still very large. If a large nation state or tech company decided that 2048 was their top priority, which may not be the craziest thing that's happened this year, I think they could probably finish the job.
 
-The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48), mainly in ruby and C++.
+The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48#3-number-of-states-by-exhaustive-enumeration), mainly in ruby and C++.
 
 # Counting States
 
