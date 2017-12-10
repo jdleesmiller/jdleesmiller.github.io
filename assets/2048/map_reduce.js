@@ -295,7 +295,7 @@
     }
 
     function update (animate) {
-      console.log(getAllPieces(LAYERS))
+      // console.log(getAllPieces(LAYERS))
       var t = d3.transition().duration(1000)
       animate(t, figure.selectAll('rect').data(getAllPieces(LAYERS), Piece.key))
       return t
