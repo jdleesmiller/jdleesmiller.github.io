@@ -12,7 +12,7 @@
     var MAX_SUM = 12
 
     var svg = container.append('svg')
-      .attr('width', '100%')
+      .attr('width', (MAX_SUM + 4) * PIECE_WIDTH)
       .attr('height', HEIGHT)
 
     var figure = svg.append('svg').attr('y', '3em')

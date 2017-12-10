@@ -175,7 +175,7 @@ For the 3x3 game to the `1024` tile, there are too many states to draw a diagram
 We can therefore organize the states into 'layers' by the sum of their tiles, and with each move that sum will increase. Plotting out the number of states in each layer gives:
 
 <p align="center">
-<img src="/assets/2048/enumeration_3x3_to_1024.svg" alt="Number of states per sum layer in the 3x3 game to 1024" />
+<a href="/assets/2048/enumeration_3x3_to_1024.svg"><img src="/assets/2048/enumeration_3x3_to_1024.svg" alt="Number of states per sum layer in the 3x3 game to 1024" /></a>
 </p>
 
 Early in the game, when the sum of the tiles is small, the number of states grows fairly smoothly and linearly with the sum of tiles. However, later in the game, there are sharp drops around where the sum of tiles reaches a larger power of two, for example at around sums 128 and 256. These drops indicate that the 3x3 game is tightly constrained by the small size of the board --- there are not many ways to survive past these drops without merging most of the tiles together into a larger one.
@@ -185,7 +185,7 @@ It's also notable that the same structure seems to repeat each time a larger max
 We might hope that the game on the 4x4 board would also show some of these characteristics, but at least up to layer sum 380, this is apparently not the case. After running for one month and enumerating over 1.3 trillion states, the results to date for the full game of 2048 look like:
 
 <p align="center">
-<img src="/assets/2048/enumeration_4x4_to_2048_partial.svg" alt="Number of states per sum layer in the 4x4 game to 2048" />
+<a href="/assets/2048/enumeration_4x4_to_2048_partial.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial.svg" alt="Number of states per sum layer in the 4x4 game to 2048" /></a>
 </p>
 
 We see smooth and uninterrupted growth in the total number of states. Whereas the game on the 3x3 board topped out at about 80 thousand states per layer, the game on the 4x4 board shows no sign of slowing down at 27 billion states per layer [^resolve].
@@ -193,7 +193,7 @@ We see smooth and uninterrupted growth in the total number of states. Whereas th
 We can still see the rise and fall in the number of states with each maximum tile value, and it becomes clearer if we unstack these counts and plot them on a logarithmic scale:
 
 <p align="center">
-<img src="/assets/2048/enumeration_4x4_to_2048_partial_log.svg" alt="Number of states per sum layer in the 4x4 game to 2048 on a log scale" />
+<a href="/assets/2048/enumeration_4x4_to_2048_partial_log.svg"><img src="/assets/2048/enumeration_4x4_to_2048_partial_log.svg" alt="Number of states per sum layer in the 4x4 game to 2048 on a log scale" /></a>
 </p>
 
 The top line in black shows the total number of states, summing over all the maximum tile values, which are again shown in shades of blue. Each blue arc shows the growth and later decay in the number of states with a given maximum tile value, as the game progresses. The bending down of the total (black line) shows that the growth in the number of states per layer tapers off as the game progresses, but the numbers are already quite large.
@@ -324,7 +324,7 @@ For longer term storage and transport over Internet, I also [tried several compr
 Three programs emerged on the resulting [Pareto frontier](/articles/2017/05/01/compression-pareto-docker-gnuplot.html): Facebook's [Zstandard](https://github.com/facebook/zstd), Google's [Brotli](https://github.com/google/brotli) and [7-zip](http://www.7-zip.org/). After scaling size and time up by a factor of 700 to estimate performance on the larger 380/128 layer, the frontier looks like:
 
 <p align="center">
-<img src="/assets/2048/sum-0260.max_value-5.scale-701.svg" alt="Pareto frontier for selecting a compression program for lists of 2048 states" />
+<a href="/assets/2048/sum-0260.max_value-5.scale-701.svg"><img src="/assets/2048/sum-0260.max_value-5.scale-701.svg" alt="Pareto frontier for selecting a compression program for lists of 2048 states" /></a>
 </p>
 
 Here closer to the origin is better; we see Zstandard performing best for relatively fast and light compression, and 7zip performing best for relatively slow and heavy compression. From the graph, we can see that Zstandard at compression level 11 is fairly close to the origin, and it turned out to minimize the particular linear cost function that I used. The results on the smaller layer suggested that Zstandard level 11 would reduce the 380/128 layer from 35GiB to about 10GiB. In fact, it did much better: it reduced it from 35GiB to 3.8GiB, for another factor of 9.2, or about 1.5 *bits* per state. I think that's quite remarkable.
