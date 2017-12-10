@@ -105,7 +105,7 @@ end
 
 The code for generating start states is [here](https://github.com/jdleesmiller/twenty48/blob/479f646e81c38f1967e4fc5942617f9650d2c735/lib/twenty48/builder.rb#L59-L68), and the code for the rest of the State methods, such as `random_successors` and `canonicalize`, is [here](https://github.com/jdleesmiller/twenty48/blob/479f646e81c38f1967e4fc5942617f9650d2c735/lib/twenty48/state.rb).
 
-If we run this code for the game on the 2x2 board played up to the `32` tile, which we've [previously established](http://localhost:4000/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) is the highest tile reachable on the 2x2 board, we get 57 states ([click to enlarge](/assets/2048/enumeration_2x2_ungrouped.svg)):
+If we run this code for the game on the 2x2 board played up to the `32` tile, which we've [previously established](/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) is the highest tile reachable on the 2x2 board, we get 57 states ([click to enlarge](/assets/2048/enumeration_2x2_ungrouped.svg)):
 <p align="center">
   <a href="/assets/2048/enumeration_2x2_ungrouped.svg"><img src="/assets/2048/enumeration_2x2_ungrouped.svg" alt="States from the enumeration of the 2x2 game to 32"></a>
 </p>
@@ -168,7 +168,7 @@ The numbers of states for the various games we've looked at in this series of bl
 
 &nbsp;
 
-Just like the `32` tile is the highest reachable tile on the 2x2 board, the `1024` tile [is the highest](http://localhost:4000/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) on the 3x3 board. Exhaustive enumeration of states shows that the 3x3 game contains about 40.6 billion states, which is a factor of 31 lower than the rough 'Combinatorics Bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html). The factor for the game on the 4x4 board to the `64` tile, which is the largest game on the 4x4 board that I was able to completely enumerate, is even larger, at 69. As expected, the (very basic) combinatorics bounds were quite loose, because they count many states that can't occur in the game or are trivially related to each other.
+Just like the `32` tile is the highest reachable tile on the 2x2 board, the `1024` tile [is the highest](/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) on the 3x3 board. Exhaustive enumeration of states shows that the 3x3 game contains about 40.6 billion states, which is a factor of 31 lower than the rough 'Combinatorics Bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html). The factor for the game on the 4x4 board to the `64` tile, which is the largest game on the 4x4 board that I was able to completely enumerate, is even larger, at 69. As expected, the (very basic) combinatorics bounds were quite loose, because they count many states that can't occur in the game or are trivially related to each other.
 
 For the 3x3 game to the `1024` tile, there are too many states to draw a diagram like the one for the 2x2 game above. However, we can gain some insight into how the number of reachable states changes as the game progresses by using the following property of the game: *The sum of the tiles on the board increases by either 2 or 4 with each move.* This property holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile. [^property-3]
 
