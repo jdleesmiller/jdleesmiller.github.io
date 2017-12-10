@@ -19,7 +19,7 @@ Enumeration of all states for the full game on a 4x4 board remains an open probl
 
 Overall, the results show that the combinatorial estimates from the last post were substantial overestimates, as suspected. However, the state space for the full game is still very large. If a large nation state or tech company decided that 2048 was their top priority, which may not be the craziest thing that's happened this year, I think they could probably finish the job.
 
-The (research quality) code behind this article is open source, in case you would like to see the implementation or code for the plots. The code is in C++ with a ruby wrapper.
+The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48), mainly in ruby and C++.
 
 # Counting States
 
@@ -46,7 +46,7 @@ When the tiles in a state are arranged in a symmetrical pattern, the number of e
 Which of the equivalent states should we choose as the canonical state? To answer this question, it will be helpful to think about states as numbers. We'll also see that this has significant computational benefits in the appendices.
 
 To write a state as a number, we can start in the top left and read the cells by rows; for each cell, we write a \\(0\\) digit if the cell is empty, and the digit \\(i\\) if the cell contains the \\(2^i\\) tile. For example, on a 2x2 board, the state <img src="/assets/2048/2x2_s2_3_1_0.svg" alt="4 8 2 -" style="height: 2em;">
-would be written as the number \\(2310\\).
+would be written as the number \\(2310\\), because \\(4 = 2^2\\), \\(8 = 2^3\\), \\(2 = 2^1\\), and the last cell is empty.
 
 Since we're only interested in numbers up to 2048, which is \\(2^{11}\\), we could in principle write any state as a number in base 12 (rather than base 10, as we are accustomed to). However, because computers run on binary numbers, it will be more convenient to think of each state as a number in base 16 --- that is, hexadecimal. The state above would therefore be more properly written as `0x2310` for computer scientists or \\(2310_{16}\\) for mathematicians.
 
@@ -105,7 +105,7 @@ end
 
 The code for generating start states is [here](https://github.com/jdleesmiller/twenty48/blob/479f646e81c38f1967e4fc5942617f9650d2c735/lib/twenty48/builder.rb#L59-L68), and the code for the rest of the State methods, such as `random_successors` and `canonicalize`, is [here](https://github.com/jdleesmiller/twenty48/blob/479f646e81c38f1967e4fc5942617f9650d2c735/lib/twenty48/state.rb).
 
-If we run this code for the 2x2 board up to the `32` tile, we get 57 states ([click to enlarge](/assets/2048/enumeration_2x2_ungrouped.svg)):
+If we run this code for the game on the 2x2 board played up to the `32` tile, which we've [previously established](http://localhost:4000/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) is the highest tile reachable on the 2x2 board, we get 57 states ([click to enlarge](/assets/2048/enumeration_2x2_ungrouped.svg)):
 <p align="center">
   <a href="/assets/2048/enumeration_2x2_ungrouped.svg"><img src="/assets/2048/enumeration_2x2_ungrouped.svg" alt="States from the enumeration of the 2x2 game to 32"></a>
 </p>
@@ -120,7 +120,7 @@ or we could swipe up or down, which would leave the two `2` tiles unmerged and l
 
 Not shown are the special 'lose' and 'win' states, so in total we have 59 states for the 2x2 game to the `32` tile. This compares favorably to the estimate of 529 states from the (simple) combinatorics arguments in the previous blog post. We've saved about one order of magnitude!
 
-When we try to run this ruby code on the 3x3 or 4x4 boards, however, we quickly hit two problems: it's very slow, and it runs out of memory for the `closed` set. Profiling showed that it is spending most of its time manipulating states (sliding tiles, trying different reflections and rotations for canonicalization, and testing for win or lose conditions). I've included three appendices with the details of how to speed up the calculations and manage the large amounts of data involved, but first let's see some results.
+When we try to run this ruby code on the 3x3 or 4x4 boards, however, we quickly hit two problems: it's very slow, and it runs out of memory for the `closed` set. I've included three appendices with the details of how to speed up the calculations and manage the large amounts of data involved, but first let's see some results.
 
 # Results
 
@@ -166,19 +166,21 @@ The numbers of states for the various games we've looked at in this series of bl
   </tbody>
 </table>
 
-We've [previously established](http://localhost:4000/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) that the `32` tile is the highest tile reachable on the 2x2 board, and the `1024` tile is the highest tile reachable on the 3x3 board, so that is why those values are used for the first two rows.
+&nbsp;
 
-The 'Combinatorics bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html) is included for reference. As expected, the combinatorics bounds are quite loose --- they count many states that can't occur in the game or are trivially related to each other. The reduction for the 2x2 game to 32 is about a factor of 9, and the reduction for the 3x3 game to 1024 is about a factor of 31. For the 4x4 board, the largest maximum tile for which I could complete enumeration was the `64` tile; there the reduction was a factor of 69.
+Just like the `32` tile is the highest reachable tile on the 2x2 board, the `1024` tile [is the highest](http://localhost:4000/articles/2017/09/17/counting-states-combinatorics-2048.html#fnref:smallest-board) on the 3x3 board. Exhaustive enumeration of states shows that the 3x3 game contains about 40.6 billion states, which is a factor of 31 lower than the rough 'Combinatorics Bound' from [the previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html). The factor for the game on the 4x4 board to the `64` tile, which is the largest game on the 4x4 board that I was able to completely enumerate, is even larger, at 69. As expected, the (very basic) combinatorics bounds were quite loose, because they count many states that can't occur in the game or are trivially related to each other.
 
-For the 3x3 game to the `1024` tile, there are too many states to draw, but we can see how the number of reachable states changes as the game progresses:
+For the 3x3 game to the `1024` tile, there are too many states to draw a diagram like the one for the 2x2 game above. However, we can gain some insight into how the number of reachable states changes as the game progresses by using the following property of the game: *The sum of the tiles on the board increases by either 2 or 4 with each move.* This property holds because merging two tiles does not change the sum of the tiles on the board, and the game then adds either a `2` or a `4` tile. [^property-3]
+
+We can therefore organize the states into 'layers' by the sum of their tiles, and with each move that sum will increase. Plotting out the number of states in each layer gives:
 
 <p align="center">
 <img src="/assets/2048/enumeration_3x3_to_1024.svg" alt="Number of states per sum layer in the 3x3 game to 1024" />
 </p>
 
-Early in the game, when the sum of the tiles is small, the number of states grows fairly smoothly and linearly with the sum of tiles. However, later in the game, there are sharp drops around where the sum of tiles reaches a larger power of two, for example at around sums 128 and 256. These drops indicate that the game is tightly constrained by the small size of the board --- there are not many ways to survive past these drops without merging most of the tiles together into a larger one.
+Early in the game, when the sum of the tiles is small, the number of states grows fairly smoothly and linearly with the sum of tiles. However, later in the game, there are sharp drops around where the sum of tiles reaches a larger power of two, for example at around sums 128 and 256. These drops indicate that the 3x3 game is tightly constrained by the small size of the board --- there are not many ways to survive past these drops without merging most of the tiles together into a larger one.
 
-It's also notable that the same structure seems to repeat each time a larger maximum tile is reached (that is, each time the shade of blue in the plot gets darker). The 64, 128, 256 and 512 max tile curves each have a similar slope and a 'step' at about 26,000 states per layer. In terms of gameplay, this repetition reflects the fact that once you merge most of the tiles together to get the next largest one, the board is mostly empty again, except for the newly merged tile. The regular steps and drops again reflect the fact that the game on the 3x3 board is very tightly constrained.
+It's also notable that the same structure seems to repeat each time a larger maximum tile is reached (that is, each time the shade of blue in the plot gets darker). The 64, 128, 256 and 512 max tile curves each have a similar slope at the start and a 'step' at about 26,000 states per layer. In terms of gameplay, this repetition reflects the fact that once you merge most of the tiles together to get the next largest one, the board is mostly empty again, except for the newly merged tile, so the game sort of 'resets' at that point.
 
 We might hope that the game on the 4x4 board would also show some of these characteristics, but at least up to layer sum 380, this is apparently not the case. After running for one month and enumerating over 1.3 trillion states, the results to date for the full game of 2048 look like:
 
@@ -186,31 +188,37 @@ We might hope that the game on the 4x4 board would also show some of these chara
 <img src="/assets/2048/enumeration_4x4_to_2048_partial.svg" alt="Number of states per sum layer in the 4x4 game to 2048" />
 </p>
 
-We see smooth and uninterrupted growth in the number of states. Whereas the game on the 3x3 board topped out at about 80 thousand states per layer, the game on the 4x4 board shows no sign of slowing down at 27 billion states per layer [^resolve].
+We see smooth and uninterrupted growth in the total number of states. Whereas the game on the 3x3 board topped out at about 80 thousand states per layer, the game on the 4x4 board shows no sign of slowing down at 27 billion states per layer [^resolve].
 
-If we unstack the layers from the previous plot for the 4x4 board so that we can use a log scale, we can see that the overall growth looks subexponential, but the numbers involved are nonetheless quite large:
+We can still see the rise and fall in the number of states with each maximum tile value, and it becomes clearer if we unstack these counts and plot them on a logarithmic scale:
 
 <p align="center">
 <img src="/assets/2048/enumeration_4x4_to_2048_partial_log.svg" alt="Number of states per sum layer in the 4x4 game to 2048 on a log scale" />
 </p>
 
-The top line in black shows the total number of states, summing over all the maximum tile values, which are again shown in shades of blue. It is notable that for most layers there is one maximum tile value that accounts for most of the states --- that is, one of the blue lines is close to the black line. For example, in the layer with sum 380, where this dataset ends, the vast majority of states have at least one `128` tile, but some have only tiles up to `64`, and some have a `256` tile.
+The top line in black shows the total number of states, summing over all the maximum tile values, which are again shown in shades of blue. Each blue arc shows the growth and later decay in the number of states with a given maximum tile value, as the game progresses. The bending down of the total (black line) shows that the growth in the number of states per layer tapers off as the game progresses, but the numbers are already quite large.
 
 # Conclusion
 
-We've improved our estimates for the number of states in the game of 2048 on the 2x2 and 3x3 boards, and shown that our previous combinatorial estimates were high by at least one or two orders of magnitude. The number of states for the game on the 4x4 board remains too large to enumerate in full, but we have at least managed to completely enumerate the states for the 4x4 game to the `64` tile, and we've made an attempt at enumerating the states for the full game.
+We've improved our estimates for the number of states in the game of 2048 on the 2x2 and 3x3 boards by one to two orders of magnitude, compared to the previous (basic) combinatorial estimates. The number of states for the game on the 4x4 board remains too large to enumerate in full, but we have at least managed to completely enumerate the states for the 4x4 game to the `64` tile, and we've made an attempt at enumerating the states for the full game.
 
-Even when all of the states are reachable, we still find some rather odd states. For example, in the last figure above, the arc that shows the number of states with at most the `32` tile does not stop until layer sum 348. In that layer we find four states, one of which is:
+The explicit enumeration of states counts only states that can be reached in actual game play, but even with that restriction there are still some surprising states included in the count. For example, in the last figure above, the arc that shows the number of states with at most a `32` tile does not stop until layer sum 348. That layer contains four states, one of which I chose for the cover image of this post: [^cover]
 
 <p align="center">
 <img src="/assets/2048/4x4_s2_3_4_5_4_5_4_5_5_4_5_4_4_5_4_5.svg" alt="State from layer 348 with no 64 tile; contains diagonal bands of 16s and 32s" />
 </p>
 
-I find it quite surprising that it's possible to play to such a state, and indeed it seems quite improbable, especially if one is playing well.
+It contains seven `32` tiles and seven `16` tiles arranged in a nice striped pattern that makes it very difficult to merge any of them. I find it quite surprising that it's possible to play to such a state without losing, and indeed it seems quite improbable, especially if one is 'playing well'.
 
-In the next post, we'll explore more about what it means to 'play well' by modeling the game of 2048 as a [Markov Decision Process](https://en.wikipedia.org/wiki/Markov_decision_process) and finding an *optimal policy* for the 2x2 and 3x3 games --- that is, we will find a strategy for playing those game that we can show mathematically to be at least as good as any other possible strategy.
+In the next post, we'll explore what it means to 'play well' in a rigorous way by modeling the game of 2048 as a [Markov Decision Process](https://en.wikipedia.org/wiki/Markov_decision_process) and finding an *optimal policy* for the 2x2 and 3x3 games --- that is, we will find a strategy for playing those game that we can show mathematically to be at least as good as any other possible strategy.
+
+---
+
+&nbsp;
 
 # Appendix A: Bit Bashing for Efficiency
+
+Profiling the ruby code above revealed that most of the time was being spent on state manipulation --- for example, moving tiles, counting available tiles, and reflecting or rotating states to find canonical states. Let's see how we can speed it up.
 
 The hexadecimal numerical representation for states has a convenient property: for the 4x4 board, we need to store 16 numbers, where each number takes 4 bits, for a total of 64 bits. Now that we all use 64-bit computers, this is an auspicious number: the whole board state can fit into a single 64-bit (8-byte) machine word. For example, the 4x4 state (which is a winning state, because it has a `2048` tile)
 <p align="center"><img src="/assets/2048/4x4_s0_2_2_11_0_1_3_0_2_0_1_0_0_0_0_0.svg" alt="- 4 4 2048 - 2 8 - 4 - 2 - - - - -"></p>
@@ -267,7 +275,7 @@ To parallelize the work within each layer, we can use the [MapReduce](https://en
 
 <div id="map-reduce"></div>
 
-In the map step for each piece, it is feasible to maintain the set of successor states in memory. To make the merge in the reduce step efficient, we want the map step to output a list of states for each piece in order by their state numbers so we can merge the pieces together in linear time. Here Google again comes to our aid: they have released a handy in-memory [B-tree implementation](https://code.google.com/archive/p/cpp-btree/) that plays well with the C++ standard template library. [B-trees](https://en.wikipedia.org/wiki/B-tree) are most commonly found in relational database systems, where they are often used to maintain indexes on columns, but they are useful data structures in their own right: they keep data in order and provide logarithmic time lookup and also logarithmic time insertion --- much better than logarithmic plus linear time insertion into a sorted list --- with relatively little memory overhead.
+In the map step for each piece, it is feasible to maintain the set of successor states in memory. To make the merge in the reduce step efficient, we want the map step to output a list of states for each piece in order by their state numbers so we can merge the pieces together in linear time. Here Google again comes to our aid: they have released a handy in-memory [B-tree implementation](https://code.google.com/archive/p/cpp-btree/) that plays well with the C++ standard template library. [B-trees](https://en.wikipedia.org/wiki/B-tree) are most commonly found in relational database systems, where they are often used to maintain indexes on columns. They keep data in order and provide logarithmic time lookup and also logarithmic time insertion --- much better than logarithmic plus linear time insertion into a sorted list --- with relatively little memory overhead.
 
 To break the state space up into even smaller pieces, which reduces the amount of work we need to do in each merge step, we can exploit an another property of the game: *the maximum tile value on the board must either stay the same or double with each move.* This property holds because the maximum tile value never decreases, and when it does increase, it can only increase as the result of merging two tiles --- that is, even if you have for example four `16` tiles in a row and you merge them, after one move the result is two `32` tiles, not one `64` tile.
 
@@ -303,13 +311,13 @@ There is a bit more bookkeeping to keep track of which pieces need to be merged 
 <p align="center">
   <a href="/assets/2048/enumeration_2x2_grouped.svg"><img src="/assets/2048/enumeration_2x2_grouped.svg" alt="States from the enumeration of the 2x2 game to 32 with grouping into parts by sum and max value"></a>
 </p>
-For example, in the leftmost piece, both states have tile sum 4 and maximum tile value `2`. The transitions from that piece are to pieces with tile sum either 6 or 8 and maximum tile value `2` or `4`.
+For example, in the leftmost piece, both states have tile sum 4 and maximum tile value `2`. The transitions from that piece are to pieces with tile sum either 6 or 8 and maximum tile value `2` or `4`. Compared to the original diagram of these states without grouping, it's also easier to see that you always transition to a state with a tile sum that is either 2 or 4 larger, like in the [first post](/articles/2017/08/05/markov-chain-2048.html) in this series.
 
 # Appendix C: Encoding and Compression
 
-When working with billions or trillions of states, and each state takes 8 bytes, even fitting them all on disk is not trivial (or at least not cheap). To reduce the storage space required, and also the amount of input/output required, we can exploit the fact that the states are stored as large sorted lists of integers; rather than storing each integer in full, we can use a [variable-width encoding scheme](https://en.wikipedia.org/wiki/Variable-width_encoding) to store the differences between successive integers. These differences will generally be smaller than the integers themselves, so it is usually possible to store the differences in a smaller number of bytes. [^variable-width]
+When working with billions or trillions of states, and each state takes 8 bytes, even fitting them all on disk is not trivial (or at least not cheap). To reduce the storage space required, and also the amount of input/output required, we can exploit the fact that the states are stored as sorted lists of integers --- rather than storing each integer in full, we can store the differences between successive integers. These differences will generally be smaller than the integers themselves, so it is usually possible to store the differences in a smaller number of bytes. Using a [variable-width encoding scheme](https://en.wikipedia.org/wiki/Variable-width_encoding) to store the differences ensures that we use only the number of bytes we need. [^variable-width]
 
-For example, the list of states for the 4x4 game to the `2048` tile with tile sum 380 and maximum tile value `128` contains 21,705,361,721 states [^resolve]. At 8 bytes per state, that would be roughly 161GiB. However, with variable-width encoding, it takes only 35GiB --- a compression factor of 4.6, or about 1.7 bytes per state.
+For example, the list of states for the 4x4 game to the `2048` tile with tile sum 380 and maximum tile value `128` contains 21,705,361,721 states [^resolve]. At 8 bytes per state, that would be roughly 161GiB. However, with variable-width encoding, it takes only 35GiB --- a compression factor of 4.6 --- or about 1.7 bytes per state.
 
 For longer term storage and transport over Internet, I also [tried several compression programs](/articles/2017/05/01/compression-pareto-docker-gnuplot.html) on the variable-width encoded data. To evaluate the different programs, I used a smaller list of states with tile sum 260 and maximum tile value `32`; it contained 30,954,422 states, which is about 1/700th the number in the 380/128 layer mentioned above, and it weighed in at 64MiB after variable-width encoding. For each of the programs, and for each of their supported compression levels, I measured the elapsed time for compression and the resulting compressed size using this smaller list of states.
 
@@ -319,7 +327,7 @@ Three programs emerged on the resulting [Pareto frontier](/articles/2017/05/01/c
 <img src="/assets/2048/sum-0260.max_value-5.scale-701.svg" alt="Pareto frontier for selecting a compression program for lists of 2048 states" />
 </p>
 
-Here closer to the origin is better; we see Zstandard performing best for relatively fast and light compression, and 7zip performing best for relatively slow and heavy compression. From the graph, we can see that Zstandard at compression level 11 is optimal for a fairly wide range of space / bandwidth and time costs. The results on the smaller layer suggested that Zstandard level 11 would reduce the 380/128 layer from 35GiB to about 10GiB. In fact, it did much better: it reduced the 380/128 layer from 35GiB to 3.8GiB, for another factor of 9.2, or about 1.5 *bits* per state. I think that's quite remarkable.
+Here closer to the origin is better; we see Zstandard performing best for relatively fast and light compression, and 7zip performing best for relatively slow and heavy compression. From the graph, we can see that Zstandard at compression level 11 is fairly close to the origin, and it turned out to minimize the particular linear cost function that I used. The results on the smaller layer suggested that Zstandard level 11 would reduce the 380/128 layer from 35GiB to about 10GiB. In fact, it did much better: it reduced it from 35GiB to 3.8GiB, for another factor of 9.2, or about 1.5 *bits* per state. I think that's quite remarkable.
 
 ---
 
@@ -328,6 +336,8 @@ Here closer to the origin is better; we see Zstandard performing best for relati
 [^bit-bashing]: The bit bashing techniques used here are based mainly on [2048-ai](https://github.com/nneonneo/2048-ai/blob/1f25f2e19e82a477600fd1b437e710d584f99e99/2048.cpp) by Robert Xiao and [2048-c](https://github.com/kcwu/2048-c/blob/209a1f5ea635222a859c493a90d3304328117af3/micro_optimize.cc) by Kuang-che Wu, with some help from [Bit Twiddling Hacks](http://graphics.stanford.edu/~seander/bithacks.html) by Sean Eron Anderson. The original motivation for 2048-ai and 2048-c was to allow real time search for 2048 AI bots.
 
 [^property-3]: This property was called called *Property 3* in the [previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html), and we also used it anonymously in the [first post](/2017/08/05/markov-chain-2048.html). It is a very useful property.
+
+[^cover]: In case you are wondering, I faked that screenshot; I didn't actually play the game to that state!
 
 [^variable-width]: Variable width encodings are most commonly encountered in the [UTF-8](https://en.wikipedia.org/wiki/UTF-8) character encoding for unicode, which you are using as you read this webpage. They are also sometimes used for storing [integer primary key indexes](https://en.wikipedia.org/wiki/Database_index) in some databases, which also face the problem of efficiently storing large lists of sorted integers. The implementation used here is [libvbyte](https://github.com/cruppstahl/libvbyte) from Christoph Rupp, based on work by [Daniel Lemire](https://github.com/lemire/MaskedVbyte).
 
