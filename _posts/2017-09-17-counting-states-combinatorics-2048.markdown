@@ -11,6 +11,8 @@ description: How many board configurations are there in the game of 2048? Let's 
 
 **2017-09-25** There was some lively [discussion about this article on Hacker News](https://news.ycombinator.com/item?id=15327837).
 
+*This post is the second in a series. Next: [Counting States by Exhaustive Enumeration](/articles/2017/12/10/counting-states-enumeration-2048.html).*
+
 ---
 
 &nbsp;
@@ -332,7 +334,7 @@ It is likely that this and the other estimates are substantial overestimates, be
 
 satisfies all of the restrictions we've considered here, but it is still not possible to reach it, because we must have swiped in some direction before getting to this state, and that would have moved two of the `2` tiles to the edge of the board. It may be possible to adapt the counting arguments above to take this (and likely other restrictions) into account, but I have not figured out how!
 
-In the next post, we'll see that the number of actually reachable states is much lower by actually enumerating them. There will still be a lot of them for the 3x3 and 4x4 boards, so we will need some computer science as well as mathematics.
+In [the next post](/articles/2017/12/10/counting-states-enumeration-2048.html), we'll see that the number of actually reachable states is much lower by actually enumerating them. There will still be a lot of them for the 3x3 and 4x4 boards, so we will need some computer science as well as mathematics.
 
 ---
 

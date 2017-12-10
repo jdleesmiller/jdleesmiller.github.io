@@ -331,6 +331,10 @@ Here closer to the origin is better; we see Zstandard performing best for relati
 
 ---
 
+&nbsp;
+
+If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
+
 # Footnotes
 
 [^bit-bashing]: The bit bashing techniques used here are based mainly on [2048-ai](https://github.com/nneonneo/2048-ai/blob/1f25f2e19e82a477600fd1b437e710d584f99e99/2048.cpp) by Robert Xiao and [2048-c](https://github.com/kcwu/2048-c/blob/209a1f5ea635222a859c493a90d3304328117af3/micro_optimize.cc) by Kuang-che Wu, with some help from [Bit Twiddling Hacks](http://graphics.stanford.edu/~seander/bithacks.html) by Sean Eron Anderson. The original motivation for 2048-ai and 2048-c was to allow real time search for 2048 AI bots.

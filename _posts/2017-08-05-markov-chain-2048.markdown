@@ -7,6 +7,10 @@ image: /assets/2048/markov_chain_weighted_mixture.png
 description: How many moves does it take to win a game of 2048? Find out using Markov chains!
 ---
 
+**Updates**
+
+**2017-09-25** There was some lively [discussion about this series on Hacker News](https://news.ycombinator.com/item?id=15327837).
+
 *This post is the first in a series. Next: [Counting States with Combinatorics](/articles/2017/09/17/counting-states-combinatorics-2048.html).*
 
 ---
@@ -154,7 +158,7 @@ In principle, there is non-zero probability that we could win the game in only 5
 
 In this post we have seen how to construct a Markov chain that models how a game of 2048 evolves if it is always possible to merge like tiles. By doing so, we've been able to apply techniques from the theory of absorbing Markov chains to calculate interesting properties of the game, and in particular that it takes at least 938.8 moves to win, on average.
 
-The main simplification that enabled this approach was to ignore the structure of the board, effectively assuming that we threw tiles into a bag, rather than placing them onto the board. In my next post, I plan to look at what happens when we do consider the structure of the board. We'll see that the number of states we need to consider becomes many orders of magnitude larger (though perhaps not as large as one might think), and also that we will need to leave the world of Markov chains and enter the world of Markov Decision Processes, which allow us to bring the player back into the equation, and in principle may allow us to 'solve' the game completely --- to find a provably optimal way of playing.
+The main simplification that enabled this approach was to ignore the structure of the board, effectively assuming that we threw tiles into a bag, rather than placing them onto the board. In [my next post](/articles/2017/09/17/counting-states-combinatorics-2048.html), I plan to look at what happens when we do consider the structure of the board. We'll see that the number of states we need to consider becomes many orders of magnitude larger (though perhaps not as large as one might think), and also that we will need to leave the world of Markov chains and enter the world of Markov Decision Processes, which allow us to bring the player back into the equation, and in principle may allow us to 'solve' the game completely --- to find a provably optimal way of playing.
 
 ## Appendix A: Analysis of the Markov Chain
 
