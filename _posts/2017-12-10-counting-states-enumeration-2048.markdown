@@ -339,7 +339,7 @@ If you've read this far, perhaps you should [follow me on twitter](https://twitt
 
 [^bit-bashing]: The bit bashing techniques used here are based mainly on [2048-ai](https://github.com/nneonneo/2048-ai/blob/1f25f2e19e82a477600fd1b437e710d584f99e99/2048.cpp) by Robert Xiao and [2048-c](https://github.com/kcwu/2048-c/blob/209a1f5ea635222a859c493a90d3304328117af3/micro_optimize.cc) by Kuang-che Wu, with some help from [Bit Twiddling Hacks](http://graphics.stanford.edu/~seander/bithacks.html) by Sean Eron Anderson. The original motivation for 2048-ai and 2048-c was to allow real time search for 2048 AI bots.
 
-[^property-3]: This property was called called *Property 3* in the [previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html), and we also used it anonymously in the [first post](/2017/08/05/markov-chain-2048.html). It is a very useful property.
+[^property-3]: This property was called called *Property 3* in the [previous post](/articles/2017/09/17/counting-states-combinatorics-2048.html), and we also used it anonymously in the [first post](/articles/2017/08/05/markov-chain-2048.html). It is a very useful property.
 
 [^cover]: In case you are wondering, I faked that screenshot; I didn't actually play the game to that state!
 
