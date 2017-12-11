@@ -6,6 +6,11 @@ categories: articles
 image: /assets/2048/2048_improbable.png
 description: How many board configurations are there in the game of 2048? Let's try to enumerate them.
 ---
+**Updates**
+
+**2017-12-11** This post was [discussed on Hacker News](https://news.ycombinator.com/item?id=15894126).
+
+---
 
 &nbsp;
 
