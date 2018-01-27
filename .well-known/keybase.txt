@@ -1,0 +1,73 @@
+==================================================================
+https://keybase.io/jdleesmiller
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://jdlm.info
+  * I am jdleesmiller (https://keybase.io/jdleesmiller) on keybase.
+  * I have a public key with fingerprint 634A C357 0983 8AFF 4EFF  DEDE 400C 3ADF E1FC 65A6
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012093f1e40acd038f2ccb48e62669bf54eac8ade6dc0c9f4b08259e47ea5c09e6240a",
+      "fingerprint": "634ac35709838aff4effdede400c3adfe1fc65a6",
+      "host": "keybase.io",
+      "key_id": "400c3adfe1fc65a6",
+      "kid": "0101f014253d29618b8b9d8005bc801a9f8ae5d12ed4e3f93359a61a0ee42fdbe6730a",
+      "uid": "4ead78c206b0516ee412c17fc608d519",
+      "username": "jdleesmiller"
+    },
+    "service": {
+      "hostname": "jdlm.info",
+      "protocol": "http:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1517057070,
+  "expire_in": 157680000,
+  "prev": "88a9f3d5257fb4891283de5072ced482d4d29c27372f9e5c1fe74b53d01cb0dc",
+  "seqno": 7,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+
+owFtUntQVFUc3sWNVxg6BsSgDt0MjXbg3Pe9q6SMgIkYIQZoKN177rlwcdldd1eU
+lzjDpCMOCib5nsUikj8ce05alMRjcaLGpURSiQB1pqVAm9S0gaFzKaZ/+uvM/d3v
++37f951TP3eOIdi4Kszy88gkajH2+mXDZqv7pQpCtitlhKWC2IZmDmRVkMtdsE1T
+CAsBSAqItEoiBkhQAbSgUhDKjIA4iuNEWWUZJEFBUhCnQABFlZGBQLEiYngksRCI
+GIeZhJlQNVshcjqcms2NZTmakSDN8kAUaEFSVQapqoIUvAVAWlJURKqQYyUOE4vs
+Lp2BzcmSCyVodjzDHwUz9v4HP+sbkCogGYqlFUrkSEEWZFERAGBlKABSElVBQqxC
+UkhhEK2KNM2KEkdKACGGUhUZcTw943vHP3uQpPACpAAnA5bkMIikIMnjpUBQWFLU
+gS7ktEklCKOLFStCrhLNakVOospM4D+lGkR6uXqa/1AlCZpN1QM5nHa3HdqteFzk
+djssOstd5tBhO5Fc8K9AgazZFNwjJpQip0uz2wgLiZHQremKJEvyAHfKAzOBdjk0
+JyrQdATLczg4APoaVIolBQHnp5U8lmJ5FV+mSFICrSAW8BTEfQiUwuDSIMXTPKWK
+iIWkinhGxlUCEspAgYSeabvNTlh47FMqxJourdAmuXc4EVEVuj+ANhmMwYZFkc+a
+YHpnbkhN7fQr00NDs2/viQD94RlCQ+bNThKJeYYz93qHfY7r75VtsTbtuftB1ebA
+watb2ynzyuzv+n7MlKj+1IZm08FzJ2/tUddcSlr2V5s3P+a4Kaeok3nSAv/47UT/
+hsYaF3/51+tbFq2OfPdm0qp36jIm/JOGmtXjjZ6KqIOt2V0pCyPGM5fX7W92JHky
+1tGJQ+bDNYeXL/Cv2fQwYuJ5y+0D9+K7hqeHbCuMaZ+HnNq6JOExfTLu7Mvz74jz
+3U2B32dcavc/Sv86dCgz1p4G47uuah2LB3OS41t8I0uOflT7y9K3fbnZ61IbehxM
+c9R5cbQyYFmoadib/llebPaYeD465ouIxEPhnzxMORqe0t1x2luxN25BgtBdsbI4
+bak1889r6+8fEYNTL8S0GXmjJd/fuLfzckn2jVtB3mcGqvqpV69svDCI9oV5g6/U
+73xOik2rPbZ+TvIZeSDqjbnlHeeq7waN1IaJN8IcHbDpWF609GD7piMf/tCgtB4f
+GGvNDPfzA2xnX0hW877f8/KvPcpqSy0u393j6XMRvrrFPWvvBO6qLPdMQftF4v1D
+T58ePlvty7akOta+9Wn1pJqQt2Liq6afGDUjIfibsfsfP/Wtr44bdBs7X3gtGn5Z
+5Clsz0rPf7N5yvn6+M0p84jY0rxhNC7XbztVGJncsXGiOu5x8MXRha2VOQ+4Hg/l
+DXrxthYV4DkBOrym7oja3t1R9f7iib8B
+=qOJA
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jdleesmiller
+
+==================================================================
