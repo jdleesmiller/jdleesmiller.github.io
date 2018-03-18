@@ -1,0 +1,55 @@
+digraph {
+  bgcolor = transparent;
+  rankdir = LR;
+  ranksep = 1.5;
+  nodesep = 0.25;
+  node [fontname="Courier"];
+  s0_1_1_0 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_1_0 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;2|&nbsp;&nbsp;}"];
+  s1_2_1_0 [shape=record, label="{&nbsp;2|&nbsp;4}|{&nbsp;2|&nbsp;&nbsp;}"];
+  s1_0_1_1 [shape=record, label="{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}"];
+  s1_0_1_2 [shape=record, label="{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;4}"];
+  s1_1_0_1 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;2}"];
+  s2_1_0_1 [shape=record, label="{&nbsp;4|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;2}"];
+  s0_1_1_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;2}"];
+  s0_1_2_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;2}"];
+  s1_1_2_0 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;4|&nbsp;&nbsp;}"];
+  s1_1_0_2 [shape=record, label="{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;4}"];
+  s2_0_1_1 [shape=record, label="{&nbsp;4|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}"];
+  s0_2_1_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;4}|{&nbsp;2|&nbsp;2}"];
+  s0_1_1_0 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport=left, headlabel="0.45    "];
+  s0_1_1_0 -> s1_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport=left, headlabel="0.05    "];
+  s0_1_1_0 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=left, headlabel="0.45    "];
+  s0_1_1_0 -> s1_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport=left, headlabel="0.05    "];
+  s0_1_1_0 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=right, headlabel="0.45    "];
+  s0_1_1_0 -> s2_1_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport=right, headlabel="0.05    "];
+  s0_1_1_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=right, headlabel="0.45    "];
+  s0_1_1_0 -> s0_1_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport=right, headlabel="0.05    "];
+  s0_1_1_0 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport=up, headlabel="0.45    "];
+  s0_1_1_0 -> s1_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport=up, headlabel="0.05    "];
+  s0_1_1_0 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=up, headlabel="0.45    "];
+  s0_1_1_0 -> s1_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport=up, headlabel="0.05    "];
+  s0_1_1_0 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=down, headlabel="0.45    "];
+  s0_1_1_0 -> s2_0_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport=down, headlabel="0.05    "];
+  s0_1_1_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport=down, headlabel="0.45    "];
+  s0_1_1_0 -> s0_2_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport=down, headlabel="0.05    "];
+}

@@ -5,6 +5,13 @@ date: 2017-07-09 16:00:00 +0000
 categories: articles
 ---
 
+--------------
+
+consistency:
+- allowed vs possible actions
+- next state vs successor state
+- use of 'game' to mean whichever 2048-like game we mean
+- use of player rather than 'we'
 
 The game of 2048 is ordinarily played on a 4x4 board, but it will be helpful to start with smaller boards: 2x2 and 3x3.
 
@@ -372,6 +379,87 @@ Just as we don't particularly care exactly what is on the board when we win,
 - Should we split this article into two? The combinatorial bounds are one somewhat interesting idea, and there is something of a result: we cut down the 2x2 and 3x3 boards significantly. Part 2 could then talk about the computational approach (actually enumerating the states). There's quite a bit of interesting technical detail I could talk about: the idea of layers (already introduced in part 1), map-reduce, b-trees, vbyte encoding, and zstandard compression. I think trying to fit all of that into part 1 will make it too large. The other way of slicing it would be to present the computational results here and then talk about the methods in part 2, but then I'd probably end up repeating a lot of the results. So... maybe worth trying to split it up this way.
 
 - Another thing I would like to talk about is the length of the game. That doesn't necessarily fit with the 'counting states' title, but it also doesn't seem like quite enough for its own part. It does sort of fit after the idea of layers --- one way to truncate is to look for consecutive empty layers. Another is to look at the minimum and maximum number of moves.
+
+
+
+The reward in `end` state is particularly important, because the `end` state is absorbing. In the diagram above, the `end` state has a
+
+If the player loses, which happens when the board is full and no action is possible, the  The `end` state is 'absorbing' --- once the process reaches it, it never leaves.
+
+Rewards serve to guide which actions the player will take. Each time the process changes state, the player may receive a reward, and it is assumed that the player wants to collect as much reward as possible over time. There are several possible reward systems, each of which corresponds to a different objective for the game. For now, we'll use a very simple reward system: the player receives a reward of 1 for entering a winning state, and otherwise receives zero reward. (It is a unit-less reward, but you could prepend a dollar sign if you like.)
+
+
+The transition probabilities are represented by the weights of the edges, where thicker edges have higher probability. Edges with probability exactly 1 are marked with a circle behind the arrow, for reference.
+
+TODO: maybe just explain how the end and win states work with respect to the normal states --- both are 'any win / loss' conditions. Move the 'absorbing' bit lower down? Maybe it will make more sense in the context of the rewards and the solve.
+
+Toward the right hand edge of the diagram, there are two special states, `win` (in green) and `end`, which are used to model how the game ends. The `end` state is used to represent any state in which the board is full and it is not possible to merge any tiles --- that is, when the player has lost the game. We don't care exactly how the player lost, so a single `end` state suffices.
+
+For reasons that will become clear shortly, the `end` state is 'absorbing': it has a single action that causes the process to transition back to the `end` state with probability 1. We also use the `end` state for it's absorbing character once the player has won. That is, whether the player wins or loses, they always finish in the `end` state, but if they win then they will get their via the `win` state.
+
+The `win` state represents any state with an `8` tile --- just as we don't care what is on the board when the player loses, we don't care exactly how the player wins, so a single `win` state suffices to represent all of the possible winning states. The player is trying to choose actions such that they transition to the `win` state.
+
+we are ready to talk about what the player is trying to achieve by playing the game. Here we'll assume that the player's objective is simply to reach a tile with a given target value --- in our example on the 2x2 board, it is the mighty `8` tile, but in the full game it would be the `2048` tile .
+
+
+
+There are several ways we could set up the rewards, depending on what the player is trying to accomplish. For example, the player could be trying to reach the highest possible tile without losing; or they could just be trying to reach the `8` tile. In this post, we'll focus on the latter
+
+For now, we'll set the rewards to reflect the latter option: they will receive a reward of 1 for entering the `win` state, and 0 for all other states, including the `end` state.
+
+
+
+
+
+# Canonical States
+
+# Rewards
+
+Rewards serve to guide which actions the player will take. Each time the process changes state, the player may receive a reward, and it is assumed that the player wants to collect as much reward as possible over time. There are several possible reward systems, each of which corresponds to a different objective for the game. For now, we'll use a very simple reward system: the player receives a reward of 1 for entering a winning state, and otherwise receives zero reward. (It is a unit-less reward, but you could prepend a dollar sign if you like.)
+
+To make this notion of collecting as much reward as possible over time precise, we'll need some notation for the four main MDP concepts. Let \\(S\\) be the set of states, and for each state \\(s \\in S\\), let \\(A_s\\) be the set of actions that are possible in state \\(s\\). Let \\(\\Pr(s' \| s, a)\\) denote the probability of transitioning to the state \\(s' \\in S\\) given that the process is in state \\(s \\in S\\) and the player takes action \\(a \\in A_s\\). Finally, let \\(R(s)\\) denote the reward received for entering state \\(s\\).
+
+Our objective is to find a *policy* that tells the player which action to take in each state. Let \\(\\pi(s) \\in A_s\\) denote the action to take in state \\(s\\) when following policy \\(\\pi\\). For a given policy \\(\\pi\\), we can define the *value* of each state \\(s\\), \\(V^\\pi(s)\\), according to the policy, as the expected reward collected over time if we follow that policy from that state:
+
+\\[
+V^\\pi(s) = R(s) + \\gamma \\sum_{s'} \\Pr(s' \| s, \\pi(s)) V^\\pi(s')
+\\]
+
+where \\(\\gamma\\) is a *discount factor* that trades off the value of the immediate reward against the value of the future rewards. In other words, it [accounts for the time value of money](https://en.wikipedia.org/wiki/Time_value_of_money) to the decision maker. If \\(\\gamma\\) is close to 1, it means that the decision maker is very patient: they don't mind waiting for future rewards; likewise, smaller values of \\(\\gamma\\) mean that the decision maker is less patient.
+
+The discount factor is often required in order to ensure that the value function converges --- if the process runs forever and continues to accumulate additive rewards, the geometric discounting ensures that the sum still converges. For the 2048 processes with the reward structure we're considering here, we'll see that we can safely set the discount factor to 1, because the process is a directed acyclic graph (DAG) except for the `end` state, which gives zero reward. It therefore has no loops that generate nonzero reward. We will however set the discount factor slightly less than 1 for the 4x4 game.
+
+So, how do we find the policy? For each state, we want to choose the action that maximizes the expected future value:
+
+\\[
+\\pi(s) = \\mathop{\\mathrm{argmax}}\\limits_{a \\in A_s} \\left\\{
+  \\sum_{s'} \\Pr(s' \| s, a) V^\\pi(s')
+  \\right\\}
+\\]
+
+So, this gives us two linked equations. In general, we can these iteratively. That is, pick an initial policy, which might be very simple, compute the value of every state under that simple policy, and then find a new policy based on that value function, and so on. Perhaps remarkably, under very modest technical conditions, such an iterative process is guaranteed to converge to an optimal policy, \\(\\pi^\*\\), and an optimal value function \\(V^{\\pi^\*}\\) with respect to that optimal policy.
+
+For 2048, it is not actually necessary to do this iterative calculation, however, again because the model is essentially a DAG. We can start at the 'leaf' nodes, for which all successors will either be the `win` state, which has a known reward of 1, or the `end` state, which has a known reward of 0. By working backward, we can therefore compute the values of all of the nodes. This special structure is fortunate, because it means we can solve very large models efficiently, particularly if we exploit the fact that we can organize the states into [layers](/articles/2017/12/10/counting-states-enumeration-2048.html#appendix-b-layers-and-mapreduce-for-parallelism) by the sum of their tiles. In the enumeration step, we worked forward from the start states. In the solve step, we can instead work backward through the layers. (Actually, with some additional bookkeeping, we can also work backwards by part with the same maximum tile value to further reduce the amount of data we have to process in any single batch.)
+
+
+
+If we carry out this calculation for the 2x2 game to the `8` tile, we arrive at a somewhat simplified diagram in which each state has only a single action, namely the optimal action:
+
+<p align="center">
+<a href="/assets/2048/mdp_2x2_3_optimal.svg"><img src="/assets/2048/mdp_2x2_3_optimal.svg" alt="MDP model with only the optimal actions for the 2x2 game up to the 8 tile" /></a>
+</p>
+
+The number below each state is the value function for that state. It is notable that for this example the value function is always 1, and all paths to the `end` state are through the `win` state. That is, if you play optimally, it is impossible to lose this very short game to the `8` tile.
+
+Key figures:
+- a 2x2 game to say 16 that will hopefully be small enough that it will be easy to tabulate everything and draw some non-crazy diagrams; can I think canonicalize and point to previous blog post
+- will the transient probabilies be interesting for the 2x2 game? If so, can present them here; otherwise may need to wait until the 3x3 game.
+- then the 2x2 game demo that runs the policy
+- then give the 2x2 game up to 32; make the point that playing optimally doesn't guarantee that you can win; in fact winning is very unlikely --- maybe graph out the average value as a function of the sum
+- then show the 3x3 game to 1024
+- then present results on number of states --- 25M reachable; 9M if following the optimal policy; only 1 in a million games will touch more than XX states
+- graph out the total reachable per sum, total if following optimal policy; and also say the 1 in a million (and possibly 1 in a thousand?) lines
+- can we get anything like that for the 4x4 game to 64? need to rewrite the solver to use less memory... or spin up the OVH box again and rerun the build. That is probably the smarter answer. Just need the policy files and then can hopefully do the reduction and get some numbers; expect it will be a massive reduction.
 
 
 

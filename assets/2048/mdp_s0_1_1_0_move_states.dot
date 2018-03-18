@@ -1,0 +1,36 @@
+digraph {
+  bgcolor = transparent;
+  rankdir = LR;
+  node [fontname="Courier"];
+
+  s0_1_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+    <TR>
+      <TD COLSPAN="2">&nbsp;</TD>
+      <TD BORDER="1" PORT="left" STYLE="ROUNDED">L</TD>
+    </TR>
+    <TR>
+      <TD BORDER="1">&nbsp;&nbsp;</TD>
+      <TD BORDER="1">&nbsp;2</TD>
+      <TD BORDER="1" PORT="right" STYLE="ROUNDED">R</TD>
+    </TR>
+    <TR>
+      <TD BORDER="1">&nbsp;2</TD>
+      <TD BORDER="1">&nbsp;&nbsp;</TD>
+      <TD BORDER="1" PORT="up" STYLE="ROUNDED">U</TD>
+    </TR>
+    <TR>
+      <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+      <TD BORDER="1" PORT="down" STYLE="ROUNDED">D</TD>
+    </TR>
+  </TABLE>>];
+
+  s1_0_1_0 [shape=record, style=dashed, label="{&nbsp;2|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;&nbsp;}"];
+  s0_1_0_1 [shape=record, style=dashed, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;2}"];
+  s1_1_0_0 [shape=record, style=dashed, label="{&nbsp;2|&nbsp;2}|{&nbsp;&nbsp;|&nbsp;&nbsp;}"];
+  s0_0_1_1 [shape=record, style=dashed, label="{&nbsp;&nbsp;|&nbsp;&nbsp;}|{&nbsp;2|&nbsp;2}"];
+
+  s0_1_1_0 -> s1_0_1_0 [style=dashed, tailport=left];
+  s0_1_1_0 -> s0_1_0_1 [style=dashed, tailport=right];
+  s0_1_1_0 -> s1_1_0_0 [style=dashed, tailport=up];
+  s0_1_1_0 -> s0_0_1_1 [style=dashed, tailport=down];
+}

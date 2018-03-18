@@ -1,0 +1,31 @@
+digraph {
+  bgcolor = transparent;
+  rankdir = LR;
+  ranksep = 1.5;
+  nodesep = 0.5;
+  node [fontname="Courier"];
+  s0_1_1_0 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="4" STYLE="ROUNDED" PORT="left_right_up_down">L<BR/>R<BR/>U<BR/>D</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    
+  </TR>
+</TABLE>>];
+  s0_1_1_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;2|&nbsp;2}"];
+  s0_1_2_1 [shape=record, label="{&nbsp;&nbsp;|&nbsp;2}|{&nbsp;4|&nbsp;2}"];
+  s0_1_1_0 -> s0_1_1_1 [tailport="left_right_up_down", headlabel="0.90   "];
+  s0_1_1_0 -> s0_1_2_1 [tailport="left_right_up_down", headlabel="0.10   "];
+}

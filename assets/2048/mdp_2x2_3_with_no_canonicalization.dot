@@ -1,0 +1,1903 @@
+digraph {
+  bgcolor = transparent;
+  rankdir = LR;
+  nodesep = 0.25;
+  ranksep = 20;
+  node [fontname="Courier"];
+  subgraph cluster_4 { label="sum 4"; style=filled; color=grey95; margin=16; s0_0_1_1; s0_1_0_1; s0_1_1_0; s1_0_0_1; s1_0_1_0; s1_1_0_0; }
+  subgraph cluster_6 { label="sum 6"; style=filled; color=grey95; margin=16; s0_0_1_2; s0_0_2_1; s0_1_0_2; s0_1_1_1; s0_1_2_0; s0_2_0_1; s0_2_1_0; s1_0_0_2; s1_0_1_1; s1_0_2_0; s1_1_0_1; s1_1_1_0; s1_2_0_0; s2_0_0_1; s2_0_1_0; s2_1_0_0; }
+  subgraph cluster_8 { label="sum 8"; style=filled; color=grey95; margin=16; s0_0_2_2; s0_1_1_2; s0_1_2_1; s0_2_0_2; s0_2_1_1; s0_2_2_0; s1_0_1_2; s1_0_2_1; s1_1_0_2; s1_1_2_0; s1_2_0_1; s1_2_1_0; s2_0_0_2; s2_0_1_1; s2_0_2_0; s2_1_0_1; s2_1_1_0; s2_2_0_0; }
+  subgraph cluster_10 { label="sum 10"; style=filled; color=grey95; margin=16; s0_1_2_2; s0_2_1_2; s0_2_2_1; s1_0_2_2; s1_1_1_2; s1_1_2_1; s1_2_0_2; s1_2_1_1; s1_2_2_0; s2_0_1_2; s2_0_2_1; s2_1_0_2; s2_1_1_1; s2_1_2_0; s2_2_0_1; s2_2_1_0; }
+  subgraph cluster_12 { label="sum 12"; style=filled; color=grey95; margin=16; s0_2_2_2; s1_1_2_2; s1_2_1_2; s2_0_2_2; s2_1_2_1; s2_2_0_2; s2_2_1_1; s2_2_2_0; }
+  subgraph cluster_14 { label="sum 14"; style=filled; color=grey95; margin=16; s1_2_2_2; s2_1_2_2; s2_2_1_2; s2_2_2_1; }
+  s0_0_0_0 [label="lose", style=filled, fillcolor=red];
+  s0_0_0_3 [label="win", shape=star, style=filled, fillcolor=green];
+  s0_0_1_1 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_0_1_2 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_0_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_0_2_2 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_1_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_1_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_1_1_0 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_1_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_1_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_1_2_0 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_1_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_1_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_2_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_2_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_2_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_2_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_2_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_2_2_0 [color="blue", label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_2_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s0_2_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_0_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s1_0_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s1_0_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s1_1_0_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_1_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s1_2_0_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s1_2_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_0_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_0_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_0_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s2_0_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s2_0_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s2_0_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_0_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_0_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_0_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">L</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">R</FONT></TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_1_2_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_0_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_0_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_0_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_1_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_1_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">U</FONT></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED"><FONT COLOR="grey">D</FONT></TD>
+  </TR>
+</TABLE>>];
+  s2_2_1_2 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_2_0 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s2_2_2_1 [label=<<TABLE CELLSPACING="0" CELLPADDING="4" BORDER="0">
+  <TR>
+    <TD COLSPAN="2">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="left">L</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="right">R</TD>
+  </TR>
+  <TR>
+    <TD BORDER="1">&nbsp;4</TD>
+    <TD BORDER="1">&nbsp;2</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="up">U</TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2" BORDER="0">&nbsp;</TD>
+    <TD BORDER="1" ROWSPAN="1" STYLE="ROUNDED" PORT="down">D</TD>
+  </TR>
+</TABLE>>];
+  s0_0_1_1 -> s1_0_2_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s0_0_1_1 -> s2_0_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s0_0_1_1 -> s0_1_2_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s0_0_1_1 -> s0_2_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s0_0_1_1 -> s0_0_2_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s0_0_1_1 -> s0_0_2_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s0_0_1_1 -> s1_0_0_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s0_0_1_1 -> s2_0_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s0_0_1_1 -> s0_1_0_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s0_0_1_1 -> s0_2_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s0_0_1_1 -> s0_0_1_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s0_0_1_1 -> s0_0_2_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s0_0_1_1 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_1_1 -> s1_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_1_1 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_1_1 -> s1_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_1_2 -> s1_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_1_2 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_1_2 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_1_2 -> s1_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_2_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_2_1 -> s2_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_2_1 -> s2_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_2_1 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s0_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s0_0_2_2 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_2_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_0_2_2 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_0_2_2 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_0_1 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_0_1 -> s1_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_0_1 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_0_1 -> s1_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_0_1 -> s1_2_0_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s0_1_0_1 -> s2_2_0_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s0_1_0_1 -> s0_2_1_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s0_1_0_1 -> s0_2_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s0_1_0_1 -> s0_2_0_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s0_1_0_1 -> s0_2_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s0_1_0_1 -> s1_0_0_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s0_1_0_1 -> s2_0_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s0_1_0_1 -> s0_1_0_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s0_1_0_1 -> s0_2_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s0_1_0_1 -> s0_0_1_2 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s0_1_0_1 -> s0_0_2_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s0_1_0_2 -> s1_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_0_2 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_0_2 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_0_2 -> s1_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_1_0 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_1_0 -> s1_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_1_0 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_1_0 -> s1_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_1_0 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_1_0 -> s2_1_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_1_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_1_0 -> s0_1_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_1_0 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_1_0 -> s1_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_1_0 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_1_0 -> s1_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_1_0 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_1_0 -> s2_0_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_1_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_1_0 -> s0_2_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_1_1 -> s1_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_1_1 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_1_1 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_1_1 -> s1_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_1_1 -> s1_1_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_1_1 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_1_1 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_1_1 -> s0_1_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_1_1 -> s1_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_1_1 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_1_1 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_1_1 -> s1_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_1_1 -> s1_0_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_1_1 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_1_1 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_1_1 -> s0_2_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_1_2 -> s1_1_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s0_1_1_2 -> s1_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s0_1_1_2 -> s1_1_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s0_1_1_2 -> s1_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s0_1_2_0 -> s1_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_2_0 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_2_0 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_1_2_0 -> s1_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_1_2_0 -> s1_1_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_2_0 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_2_0 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_1_2_0 -> s0_1_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_1_2_0 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_2_0 -> s2_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_2_0 -> s2_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_2_0 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_2_0 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_2_0 -> s2_0_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_2_0 -> s0_1_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_2_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_2_1 -> s1_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s0_1_2_1 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s0_1_2_1 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_2_1 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_2_1 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_1_2_1 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_1_2_1 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_2_1 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_2_1 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_1_2_1 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s0_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s0_1_2_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s0_1_2_2 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s0_2_0_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_0_1 -> s2_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_0_1 -> s2_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_0_1 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_0_2 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_0_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_0_2 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_0_2 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s0_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s0_2_1_0 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_1_0 -> s2_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_1_0 -> s2_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_1_0 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_1_0 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_1_0 -> s2_2_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_1_0 -> s0_2_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_1_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_1_0 -> s1_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_2_1_0 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_2_1_0 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_2_1_0 -> s1_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_2_1_0 -> s1_0_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_2_1_0 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_2_1_0 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_2_1_0 -> s0_2_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_2_1_1 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_1_1 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_1_1 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_1_1 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_1_1 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_1_1 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_1_1 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_1_1 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_1_1 -> s1_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s0_2_1_1 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s0_2_1_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s0_2_1_2 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s0_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s0_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s0_2_2_0 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_2_0 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_2_0 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s0_2_2_0 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s0_2_2_0 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_2_0 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_2_0 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s0_2_2_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s0_2_2_0 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_2_2_0 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_2_2_0 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s0_2_2_0 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s0_2_2_0 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_2_2_0 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_2_2_0 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s0_2_2_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s0_2_2_1 -> s2_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s0_2_2_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s0_2_2_1 -> s2_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s0_2_2_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s0_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s0_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s0_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s0_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s1_0_0_1 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_0_1 -> s1_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_0_1 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_0_1 -> s1_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_0_1 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_0_1 -> s2_1_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_0_1 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_0_1 -> s0_1_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_0_1 -> s1_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_0_1 -> s1_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_0_1 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_0_1 -> s1_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_0_1 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_0_1 -> s2_0_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_0_1 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_0_1 -> s0_2_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_0_2 -> s1_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_0_2 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_0_2 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_0_2 -> s1_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_0_2 -> s1_1_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_0_2 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_0_2 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_0_2 -> s0_1_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_0_2 -> s1_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_0_2 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_0_2 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_0_2 -> s1_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_0_2 -> s1_0_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_0_2 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_0_2 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_0_2 -> s0_2_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_1_0 -> s1_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_1_0 -> s2_1_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_1_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_1_0 -> s0_1_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_1_0 -> s2_1_0_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s1_0_1_0 -> s2_2_0_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s1_0_1_0 -> s2_0_1_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s1_0_1_0 -> s2_0_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s1_0_1_0 -> s2_0_0_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="up"];
+  s1_0_1_0 -> s2_0_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="up"];
+  s1_0_1_0 -> s1_0_2_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s1_0_1_0 -> s2_0_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s1_0_1_0 -> s0_1_2_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s1_0_1_0 -> s0_2_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s1_0_1_0 -> s0_0_2_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="down"];
+  s1_0_1_0 -> s0_0_2_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="down"];
+  s1_0_1_1 -> s1_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_1_1 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_1_1 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_0_1_1 -> s1_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_0_1_1 -> s1_1_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_1_1 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_1_1 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_1_1 -> s0_1_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_1_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_1_1 -> s2_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_1_1 -> s2_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_1_1 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_1_1 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_1_1 -> s2_0_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_1_1 -> s0_1_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_1_1 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_1_2 -> s1_1_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_0_1_2 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_0_1_2 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_1_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_1_2 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_0_1_2 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_0_1_2 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_1_2 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_1_2 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_0_1_2 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_0_2_0 -> s1_1_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_2_0 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_2_0 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_0_2_0 -> s0_1_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_0_2_1 -> s1_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_0_2_1 -> s2_1_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_0_2_1 -> s1_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s1_0_2_1 -> s1_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s1_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s1_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s1_0_2_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s1_0_2_2 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s1_1_0_0 -> s2_1_0_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s1_1_0_0 -> s2_2_0_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s1_1_0_0 -> s2_0_1_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s1_1_0_0 -> s2_0_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s1_1_0_0 -> s2_0_0_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="left"];
+  s1_1_0_0 -> s2_0_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="left"];
+  s1_1_0_0 -> s1_2_0_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s1_1_0_0 -> s2_2_0_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s1_1_0_0 -> s0_2_1_0 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s1_1_0_0 -> s0_2_2_0 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s1_1_0_0 -> s0_2_0_1 [weight=30, penwidth=1.6, tooltip="0.300", tailport="right"];
+  s1_1_0_0 -> s0_2_0_2 [weight=3, penwidth=1.0666666666666667, tooltip="0.033", tailport="right"];
+  s1_1_0_0 -> s1_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_0_0 -> s2_0_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_0_0 -> s0_1_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_0_0 -> s0_2_1_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_0_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_0_1 -> s2_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_0_1 -> s2_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_0_1 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_0_1 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_0_1 -> s2_2_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_0_1 -> s0_2_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_0_1 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_0_1 -> s1_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_1_0_1 -> s1_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_1_0_1 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_1_0_1 -> s1_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_1_0_1 -> s1_0_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_0_1 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_0_1 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_0_1 -> s0_2_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_0_2 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_0_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_0_2 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_0_2 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_0_2 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_0_2 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_0_2 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_0_2 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_0_2 -> s1_1_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_1_0_2 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_1_1_0 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_1_0 -> s2_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_1_0 -> s2_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_1_0 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_1_0 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_1_0 -> s2_2_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_1_0 -> s0_2_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_1_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_1_0 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_1_1_0 -> s2_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_1_1_0 -> s2_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_1_1_0 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_1_1_0 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_1_0 -> s2_0_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_1_0 -> s0_1_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_1_1_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_1_1_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s1_1_1_2 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s1_1_1_2 -> s1_2_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_1_1_2 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_1_1_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s1_1_1_2 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s1_1_1_2 -> s1_1_2_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_1_1_2 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_1_2_0 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_2_0 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_2_0 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s1_1_2_0 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s1_1_2_0 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_2_0 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_2_0 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s1_1_2_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s1_1_2_0 -> s1_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_1_2_0 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_1_2_1 -> s2_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s1_1_2_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s1_1_2_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_1_2_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_1_2_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s1_1_2_1 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s1_1_2_1 -> s1_1_2_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_1_2_1 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s1_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s1_2_0_0 -> s1_0_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_2_0_0 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_2_0_0 -> s0_1_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_2_0_0 -> s0_2_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_2_0_1 -> s1_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s1_2_0_1 -> s1_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s1_2_0_1 -> s1_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_2_0_1 -> s2_2_1_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_2_0_2 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s1_2_0_2 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s1_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s1_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s1_2_1_0 -> s1_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_2_1_0 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_2_1_0 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_2_1_0 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_2_1_0 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s1_2_1_0 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s1_2_1_0 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_2_1_0 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_2_1_0 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s1_2_1_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s1_2_1_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s1_2_1_1 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s1_2_1_1 -> s1_2_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_2_1_1 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_2_1_1 -> s2_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s1_2_1_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s1_2_1_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_2_1_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s1_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s1_2_2_0 -> s1_2_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s1_2_2_0 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s1_2_2_0 -> s1_1_2_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s1_2_2_0 -> s1_2_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s1_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s1_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s1_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s1_2_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_0_0_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_0_1 -> s2_2_1_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_0_1 -> s2_0_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_0_1 -> s2_0_1_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_0_1 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_0_1 -> s2_2_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_0_1 -> s0_2_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_0_1 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_0_1 -> s2_1_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_0_0_1 -> s2_1_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_0_0_1 -> s2_1_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_0_0_1 -> s2_1_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_0_0_1 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_0_0_1 -> s2_0_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_0_0_1 -> s0_1_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_0_0_1 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_0_0_2 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_0_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_0_2 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_0_2 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_0_2 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_0_2 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_0_2 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_0_2 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_0_2 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_0_0_2 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_0_0_2 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_0_0_2 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_0_0_2 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_0_0_2 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_0_0_2 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_0_0_2 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_0_1_0 -> s1_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_1_0 -> s2_2_0_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_1_0 -> s0_2_1_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_1_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_1_1 -> s2_1_2_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_1_1 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_1_1 -> s2_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="left"];
+  s2_0_1_1 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="left"];
+  s2_0_1_1 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_1_1 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_1_1 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_1_1 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_1_1 -> s2_1_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s2_0_1_1 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s2_0_1_2 -> s1_2_1_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s2_0_1_2 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s2_0_1_2 -> s2_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s2_0_1_2 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s2_0_2_0 -> s1_2_0_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_2_0 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_2_0 -> s0_2_1_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="right"];
+  s2_0_2_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="right"];
+  s2_0_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_0_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_0_2_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s2_0_2_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s2_0_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_0_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_0_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_1_0_0 -> s1_0_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_1_0_0 -> s2_0_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_1_0_0 -> s0_1_2_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_1_0_0 -> s0_2_2_1 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_1_0_1 -> s2_1_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s2_1_0_1 -> s0_0_0_0 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s2_1_0_1 -> s2_2_1_0 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_1_0_1 -> s2_2_2_0 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_1_0_1 -> s2_2_0_1 [weight=45, penwidth=1.9, tooltip="0.450", tailport="up"];
+  s2_1_0_1 -> s2_2_0_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="up"];
+  s2_1_0_1 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_1_0_1 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_1_0_1 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_1_0_1 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_1_0_2 -> s2_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s2_1_0_2 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s2_1_0_2 -> s1_1_2_2 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s2_1_0_2 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s2_1_1_0 -> s2_1_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s2_1_1_0 -> s2_1_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s2_1_1_0 -> s2_1_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s2_1_1_0 -> s2_2_1_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s2_1_1_1 -> s2_1_2_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="left"];
+  s2_1_1_1 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="left"];
+  s2_1_1_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s2_1_1_1 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s2_1_1_1 -> s2_2_1_1 [weight=90, penwidth=2.8, tooltip="0.900", tailport="up"];
+  s2_1_1_1 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="up"];
+  s2_1_1_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s2_1_1_1 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s2_1_2_0 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="right"];
+  s2_1_2_0 -> s2_1_2_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="right"];
+  s2_1_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_1_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_1_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_1_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_1_2_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_2_0_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_0_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_0_0 -> s1_0_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_2_0_0 -> s2_0_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_2_0_0 -> s0_1_2_2 [weight=45, penwidth=1.9, tooltip="0.450", tailport="down"];
+  s2_2_0_0 -> s0_2_2_2 [weight=5, penwidth=1.1, tooltip="0.050", tailport="down"];
+  s2_2_0_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_0_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_0_1 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s2_2_0_1 -> s2_2_2_1 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s2_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_2_0_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_2_1_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_1_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_1_0 -> s0_0_0_0 [weight=90, penwidth=2.8, tooltip="0.900", tailport="down"];
+  s2_2_1_0 -> s2_2_1_2 [weight=10, penwidth=1.2, tooltip="0.100", tailport="down"];
+  s2_2_1_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_1_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_2_1_2 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_2_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_2_2_0 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+  s2_2_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="left"];
+  s2_2_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="right"];
+  s2_2_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="up"];
+  s2_2_2_1 -> s0_0_0_3 [weight=100, penwidth=3, arrowhead=normalodot, tooltip="1.000", tailport="down"];
+}
