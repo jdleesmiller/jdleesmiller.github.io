@@ -121,7 +121,7 @@ If you'd like to explore these models for the 2x2 game in more depth, [Appendix 
 
 On the 3x3 board, it is possible to play up to the `1024` tile, and that game has some [25 million states](/articles/2017/12/10/counting-states-enumeration-2048.html#results). Drawing an MDP diagram like we did for the 2x2 games is therefore clearly out of the question, but we can still watch an optimal policy in action [^missing]:
 
-<p class="twenty48-policy-player" data-board-size="3" data-max-exponent="10" data-packed-policy-path="/assets/2048/game-board_size-3.max_exponent-a/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.dat" data-initial-seed="56">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="3" data-max-exponent="10" data-packed-policy-path="/assets/2048/game-board_size-3.max_exponent-a/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt" data-initial-seed="56">Loading&hellip;</p>
 
 Much like the 2x2 game to `32`, the 3x3 game to `1024` is very hard to win --- if playing optimally, the probability of winning is only about 1%. For some less frustrating entertainment, here also is the game to `512`, for which the probability of winning if playing optimally is much higher, at about 74%:
 
