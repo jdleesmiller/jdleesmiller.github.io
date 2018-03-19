@@ -10,6 +10,8 @@ description: How many board configurations are there in the game of 2048? Let's 
 
 **2017-12-11** This post was [discussed on Hacker News](https://news.ycombinator.com/item?id=15894126).
 
+*This post is the third in a series. Next: [Optimal Play with Markov Decision Processes](/articles/2018/03/18/markov-decision-process-2048.html).*
+
 ---
 
 &nbsp;
