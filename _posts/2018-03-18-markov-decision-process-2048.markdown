@@ -17,6 +17,8 @@ In this post, we'll use Markov Decision Processes to find provably optimal strat
 
 The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48).
 
+&nbsp;
+
 ## Markov Decision Processes for 2048
 
 Markov Decision Processes ([MDPs](https://en.wikipedia.org/wiki/Markov_decision_process)) are a mathematical framework for modeling and solving problems in which we need to make a sequence of related decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/book/the-book.html). For 2048, the sequence of decisions is the direction to swipe in each turn, and the uncertainty arises because the game adds new tiles to the board at random.
