@@ -42,33 +42,33 @@ figures: 2x2_successors_example.svg \
 	mdp_2x2_3_optimal.svg mdp_2x2_4_optimal.svg mdp_2x2_5_optimal.svg
 
 mdp_policies: \
-	game-board_size-2.max_exponent-3/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat \
-	game-board_size-2.max_exponent-4/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat \
-	game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat \
-	game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.dat \
-	game-board_size-3.max_exponent-a/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.dat \
-	game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-false.dat
+	game-board_size-2.max_exponent-3/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
+	game-board_size-2.max_exponent-4/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
+	game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
+	game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt \
+	game-board_size-3.max_exponent-a/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt \
+	game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt
 
-game-board_size-2.max_exponent-3/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-2.max_exponent-3/layer_model-max_depth-0/%.dat
+game-board_size-2.max_exponent-3/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-2.max_exponent-3/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@
 
-game-board_size-2.max_exponent-4/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-2.max_exponent-4/layer_model-max_depth-0/%.dat
+game-board_size-2.max_exponent-4/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-2.max_exponent-4/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@
 
-game-board_size-2.max_exponent-5/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-2.max_exponent-5/layer_model-max_depth-0/%.dat
+game-board_size-2.max_exponent-5/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-2.max_exponent-5/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@
 
-game-board_size-3.max_exponent-9/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-3.max_exponent-9/layer_model-max_depth-0/%.dat
+game-board_size-3.max_exponent-9/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-3.max_exponent-9/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@
 
-game-board_size-3.max_exponent-a/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-3.max_exponent-a/layer_model-max_depth-0/%.dat
+game-board_size-3.max_exponent-a/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-3.max_exponent-a/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@
 
-game-board_size-4.max_exponent-6/layer_model-max_depth-0/%.dat : ../../../twenty48/data/game-board_size-4.max_exponent-6/layer_model-max_depth-0/%.dat
+game-board_size-4.max_exponent-6/layer_model-max_depth-0/%.txt : ../../../twenty48/data/game-board_size-4.max_exponent-6/layer_model-max_depth-0/%.dat
 	mkdir -p $(dir $@)
 	cp $< $@

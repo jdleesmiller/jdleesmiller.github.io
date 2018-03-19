@@ -99,19 +99,19 @@ This standard iterative approach works well for the MDP models for games on the 
 
 We're now ready to see some optimal policies in action! If you leave the random seed at `42` and press the `Start` button below, you'll see it reach the `8` tile in 5 moves. The random seed determines the sequence of new tiles that the game will place; if you choose a different random seed by clicking the `⟲` button, you will (usually) see a different game unfold.
 
-<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="3" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-3/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat" data-initial-seed="42">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="3" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-3/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="42">Loading&hellip;</p>
 
 For the 2x2 game to the `8` tile, there is not actually much to see. If the player follows the optimal policy, they will always win. (As we saw above, when building the transition probabilities, if the player does not play optimally, it is possible to lose.) This is reflected in the fact that the value of the state remains at 1.00 for the whole game --- when playing optimally, there is at least one action in every reachable state that leads to a win.
 
 If we instead ask the player to play to the `16` tile, a win is no longer assured even when playing optimally. In this case, picking a new random seed should lead to a win 96% of the time for the game to the `16` tile, so I've set the initial seed to one of the rare seeds that leads to a loss.
 
-<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="4" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-4/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat" data-initial-seed="20">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="4" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-4/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="20">Loading&hellip;</p>
 
 As a result of setting the discount factor, \\(\\gamma\\), to 1, the value of each state also conveniently tells us the probability of winning from that state. Here the value starts at 0.96 and then eventually drops to 0.90, because the outcome hinges on the next tile being a `2` tile. Unfortunately, the game delivers a `4` tile, so the player loses, despite playing optimally.
 
 Finally, we've [previously established](/articles/2017/09/17/counting-states-combinatorics-2048.html#layer-reachability) that the largest reachable tile on the 2x2 board is the `32` tile, so let's see the corresponding optimal policy. Here the probability of winning drops to only 8%.
 
-<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.dat" data-initial-seed="47">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="47">Loading&hellip;</p>
 
 It's worth remarking that each of the policies above is *an* optimal policy for the corresponding game, but there is no guarantee of uniqueness. There may be many optimal policies that are equivalent, but we can say with certainty that none of them are strictly better.
 
@@ -125,7 +125,7 @@ On the 3x3 board, it is possible to play up to the `1024` tile, and that game ha
 
 Much like the 2x2 game to `32`, the 3x3 game to `1024` is very hard to win --- if playing optimally, the probability of winning is only about 1%. For some less frustrating entertainment, here also is the game to `512`, for which the probability of winning if playing optimally is much higher, at about 74%:
 
-<p class="twenty48-policy-player" data-board-size="3" data-max-exponent="9" data-packed-policy-path="/assets/2048/game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.dat" data-initial-seed="42">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="3" data-max-exponent="9" data-packed-policy-path="/assets/2048/game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt" data-initial-seed="42">Loading&hellip;</p>
 
 At the risk of anthropomorphizing a large table of states and actions, which is what a policy is, I see here elements of strategies that I use when I play 2048 on the 4x4 board [^me]. We can see the policy pinning the high value tiles to the edges and usually corners (though in the game to `1024`, it often puts the `512` tile in the middle of an edge). We can also see it being 'lazy' --- even when it has two high value tiles lined up to merge, it will continue merging lower value times. Particularly within the tight constraints of the 3x3 board, it makes sense that it will take the opportunity to [increase the sum of its tiles]( /articles/2017/08/05/markov-chain-2048.html#binomial-probabilities) at no risk of (immediately) losing --- if it gets stuck merging smaller tiles, it can always merge the larger ones, which opens up the board.
 
@@ -139,9 +139,9 @@ We can, however, complete the enumeration and the solve for the 4x4 game up to t
 
 However, if we reduce the discount factor, \\(\\gamma\\), that makes the player slightly impatient, so that it prefers to win sooner rather than later. It then looks a bit more directed. Here is an optimal player for \\(\\gamma = 0.99\\):
 
-<p class="twenty48-policy-player" data-board-size="4" data-max-exponent="6" data-packed-policy-path="/assets/2048/game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-false.dat" data-initial-seed="42">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="4" data-max-exponent="6" data-packed-policy-path="/assets/2048/game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt" data-initial-seed="42">Loading&hellip;</p>
 
-Again it shows good use of the edges and corners to build sequences of tiles in an order that's convenient to merge.
+The value starts around 0.72; the exact initial value reflects the expected number of moves it will take to win from the randomly selected start state. It gradually increases with each move, as the reward for reaching the win state gets closer. Again the policy shows good use of the edges and corners to build sequences of tiles in an order that's convenient to merge.
 
 ## Conclusion
 
