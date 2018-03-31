@@ -45,6 +45,7 @@ mdp_policies: \
 	game-board_size-2.max_exponent-3/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
 	game-board_size-2.max_exponent-4/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
 	game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt \
+	game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-false.txt \
 	game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt \
 	game-board_size-3.max_exponent-a/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt \
 	game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt

@@ -13,7 +13,7 @@ So far in this series on the mathematics of [2048](http://gabrielecirulli.github
 
 In this post, we'll use a mathematical framework called a Markov Decision Process to find provably optimal strategies for 2048 when played on the 2x2 and 3x3 boards, and also on the 4x4 board up to the `64` tile. For example, here is an optimal player for the 2x2 game to the `32` tile:
 
-<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="47" data-arcade-mode="true">Loading&hellip;</p>
+<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-false.txt" data-initial-seed="47" data-arcade-mode="true">Loading&hellip;</p>
 
 The random seed determines the random sequence of tiles that the game adds to the board. The 'strategy' the player follows is defined by a table, called a *policy*, that tells it which direction it should swipe in every possible board configuration. In this post, we'll see how to construct a policy that is optimal, in the sense that it maximizes the player's chances of reaching the target `32` tile.
 
