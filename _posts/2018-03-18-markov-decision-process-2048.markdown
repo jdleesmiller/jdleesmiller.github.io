@@ -9,15 +9,21 @@ description: Finding provably optimal strategies for 2048 using Markov Decision 
 
 &nbsp;
 
-<img src="/assets/2048/mdp_player.png" alt="Screenshot of a provably optimal endgame on the 4x4 board to the 64 tile" style="width: 40%; float: right; margin-left: 10pt; border: 6pt solid #eee;"/>
-
 So far in this series on the mathematics of [2048](http://gabrielecirulli.github.io/2048), we've used Markov chains to learn that [it takes at least 938.8 moves](/articles/2017/08/05/markov-chain-2048.html) on average to win, and we've explored the number of possible board configurations in the game using [combinatorics](/articles/2017/09/17/counting-states-combinatorics-2048.html) and then [exhaustive enumeration](/articles/2017/12/10/counting-states-enumeration-2048.html).
 
-In this post, we'll use Markov Decision Processes to find provably optimal strategies for 2048 when played on the 2x2 and 3x3 boards, which shed some light on successful strategies for the 4x4 board. The full game on the 4x4 board to the `2048` tile will prove intractably large for the methods used here, but we will be able to find a provably optimal strategy for a shorter version of the game played on the 4x4 board up to the `64` tile.
+In this post, we'll use a mathematical framework called a Markov Decision Process to find provably optimal strategies for 2048 when played on the 2x2 and 3x3 boards, and also on the 4x4 board up to the `64` tile. For example, here is an optimal player for the 2x2 game to the `32` tile:
+
+<p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="47" data-arcade-mode="true">Loading&hellip;</p>
+
+The random seed determines the random sequence of tiles that the game adds to the board. The 'strategy' the player follows is defined by a table, called a *policy*, that tells it which direction it should swipe in every possible board configuration. In this post, we'll see how to construct a policy that is optimal, in the sense that it maximizes the player's chances of reaching the target `32` tile.
+
+It turns out that the 2x2 game to the `32` tile is very hard to win --- even when playing optimally, the player only wins about 8% of the time, which probably does not make for a very fun game. The 2x2 games are qualitatively quite different to the 4x4 games, but they'll still be useful to introduce the key ideas.
+
+Ideally we'd be able to find an optimal policy for the full game on the 4x4 board to the `2048` tile, but as we saw in the previous post, the number of possible board configurations is very large. This makes it infeasible to construct a complete optimal policy for the full game, at least with the methods used here.
+
+We will however be able to find an optimal policy for the shortened 4x4 game to the `64` tile, and fortunately we'll see that optimal play on the 3x3 boards looks qualitatively similar, in an admittedly hand-wavy way, to some successful strategies for the full game.
 
 The (research quality) code behind this article is [open source](https://github.com/jdleesmiller/twenty48).
-
-&nbsp;
 
 ## Markov Decision Processes for 2048
 
@@ -63,7 +69,7 @@ To make the diagram smaller, all of the losing states have been collapsed into a
 
 Play proceeds roughly from left to right in the diagram, because the states have been organized into 'layers' by the sum of their tiles. A useful property of the game is that after each action the sum of the tiles on the board increases by either 2 or 4. This is because merging tiles does not change the sum of the tiles on the board, and the game always adds either a `2` tile or a `4` tile. The possible start states, which are in the layers with sum 4, 6 and 8, are drawn in blue.
 
-Even for this smallest example, there are 70 possible states and 530 possible transitions in the model. It is possible significantly reduce those numbers, however, by observing that many of the states we've enumerated above are trivially related by rotations and reflections, as described in [Appendix A](#appendix-a-canonicalization). This observation is important in practice for reducing the size of the models so that they can be solved efficiently, and it makes for more legible diagrams, but it is not essential for us to move on to our second set of MDP concepts.
+Even for this smallest example, there are 70 states and 530 transitions in the model. It is possible significantly reduce those numbers, however, by observing that many of the states we've enumerated above are trivially related by rotations and reflections, as described in [Appendix A](#appendix-a-canonicalization). This observation is important in practice for reducing the size of the models so that they can be solved efficiently, and it makes for more legible diagrams, but it is not essential for us to move on to our second set of MDP concepts.
 
 ### Rewards, Values and Policies
 
@@ -109,7 +115,7 @@ If we instead ask the player to play to the `16` tile, a win is no longer assure
 
 As a result of setting the discount factor, \\(\\gamma\\), to 1, the value of each state also conveniently tells us the probability of winning from that state. Here the value starts at 0.96 and then eventually drops to 0.90, because the outcome hinges on the next tile being a `2` tile. Unfortunately, the game delivers a `4` tile, so the player loses, despite playing optimally.
 
-Finally, we've [previously established](/articles/2017/09/17/counting-states-combinatorics-2048.html#layer-reachability) that the largest reachable tile on the 2x2 board is the `32` tile, so let's see the corresponding optimal policy. Here the probability of winning drops to only 8%.
+Finally, we've [previously established](/articles/2017/09/17/counting-states-combinatorics-2048.html#layer-reachability) that the largest reachable tile on the 2x2 board is the `32` tile, so let's see the corresponding optimal policy. Here the probability of winning drops to only 8%. (This is the same game and the same policy used in the introduction, but now it's interactive.)
 
 <p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="47">Loading&hellip;</p>
 
@@ -135,9 +141,9 @@ It's important to note that we did not teach the policy about these strategies o
 
 As established in the last post, the game to the `2048` tile on the 4x4 board has at least trillions of states, and so far it has not been possible to even enumerate all the states, let alone solve the resulting MDP for an optimal policy.
 
-We can, however, complete the enumeration and the solve for the 4x4 game up to the `64` tile --- that model has "only" about 40 billion states. Like the 2x2 game to `8` above, it is impossible to lose when playing optimally, so it essentially does not matter which actions the player takes. This does not make for very interesting viewing, because in many cases there are several good actions, and the choice between them is arbitrary.
+We can, however, complete the enumeration and the solve for the 4x4 game up to the `64` tile --- that model has "only" about 40 billion states. Like the 2x2 game to `8` above, it is impossible to lose when playing optimally. This does not make for very interesting viewing, because in many cases there are several good actions, and the choice between them is arbitrary.
 
-However, if we reduce the discount factor, \\(\\gamma\\), that makes the player slightly impatient, so that it prefers to win sooner rather than later. It then looks a bit more directed. Here is an optimal player for \\(\\gamma = 0.99\\):
+However, if we reduce the discount factor, \\(\\gamma\\), that makes the player slightly impatient, so that they prefer to win sooner rather than later. It then looks a bit more directed. Here is an optimal player for \\(\\gamma = 0.99\\):
 
 <p class="twenty48-policy-player" data-board-size="4" data-max-exponent="6" data-packed-policy-path="/assets/2048/game-board_size-4.max_exponent-6/layer_model-max_depth-0/packed_policy-discount-0.99.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt" data-initial-seed="42">Loading&hellip;</p>
 
@@ -280,11 +286,11 @@ If you've read this far, perhaps you should [follow me on twitter](https://twitt
 
 [^discounting]: In addition to being [well founded](https://en.wikipedia.org/wiki/Time_preference) in economic theory, the discount factor is often required technically in order to ensure that the value function converges. If the process runs forever and continues to accumulate additive rewards, it could accumulate infinite value. The geometric discounting ensures that the infinite sum still converges even if this happens. For the processes with the reward structure we're considering here, we can safely set the discount factor to 1, because the process is constructed so that there are no loops with nonzero reward, and therefore all rewards are bounded.
 
-[^missing]: There is a caveat for the 3x3 and 4x4 policies: the full optimal policies for every state are too large to ship to the browser (without unduly imposing on GitHub's generosity in hosting this website). The player therefore only has access to the policy for the states that have a probability of at least \\(10^{-7}\\) of actually occurring when playing according to the optimal policy. This means that, unfortunately, roughly one in hundred readers will choose a random seed that takes the process to a state that is not included in the data available on the client, in which case it will stop with an error. These states are selected by calculating the transient probabilities for the Markov chain induced by the optimal policy. The mathematics are essentially the same as those in [the first post about Markov chains for 2048](/articles/2017/08/05/markov-chain-2048.html).
+[^missing]: There is a caveat for the 3x3 and 4x4 policies: the full optimal policies for every state are too large to ship to the browser (without unduly imposing on GitHub's generosity in hosting this website). The player therefore only has access to the policy for the states that have a probability of at least \\(10^{-7}\\) of actually occurring when playing according to the optimal policy. This means that, unfortunately, roughly one in hundred readers will choose a random seed that takes the process to a state that is not included in the data available on the client, in which case it will stop with an error. These states are selected by calculating the transient probabilities for the absorbing Markov chain induced by the optimal policy. The mathematics are essentially the same as those in [the first post about Markov chains for 2048](/articles/2017/08/05/markov-chain-2048.html).
 
 [^me]: Of course, I'm not claiming here to be great at 2048. The [data in my first post](/articles/2017/08/05/markov-chain-2048.html#putting-theory-to-the-test) suggest otherwise!
 
-<script src="/assets/2048/mdp_player.96cb5779dd7942e99648.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/2048/mdp_player.6a864e01fc49fb07563a.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
