@@ -6,6 +6,11 @@ categories: articles
 image: /assets/2048/mdp_2x2_3_with_no_canonicalization.png
 description: Finding provably optimal strategies for 2048 using Markov Decision Processes
 ---
+**Updates**
+
+**2018-04-10** This post was [discussed on Hacker News](https://news.ycombinator.com/item?id=16790338).
+
+---
 
 &nbsp;
 
@@ -37,7 +42,7 @@ A *state* captures the configuration of the board at a given point in the game b
 
 The *transition probabilities* encode the game's dynamics by determining which states are likely to come next, in view of the current state and the player's action. Fortunately, we can find out exactly how 2048 works by reading [its source code](https://github.com/gabrielecirulli/2048). Most important [^merging] is the process the game uses to place a random tile on the board, which is always the same: *pick an available cell uniformly at random, then add a new tile either with value `2`, with probability 0.9, or value `4`, with probability 0.1*.
 
-At the start of each game, two random tiles are added using this process. For example, one of these possible start states is <img src="/assets/2048/2x2_s0_1_1_0.svg" style="height: 2em;" alt="- 2 2 -; two 2 tiles on the anti-diagonal">. For each of the possible actions in this state, namely `L`eft, `R`right, `U`p and `D`own, the possible next states and the corresponding transition probabilities are:
+At the start of each game, two random tiles are added using this process. For example, one of these possible start states is <img src="/assets/2048/2x2_s0_1_1_0.svg" style="height: 2em;" alt="- 2 2 -; two 2 tiles on the anti-diagonal">. For each of the possible actions in this state, namely `L`eft, `R`right, `U`p and `D`own, the possible next states and the corresponding transition probabilities are [^dot]:
 
 <p align="center">
 <img src="/assets/2048/mdp_s0_1_1_0_with_no_canonicalization.svg" alt="Actions and transitions from the state - 2 2 -" style="max-height: 40em;" />
@@ -259,7 +264,7 @@ To efficiently solve an MDP model like the ones we've constructed here for 2048,
 
 3. All states in the layer with the largest sum will transition to either a lose or win state, which have a known value, namely 0 or 1, respectively.
 
-Property (3) means that we can loop through all of the states in the last layer, in which all successor values are known, to generate the value function for that last layer. Then, using property (2), we know that the states in the second last layer must transition to either states in the last layer, for which we have just calculated values, or to a win or lose state, which have known values. In this way we can work backward, layer by layer, always knowing the values of states in the next two layers; this allows us to build both the value function and the optimal policy for the current layer.
+Property (3) means that we can loop through all of the states in the last layer, in which all successor values are known, to generate the value function for that last layer. Then, using property (2), we know that the states in the second last layer must transition to either states in the last layer, for which we have just calculated values, or to a win or lose state, which have known values. In this way we can work backward, layer by layer, always knowing the values of states in the next two layers; this allows us to build both the value function and the optimal policy for the current layer. In general, this approach to solving MDPs is called [backward induction](https://en.wikipedia.org/wiki/Backward_induction), which is a particular type of [dynamic programming](https://en.wikipedia.org/wiki/Markov_decision_process#Algorithms).
 
 In the [previous post](/articles/2017/12/10/counting-states-enumeration-2048.html#appendix-b-layers-and-mapreduce-for-parallelism) we worked forward from the start states to enumerate all of the states, layer by layer, using a map-reduce approach to parallelize the work within each layer. For the solve, we can use the output of that enumeration, which is a large list of states, to work backward, again using a map-reduce approach to parallelize the work within each layer. And like last time we can further break up the layers into 'parts' by their maximum tile value, with some additional book keeping.
 
@@ -279,6 +284,8 @@ If you've read this far, perhaps you should [follow me on twitter](https://twitt
 # Footnotes
 
 [^merging]: There is also some nuance in how tiles are merged: if you have four `2` tiles in a row, for example, and you swipe to merge them, the result is two `4` tiles, not a single `8` tile. That is, you can’t merge newly merged tiles in a single swipe. The original code for merging tiles [is here](https://github.com/gabrielecirulli/2048/blob/ac03b1f01628038039b74b67f2e284b233bd143e/js/game_manager.js#L145-L180), and the simplified but equivalent code I used to merge a line (row or column) of tiles [is here](https://github.com/jdleesmiller/twenty48/blob/master/ext/twenty48/line.hpp#L29-L54) with [tests here](https://github.com/jdleesmiller/twenty48/blob/3605cfaeba0a602d9917f84d1a2862afe4ad1bb6/test/twenty48/common/line_with_known_tests.rb).
+
+[^dot]: The graph diagrams here come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/).
 
 [^objectives]: There are several other possible objectives. For example, in the [first post](/articles/2017/08/05/markov-chain-2048.html) in this series, I tried to reach the target `2048` tile in the smallest possible number of moves; and many people I've talked to play to reach the largest possible tile, which is also what the game's points system encourages. These different objectives could also be captured by setting up the model and its rewards appropriately. For example, a simple reward of 1 per move until the player loses would represent the objective of playing as long as possible, which would I think be equivalent to trying to reach the largest possible tile.
 
