@@ -35,7 +35,7 @@ If you're not familiar with 2048 or with Markov chains, that's OK --- I'll intro
 
 To represent our simplified '2048 in a bag' game as a Markov chain, we need to define the *states* and the *transition probabilities* of the chain. Each state is like a snapshot of the game at a moment in time, and the transition probabilities specify, for each state, which state is likely to come next.
 
-Here we will define each state to encode which tiles are currently in the bag. We don't care about the order of the tiles, so we can think of it as a set of tiles. Initially, there are no tiles, so our initial state is simply the empty set. In diagram form, which we'll add to below, this initial state looks like:
+Here we will define each state to encode which tiles are currently in the bag. We don't care about the order of the tiles, so we can think of it as a multiset of tiles. Initially, there are no tiles, so our initial state is simply the empty set. In diagram form, which we'll add to below, this initial state looks like:
 
 <p align="center">
 <img src="/assets/2048/markov_chain_initial_state.svg" alt="The initial state for the Markov chain" />
