@@ -6,6 +6,7 @@ categories: articles
 image: /assets/2048/mdp_2x2_3_with_no_canonicalization.png
 description: Finding provably optimal strategies for 2048 using Markov Decision Processes
 ---
+
 **Updates**
 
 **2018-04-10** This post was [discussed on Hacker News](https://news.ycombinator.com/item?id=16790338).
@@ -20,7 +21,7 @@ In this post, we'll use a mathematical framework called a Markov Decision Proces
 
 <p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-false.txt" data-initial-seed="47" data-arcade-mode="true">Loading&hellip;</p>
 
-The random seed determines the random sequence of tiles that the game adds to the board. The 'strategy' the player follows is defined by a table, called a *policy*, that tells it which direction it should swipe in every possible board configuration. In this post, we'll see how to construct a policy that is optimal, in the sense that it maximizes the player's chances of reaching the target `32` tile.
+The random seed determines the random sequence of tiles that the game adds to the board. The 'strategy' the player follows is defined by a table, called a _policy_, that tells it which direction it should swipe in every possible board configuration. In this post, we'll see how to construct a policy that is optimal, in the sense that it maximizes the player's chances of reaching the target `32` tile.
 
 It turns out that the 2x2 game to the `32` tile is very hard to win --- even when playing optimally, the player only wins about 8% of the time, which probably does not make for a very fun game. The 2x2 games are qualitatively quite different to the 4x4 games, but they'll still be useful to introduce the key ideas.
 
@@ -34,13 +35,13 @@ The (research quality) code behind this article is [open source](https://github.
 
 Markov Decision Processes ([MDPs](https://en.wikipedia.org/wiki/Markov_decision_process)) are a mathematical framework for modeling and solving problems in which we need to make a sequence of related decisions in the presence of uncertainty. Such problems are all around us, and MDPs find many [applications](http://stats.stackexchange.com/questions/145122/real-life-examples-of-markov-decision-processes) in [economics](https://en.wikipedia.org/wiki/Decision_theory#Choice_under_uncertainty), [finance](https://www.minet.uni-jena.de/Marie-Curie-ITN/SMIF/talks/Baeuerle.pdf), and [artificial intelligence](http://incompleteideas.net/book/the-book.html). For 2048, the sequence of decisions is the direction to swipe in each turn, and the uncertainty arises because the game adds new tiles to the board at random.
 
-To set up the game of 2048 as an MDP, we will need to write it down in a specific way. This will involve six main concepts: *states*, *actions* and *transition probabilities* will encode the game's dynamics; *rewards*, *values* and *policies* will be used to capture what the player is trying to accomplish and how they should do so. To develop these six concepts, we will take as an example the smallest non-trivial 2048-like game, which is played on the 2x2 board only up to the `8` tile. Let's start with the first three.
+To set up the game of 2048 as an MDP, we will need to write it down in a specific way. This will involve six main concepts: _states_, _actions_ and _transition probabilities_ will encode the game's dynamics; _rewards_, _values_ and _policies_ will be used to capture what the player is trying to accomplish and how they should do so. To develop these six concepts, we will take as an example the smallest non-trivial 2048-like game, which is played on the 2x2 board only up to the `8` tile. Let's start with the first three.
 
 ### States, Actions and Transition Probabilities
 
-A *state* captures the configuration of the board at a given point in the game by specifying the value of the tile, if any, in each of the board's cells. For example, <img src="/assets/2048/2x2_s0_1_1_0.svg" style="height: 2em;"> is a possible state in a game on a 2x2 board. An *action* is swiping left, right, up or down. Each time the player takes an action, the process transitions to a new state.
+A _state_ captures the configuration of the board at a given point in the game by specifying the value of the tile, if any, in each of the board's cells. For example, <img src="/assets/2048/2x2_s0_1_1_0.svg" style="height: 2em;"> is a possible state in a game on a 2x2 board. An _action_ is swiping left, right, up or down. Each time the player takes an action, the process transitions to a new state.
 
-The *transition probabilities* encode the game's dynamics by determining which states are likely to come next, in view of the current state and the player's action. Fortunately, we can find out exactly how 2048 works by reading [its source code](https://github.com/gabrielecirulli/2048). Most important [^merging] is the process the game uses to place a random tile on the board, which is always the same: *pick an available cell uniformly at random, then add a new tile either with value `2`, with probability 0.9, or value `4`, with probability 0.1*.
+The _transition probabilities_ encode the game's dynamics by determining which states are likely to come next, in view of the current state and the player's action. Fortunately, we can find out exactly how 2048 works by reading [its source code](https://github.com/gabrielecirulli/2048). Most important [^merging] is the process the game uses to place a random tile on the board, which is always the same: _pick an available cell uniformly at random, then add a new tile either with value `2`, with probability 0.9, or value `4`, with probability 0.1_.
 
 At the start of each game, two random tiles are added using this process. For example, one of these possible start states is <img src="/assets/2048/2x2_s0_1_1_0.svg" style="height: 2em;" alt="- 2 2 -; two 2 tiles on the anti-diagonal">. For each of the possible actions in this state, namely `L`eft, `R`right, `U`p and `D`own, the possible next states and the corresponding transition probabilities are [^dot]:
 
@@ -78,11 +79,11 @@ Even for this smallest example, there are 70 states and 530 transitions in the m
 
 ### Rewards, Values and Policies
 
-To complete our specification of the model, we need to somehow encode the fact that the player's objective is to reach the `win` state [^objectives]. We do this by defining *rewards*. In general, each time an MDP enters a state, the player receives a reward that depends on the state. Here we'll set the reward for entering the `win` state to 1, and the reward for entering all other states to 0. That is, the one and only way to earn a reward is to reach the win state. [^absorbing]
+To complete our specification of the model, we need to somehow encode the fact that the player's objective is to reach the `win` state [^objectives]. We do this by defining _rewards_. In general, each time an MDP enters a state, the player receives a reward that depends on the state. Here we'll set the reward for entering the `win` state to 1, and the reward for entering all other states to 0. That is, the one and only way to earn a reward is to reach the win state. [^absorbing]
 
-Now that we have an MDP model of the game in terms of states, actions, transition probabilities and rewards, we are ready to solve it. A solution for an MDP is called a *policy*. It is basically a table that lists for every possible state which action to take in that state. To solve an MDP is to find an *optimal policy*, which is one that allows the player to collect as much reward as possible over time.
+Now that we have an MDP model of the game in terms of states, actions, transition probabilities and rewards, we are ready to solve it. A solution for an MDP is called a _policy_. It is basically a table that lists for every possible state which action to take in that state. To solve an MDP is to find an _optimal policy_, which is one that allows the player to collect as much reward as possible over time.
 
-To make this precise, we will need our final MDP concept: the *value* of a state according to a given policy is the expected, discounted reward the player will collect if they start from that state and follow the policy thereafter. To explain what that means will require some notation.
+To make this precise, we will need our final MDP concept: the _value_ of a state according to a given policy is the expected, discounted reward the player will collect if they start from that state and follow the policy thereafter. To explain what that means will require some notation.
 
 Let \\(S\\) be the set of states, and for each state \\(s \\in S\\), let \\(A_s\\) be the set of actions that are allowed in state \\(s\\). Let \\(\\Pr(s' \| s, a)\\) denote the probability of transitioning to each successor state \\(s' \\in S\\), given that the process is in state \\(s \\in S\\) and the player takes action \\(a \\in A_s\\). Let \\(R(s)\\) denote the reward for entering state \\(s\\). Finally, let \\(\\pi\\) denote a policy and \\(\\pi(s) \\in A_s\\) denote the action to take in state \\(s\\) when following policy \\(\\pi\\).
 
@@ -92,14 +93,14 @@ V^\\pi(s) = R(s) + \\gamma \\sum_{s'} \\Pr(s' \| s, \\pi(s)) V^\\pi(s')
 \\]
 where the first term is the immediate reward, and the summation gives the expected value of the successor states, assuming the player continues to follow the policy.
 
-The factor \\(\\gamma\\) is a *discount factor* that trades off the value of the immediate reward against the value of the expected future rewards. In other words, it accounts for [the time value of money](https://en.wikipedia.org/wiki/Time_value_of_money): a reward now is typically worth more than the same reward later. If \\(\\gamma\\) is close to 1, it means that the player is very patient: they don't mind waiting for future rewards; likewise, smaller values of \\(\\gamma\\) mean that the player is less patient. For now, we'll set the discount factor \\(\\gamma\\) to 1, which matches our assumption that the player cares only about winning, not about how long it takes to win [^discounting].
+The factor \\(\\gamma\\) is a _discount factor_ that trades off the value of the immediate reward against the value of the expected future rewards. In other words, it accounts for [the time value of money](https://en.wikipedia.org/wiki/Time_value_of_money): a reward now is typically worth more than the same reward later. If \\(\\gamma\\) is close to 1, it means that the player is very patient: they don't mind waiting for future rewards; likewise, smaller values of \\(\\gamma\\) mean that the player is less patient. For now, we'll set the discount factor \\(\\gamma\\) to 1, which matches our assumption that the player cares only about winning, not about how long it takes to win [^discounting].
 
 So, how do we find the policy? For each state, we want to choose the action that maximizes the expected future value:
 
 \\[
 \\pi(s) = \\mathop{\\mathrm{argmax}}\\limits_{a \\in A_s} \\left\\{
-  \\sum_{s'} \\Pr(s' \| s, a) V^\\pi(s')
-  \\right\\}
+\\sum_{s'} \\Pr(s' \| s, a) V^\\pi(s')
+\\right\\}
 \\]
 
 So, this gives us two linked equations, and we can solve them iteratively. That is, pick an initial policy, which might be very simple, compute the value of every state under that simple policy, and then find a new policy based on that value function, and so on. Perhaps remarkably, under very modest technical conditions, such an iterative process is guaranteed to converge to an optimal policy, \\(\\pi^\*\\), and an optimal value function \\(V^{\\pi^\*}\\) with respect to that optimal policy.
@@ -124,7 +125,7 @@ Finally, we've [previously established](/articles/2017/09/17/counting-states-com
 
 <p class="twenty48-policy-player" data-board-size="2" data-max-exponent="5" data-packed-policy-path="/assets/2048/game-board_size-2.max_exponent-5/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-0.alternate_actions-false.values-true.txt" data-initial-seed="47">Loading&hellip;</p>
 
-It's worth remarking that each of the policies above is *an* optimal policy for the corresponding game, but there is no guarantee of uniqueness. There may be many optimal policies that are equivalent, but we can say with certainty that none of them are strictly better.
+It's worth remarking that each of the policies above is _an_ optimal policy for the corresponding game, but there is no guarantee of uniqueness. There may be many optimal policies that are equivalent, but we can say with certainty that none of them are strictly better.
 
 If you'd like to explore these models for the 2x2 game in more depth, [Appendix A](#appendix-a-canonicalization) provides some diagrams that show all the possible paths through the game.
 
@@ -138,7 +139,7 @@ Much like the 2x2 game to `32`, the 3x3 game to `1024` is very hard to win --- i
 
 <p class="twenty48-policy-player" data-board-size="3" data-max-exponent="9" data-packed-policy-path="/assets/2048/game-board_size-3.max_exponent-9/layer_model-max_depth-0/packed_policy-discount-1.method-v.alternate_action_tolerance-1e-09.threshold-1e-07.alternate_actions-false.values-true.txt" data-initial-seed="42">Loading&hellip;</p>
 
-At the risk of anthropomorphizing a large table of states and actions, which is what a policy is, I see here elements of strategies that I use when I play 2048 on the 4x4 board [^me]. We can see the policy pinning the high value tiles to the edges and usually corners (though in the game to `1024`, it often puts the `512` tile in the middle of an edge). We can also see it being 'lazy' --- even when it has two high value tiles lined up to merge, it will continue merging lower value tiles. Particularly within the tight constraints of the 3x3 board, it makes sense that it will take the opportunity to [increase the sum of its tiles]( /articles/2017/08/05/markov-chain-2048.html#binomial-probabilities) at no risk of (immediately) losing --- if it gets stuck merging smaller tiles, it can always merge the larger ones, which opens up the board.
+At the risk of anthropomorphizing a large table of states and actions, which is what a policy is, I see here elements of strategies that I use when I play 2048 on the 4x4 board [^me]. We can see the policy pinning the high value tiles to the edges and usually corners (though in the game to `1024`, it often puts the `512` tile in the middle of an edge). We can also see it being 'lazy' --- even when it has two high value tiles lined up to merge, it will continue merging lower value tiles. Particularly within the tight constraints of the 3x3 board, it makes sense that it will take the opportunity to [increase the sum of its tiles](/articles/2017/08/05/markov-chain-2048.html#binomial-probabilities) at no risk of (immediately) losing --- if it gets stuck merging smaller tiles, it can always merge the larger ones, which opens up the board.
 
 It's important to note that we did not teach the policy about these strategies or give it any other hints about how to play. All of its behaviors and any apparent intelligence emerges solely from solving an optimization problem with respect to the transition probabilities and reward function we supplied.
 
@@ -171,6 +172,7 @@ It is common to find that MDPs are too large to solve in practice, so there are 
 As we've seen with the full model for the 2x2 game to the `8` tile, the number of states and transitions grows quickly, and even games on the 2x2 board become hard to draw in this form.
 
 To help keep the size of the model under control, we can reuse an observation from the [previous post about enumerating states](/articles/2017/12/10/counting-states-enumeration-2048.html#canonicalization-and-symmetry): many of the successor states are just rotations or reflections of each other. For example, the states
+
 <p align="center">
   <img src="/assets/2048/2x2_s2_1_0_1.svg" alt="4 2 - 2">
   and
@@ -202,7 +204,7 @@ We can therefore simplify the diagram for <img src="/assets/2048/2x2_s0_1_1_0.sv
 <img src="/assets/2048/mdp_s0_1_1_0_with_action_canonicalization.svg" alt="Actions and transitions from the state - 2 2 - with successor state and action canonicalization" />
 </p>
 
-Of course, states for which all actions are equivalent in this way are relatively rare. Considering another potential start state, <img src="/assets/2048/2x2_s0_0_1_1.svg" style="height: 2em;">, we see that swiping left and right are equivalent, but swiping up is distinct; swiping down is not allowed, because the tiles already on the bottom.
+Of course, states for which all actions are equivalent in this way are relatively rare. Considering another potential start state, <img src="/assets/2048/2x2_s0_0_1_1.svg" style="height: 2em;">, we see that swiping left and right are equivalent, but swiping up is distinct; swiping down is not allowed, because the tiles are already on the bottom.
 
 <p align="center">
 <img src="/assets/2048/mdp_s0_0_1_1_with_action_canonicalization.svg" alt="Actions and transitions from the state - - 2 2 with successor state and action canonicalization" />
@@ -280,21 +282,14 @@ Thanks to [Hope Thomas](https://twitter.com/h0peth0mas) for reviewing drafts of 
 
 If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
 
-
 # Footnotes
 
 [^merging]: There is also some nuance in how tiles are merged: if you have four `2` tiles in a row, for example, and you swipe to merge them, the result is two `4` tiles, not a single `8` tile. That is, you can’t merge newly merged tiles in a single swipe. The original code for merging tiles [is here](https://github.com/gabrielecirulli/2048/blob/ac03b1f01628038039b74b67f2e284b233bd143e/js/game_manager.js#L145-L180), and the simplified but equivalent code I used to merge a line (row or column) of tiles [is here](https://github.com/jdleesmiller/twenty48/blob/master/ext/twenty48/line.hpp#L29-L54) with [tests here](https://github.com/jdleesmiller/twenty48/blob/3605cfaeba0a602d9917f84d1a2862afe4ad1bb6/test/twenty48/common/line_with_known_tests.rb).
-
 [^dot]: The graph diagrams here come from the excellent `dot` tool in [graphviz](http://www.graphviz.org/).
-
 [^objectives]: There are several other possible objectives. For example, in the [first post](/articles/2017/08/05/markov-chain-2048.html) in this series, I tried to reach the target `2048` tile in the smallest possible number of moves; and many people I've talked to play to reach the largest possible tile, which is also what the game's points system encourages. These different objectives could also be captured by setting up the model and its rewards appropriately. For example, a simple reward of 1 per move until the player loses would represent the objective of playing as long as possible, which would I think be equivalent to trying to reach the largest possible tile.
-
-[^absorbing]: Technically, we need one more special state, in addition to the `win` and `lose` states, to make this reward system work as described. The equations that we develop for \\(\\pi\\) and \\(V^\\pi\\) assume that all states have at least one allowed action and successor state, so we can't just stop the process at the `lose` and `win` states. Instead, we can add an *absorbing state*, `end`, with a trivial action that just brings the process back into the `end` state with probability one. Then we can add a trivial action to both the `lose` and `win` states to transition to the absorbing `end` state with probability 1. So long as the `end` state attracts zero reward, it will not change the outcome. It's also worth mentioning that there are more general ways of defining an MDP that would provide other ways of working around this technicality, for example by making the rewards depend on the whole transition rather than just the state and by making policies stochastic which, as a side effect, means that we can handle states with no allowed actions, but they require more notation.
-
+[^absorbing]: Technically, we need one more special state, in addition to the `win` and `lose` states, to make this reward system work as described. The equations that we develop for \\(\\pi\\) and \\(V^\\pi\\) assume that all states have at least one allowed action and successor state, so we can't just stop the process at the `lose` and `win` states. Instead, we can add an _absorbing state_, `end`, with a trivial action that just brings the process back into the `end` state with probability one. Then we can add a trivial action to both the `lose` and `win` states to transition to the absorbing `end` state with probability 1. So long as the `end` state attracts zero reward, it will not change the outcome. It's also worth mentioning that there are more general ways of defining an MDP that would provide other ways of working around this technicality, for example by making the rewards depend on the whole transition rather than just the state and by making policies stochastic which, as a side effect, means that we can handle states with no allowed actions, but they require more notation.
 [^discounting]: In addition to being [well founded](https://en.wikipedia.org/wiki/Time_preference) in economic theory, the discount factor is often required technically in order to ensure that the value function converges. If the process runs forever and continues to accumulate additive rewards, it could accumulate infinite value. The geometric discounting ensures that the infinite sum still converges even if this happens. For the processes with the reward structure we're considering here, we can safely set the discount factor to 1, because the process is constructed so that there are no loops with nonzero reward, and therefore all rewards are bounded.
-
 [^missing]: There is a caveat for the 3x3 and 4x4 policies: the full optimal policies for every state are too large to ship to the browser (without unduly imposing on GitHub's generosity in hosting this website). The player therefore only has access to the policy for the states that have a probability of at least \\(10^{-7}\\) of actually occurring when playing according to the optimal policy. This means that, unfortunately, roughly one in hundred readers will choose a random seed that takes the process to a state that is not included in the data available on the client, in which case it will stop with an error. These states are selected by calculating the transient probabilities for the absorbing Markov chain induced by the optimal policy. The mathematics are essentially the same as those in [the first post about Markov chains for 2048](/articles/2017/08/05/markov-chain-2048.html).
-
 [^me]: Of course, I'm not claiming here to be great at 2048. The [data in my first post](/articles/2017/08/05/markov-chain-2048.html#putting-theory-to-the-test) suggest otherwise!
 
 <script src="/assets/2048/mdp_player.6a864e01fc49fb07563a.js" type="text/javascript" charset="utf-8"></script>
