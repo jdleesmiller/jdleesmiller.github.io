@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Zero to Driverless Race Car with Deep Learning"
-date: 2018-12-25 16:00:00 +0000
+title: "From Zero to Driverless Race Car with Deep Learning"
+date: 2019-01-01 16:30:00 +0000
 categories: articles
-image: /assets/docker_chat_demo/chat.png
-description: TODO
+image: /assets/driverless/simulator.png
+description: Learn how to train a driverless car to drive around a simulated race track using end-to-end deep learning &mdash; from camera images to steering commands.
 ---
 
 This post is based on the following talk.
