@@ -476,6 +476,8 @@ That's also amazing!
 
 I prepared this talk for the 2018 Holtzbrinck Publishing Group AI Day. I would like to thank the organizers for giving me the impetus to finally write this talk and for providing the video.
 
+The code for this project is [open source](https://github.com/jdleesmiller/carnd-cloning).
+
 If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or maybe even [join our team](https://www.overleaf.com/jobs). `:)`
 
 &nbsp;
