@@ -12,7 +12,7 @@ This post is based on the following talk.
 Abstract:
 
 <blockquote>
-Learn how to train a driverless car to drive around a simulated race track using end-to-end deep learning &mdash; from camera images to steering and throttle. Key techniques include deep neural networks, data augmentation, and transfer learning. This was a course project, so I'll introduce the key ideas and talk about the practical steps needed to get it working. You'll also see a lot of very dangerous driving.
+Learn how to train a driverless car to drive around a simulated race track using end-to-end deep learning &mdash; from camera images to steering commands. Key techniques used include deep neural networks, data augmentation, and transfer learning. This was a course project, so I'll introduce the key ideas and talk about the practical steps needed to get it working. You'll also see a lot of very dangerous driving.
 </blockquote>
 
 &nbsp;
@@ -28,7 +28,7 @@ allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 
 Today I'm going to talk about how to build a driverless race car using deep learning.
 
-I should start by saying that this was a personal project, but it does have a connection to my work. By day, I'm CTO of [Overleaf](https://www.overleaf.com), the online LaTeX editor. Overleaf now has over three million users, but the first two, namely my co-founder and I, were driverless car researchers! We started Overleaf while we were working on the [Heathrow Pod](<https://en.wikipedia.org/wiki/ULTra_(rapid_transit)#Heathrow_Terminal_5>), which was the world's first driverless taxi system. It launched in 2011, and it's still running, so if you ever have some time at London's Heathrow Airport, you should take a ride on the pods out to business parking and back to Terminal 5.
+I should start by saying that this was a personal project, but it does have a connection to my work. By day, I'm CTO of [Overleaf](https://www.overleaf.com), the online LaTeX editor. Overleaf now has over three million users, and the first two, namely my co-founder and I, were driverless car researchers! We started Overleaf while we were working on the [Heathrow Pod](<https://en.wikipedia.org/wiki/ULTra_(rapid_transit)#Heathrow_Terminal_5>), which was the world's first driverless taxi system. It launched in 2011, and it's still running, so if you ever have some time at London's Heathrow Airport, you should take a ride on the pods out to business parking and back to Terminal 5.
 
 <div style="columns: 2; column-width: 300px;">
   <p>
@@ -45,9 +45,9 @@ I should start by saying that this was a personal project, but it does have a co
 
 The key thing allowed us to put driverless taxis into active service way back in 2011 is that the taxis run on their own roads. It's a closed system, and we used a fairly traditional systems engineering approach to design and build the system and prove that it was safe.
 
-Most research now is about how we get driverless cars to work safely on public roads, where we need to worry about human drivers and pedestrians and cyclists and traffic lights and stop signs, and lots of other messy things.
+Nowadays most driverless car research is about how we get them to work safely on public roads, where we need to worry about human drivers and pedestrians and cyclists and traffic lights and stop signs, and lots of other messy things.
 
-One of the pioneers in this area is Sebastian Thrun, who was a professor at Stanford and leader of the winning team in the 2005 [DARPA Grand Challenge](https://en.wikipedia.org/wiki/DARPA_Grand_Challenge), which in many ways inaugurated the modern driverless car era. He later left to start Udacity, one of the leading [MOOC](https://en.wikipedia.org/wiki/Massive_open_online_course) providers, and they launched a course in 2016 [^courses] on driverless cars, the Self-Driving Car Engineer nano-degree, which I took in my copious free time.
+One of the pioneers in this area is Sebastian Thrun, who was a professor at Stanford and leader of the winning team in the 2005 [DARPA Grand Challenge](https://en.wikipedia.org/wiki/DARPA_Grand_Challenge), which in many ways inaugurated the modern driverless car era. He later left to start Udacity, one of the leading [MOOC](https://en.wikipedia.org/wiki/Massive_open_online_course) providers, and they launched a driverless car course in 2016 [^courses], the Self-Driving Car Engineer nano-degree. It sounded great and with my copious free time (!) I enrolled.
 
 <div style="columns: 2; column-width: 300px;">
   <p>
@@ -64,7 +64,7 @@ One of the pioneers in this area is Sebastian Thrun, who was a professor at Stan
 
 This talk is based on one of the labs in that course, which is in turn based on a 2016 paper from NVIDIA, called [End-to-End Learning for Self-Driving Cars](https://arxiv.org/abs/1604.07316). What the NVIDIA team showed is that it's possible to take images from a front-mounted camera on a car, feed them into a convolutional neural network, which we'll talk about, and have it produce steering commands to drive the car. So, just like you look at the road ahead and decide whether you need to steer left or right, they did the same thing with a neural network.
 
-What's remarkable about this is that it's very different from the systems engineering approach that we usually use in driverless car engineering. In that approach we break the overall problem of driving the car down into lots of subproblems, such as object detection, object classification, mapping, planning, etc., and have different subsystems responsible for each of those subproblems. The subsystems are then connected up to build the whole system. Here, however, we're just going to train one big monolithic neural network, which will somehow drive the car. It feels a bit like magic.
+What's remarkable about this is that it's very different from the systems engineering approach that we usually take in driverless car engineering. In that approach we break the overall problem of driving the car down into lots of subproblems, such as object detection, object classification, mapping, planning, etc., and have different subsystems responsible for each of those subproblems. The subsystems are then connected up to make the whole system. Here, however, we're just going to train one big monolithic neural network, which will somehow drive the car. It feels a bit like magic.
 
 Our task for this lab was to reproduce this magic, and this talk follows steps I went through to do so, which were broadly:
 
@@ -95,7 +95,7 @@ You might notice that I'm not very good at this. One of the key reasons is that 
 
 The spiky blue line is the raw steering input from me pressing the arrow keys. The green and red lines are the results of applying exponential and Gaussian smoothing, respectively. I tried both kinds of smoothing, and the Gaussian smoothing turned out to work better when actually driving the car.
 
-The next training hurdle to overcome is that if I only show the car how to drive in the center of the road, it will never gain any experience of what to do if it ever finds itself off-center. To solve this, we can record _recoveries_ in training, where I stop the recording, drive off to the side of the road, start recording, and then drive back into the middle:
+The next hurdle to overcome in this training process is that if I only show the car how to drive in the center of the road, it will never gain any experience of what to do if it ever finds itself off-center. We can solve this problem by recording _recoveries_ in training, in which I stop the recording, drive off to the side of the road, start recording, and then drive back into the middle:
 
 <p style="position:relative;padding-top:56.25%;">
   <iframe src="https://www.youtube.com/embed/CwRsP-bvKHo" frameborder="0" allowfullscreen
@@ -141,7 +141,7 @@ Transfer learning means that we take someone else's network that they have alrea
   </a>
 </p>
 
-Here we're going to use the [Inception v3](https://arxiv.org/abs/1409.4842) network, which was trained by Google for an image classification competition. It takes as input an image, on the left, runs lots of computations, and on the right outputs the class of the image --- that is, what kind of thing the image shows. If you feed in the image on the left, it will tell you that that is a Siberian Husky, and if you feed in the image on the right, it will tell you that that is an Eskimo Dog. (It is interesting to note that some of the classifications are quite fine; I'm not sure I could tell the difference!)
+Here we're going to use the [Inception v3](https://arxiv.org/abs/1409.4842) network, which was trained by Google for an image classification competition. It takes as input an image, runs lots of computations, and outputs the class of the image --- that is, what kind of thing the image shows. If you feed in the image on the left, it will tell you that that is a Siberian Husky, and if you feed in the image on the right, it will tell you that that is an Eskimo Dog. (It is interesting to note that some of the classifications are quite fine; I'm not sure I could tell the difference!)
 
 The Inception network is a very large --- it has over 25 million parameters, which Google has trained with considerable effort and expense. So, how would we go about building on the work that they've done? The answer is surprisingly simple: we 'lobotomize' the network and just take the first few layers (indicated by the red dashed box below).
 
@@ -165,7 +165,7 @@ I should add the architecture of our last three layers was chosen after some tri
 
 # Convolutional Neural Networks
 
-So, how does this network actually work? This is where I will talk about some of the theory. To build a convolutional neural network, which is the kind of network that this is, we need three basic building blocks:
+So, how does this network actually work? This is where I will talk about some of the theory. To build a convolutional neural network, which is the kind of deep neural network that this is, we need three basic building blocks:
 
 1. Convolution
 2. Resizing (in particular making the images smaller)
@@ -181,7 +181,7 @@ Let's take each of these things in turn. I'm going to use this camera frame as a
 
 One way to look at it is that our overall aim for this network is to go from a camera frame at 320 by 160 pixels down to a single number, which is the steering angle that the car should apply when it sees this image.
 
-Let's start with our first building block, convolution. Convolution is a simple idea but also a very general one. To use it, we define what is called a kernel (it has many names, but I will call it a kernel), which is a small matrix of numbers. In this example we have a 3 pixel by 3 pixel kernel.
+Let's start with our first building block, convolution. Convolution is a simple idea but also a very general one. To use it, we define what is called a kernel (it has many names, but I will call it a kernel), which is a small matrix of numbers. Here we'll use a 3 pixel by 3 pixel kernel.
 
 <p align="center">
   <a href="/assets/driverless/15-convolution.png">
@@ -197,7 +197,7 @@ We start by lining up our 3 pixel by 3 pixel kernel with the 3 pixel by 3 pixel 
   </a>
 </p>
 
-This operation is very simple and can be done very efficiently, but it is also very powerful. If you use a program like Photoshop, most of the tools in the image filters menu will be using a convolution under the hood, just using different kernels. The identity kernel is not very interesting, because it just copies the input to the output, but we can also choose kernels for edge detection, blurs, sharpens, and much more.
+This operation is very simple and can be done efficiently, but it is also very powerful. If you use a program like Photoshop, most of the tools in the image filters menu will be using a convolution under the hood, each using a different kernel. The identity kernel is not very interesting, because it just copies the input to the output, but we can also choose kernels for edge detection, blurs, sharpens, and much more.
 
 To use convolution in a neural network, the key insight is that instead of very carefully engineering these kernels ourselves, we let them be learned from the training data. And we let the network learn a _lot_ of different kernels. The prefix of the Inception network that we're using has about 700 thousand parameters, many which are are kernel parameters, which Google has trained using 1.2 million images.
 
@@ -224,9 +224,9 @@ When we run convolutions with so many kernels, we basically take one input image
 
 This does what it says on the tin: every few convolutions, we resize the image to make it smaller. There are lots of ways of doing this, such as [max pooling](https://computersciencewiki.org/index.php/Max-pooling_/_Pooling).
 
-When we resize, we lose some spatial resolution, but we gain depth. It lets us take our flat input image, and by repeated convolutions and resizing, get to a sausage shaped 'image' that is lower resolution but also deeper. The network also gains, in some hand waving sense, _understanding_ with this depth --- it started out with a patch of image that was just pixels, and now it has mapped those pixels into _features_ that can carry more meaning to help it solve the task at hand.
+When we resize, we lose some spatial resolution, but we gain depth. It lets us take our flat input image, and by repeated convolutions and resizing, get to a sausage shaped 'image' that is lower resolution but also deeper. The network gains, in some handwavy sense, _understanding_ with this depth --- it started out with a patch of image that was just pixels, and now it has mapped those pixels into a set of _features_ that can carry more meaning to help it solve the task at hand.
 
-Our final building block is the Activation Function. This is where the 'neural' bit comes in.
+Our final building block is the Activation Function, which is where the 'neural' in 'neural network' comes from.
 
 <p align="center">
   <a href="/assets/driverless/20-neurons.png">
@@ -238,13 +238,13 @@ A real neuron is an incredibly complicated thing with amazing dynamics and lots 
 
 Mathematically, we can represent this as a very simple squashing function. If the sum of the inputs is negative, it outputs a value near zero, which means that it is not activated. If the sum of the inputs is positive, it returns a value near one, which means it is activated.
 
-These three building blocks are all we need. We just repeat them over and over again. It's worth noting, however, that convolution is a linear operation. If it were not for the little bits of nonlinearity that we get from (most kinds of) resizing and the activation function, the composition of convolutions would collapse down to one big linear function. However, once we add these relatively tame non-linearities into the mix, we go from being able to represent only linear functions to being able to [approximate any function](https://en.wikipedia.org/wiki/Universal_approximation_theorem), which is pretty amazing.
+These three building blocks are all we need. We just repeat them over and over again. It's worth noting, however, that convolution (of the kind used here) is a linear operation. If it were not for the little bits of nonlinearity that we get from (most kinds of) resizing and the activation function, the composition of convolutions would collapse down to one big linear function. However, once we add these relatively tame non-linearities into the mix, we go from being able to represent only linear functions to being able to [approximate any function](https://en.wikipedia.org/wiki/Universal_approximation_theorem), which is pretty amazing.
 
 # Completing the Network
 
-So, that's the end of my theory bit. Let's see what it does in practice using our example camera image. When we feed it through the first 44 layers of the Inception network, we get back 256 greyscale 'feature images'. The width and height of each feature image are about a factor of 10 smaller, but there are many more of them; the output is much smaller and deeper than the input.
+So, that's the end of my theory bit. Let's see what it does in practice using our example camera image. When we feed it through the first 44 layers of the Inception network, we get back 256 greyscale 'feature images'. The width and height of each feature image are about a factor of 10 smaller than the input image, but there are many more of them --- as noted above, the output is much smaller and deeper than the input.
 
-Here are nine feature images, starting mostly at random from feature image number 42, out of our stack of 256. Each image shows one of the responses that the network gives to our example input image. A light pixel means that the neurons in that part of the feature image are activated --- they're responding to some characteristic of the corresponding part of the input image. A dark pixel means they aren't.
+Here are nine feature images, starting mostly at random from feature image number 42, out of our stack of 256. Each image shows one of the responses that the network gives to our example input image. A light pixel means that the neuron at that point in the feature image is activated --- it's responding to some characteristic of the corresponding part of the input image. A dark pixel means it isn't activated.
 
 <p align="center">
   <a href="/assets/driverless/21-features-44.png">
@@ -260,13 +260,11 @@ If we overlay the response with the input image, it becomes easier for us to int
   </a>
 </p>
 
-In feature image number 42 (top left), for example, we can see some neurons responding fairly strongly to the edges of the road. When driving, it is pretty important to know where the edges of the road are, so we can imagine that those neurons may be useful for us.
+In feature image number 42 (top left), for example, we can see some neurons responding fairly strongly to the edges of the road. When driving, it is pretty important to know where the edges of the road are, so this feature image may be useful. Number 43 (top center) seems to be responding to the road surface, which may be similarly useful. It's also picking up some of the background, but we can also see that number 48 (middle right) is responding mainly to the background. So, it seems like some combination of these feature images would give us useful information.
 
-Number 43 (top center) seems to be responding to the road surface, which may be similarly useful. It's also picking up some of the background, but we can also see that number 48 (middle right) is responding mainly to the background. So, it seems like some combination of these feature images would give us useful information.
+It's important to note that we didn't tell this part of the network how to find features that might be helpful for our task. In fact, this part of the network was trained by Google for a completely different task, namely image classification, but it seems to have some features that look like they may be useful for our task, which is encouraging.
 
-It's important to note that we didn't tell this part of the network how to find features that might be helpful for our task. This part of the network was trained by Google for a completely different task, namely image classification, but it seems to have some features that look like they may be useful for our task, which is encouraging.
-
-This brings us back to the bit of the network that we actually train, which are the three layers that we've added.
+This brings us back to the bit of the network that we actually train, which are the three layers that we've added at the end.
 
 <p align="center">
   <a href="/assets/driverless/23-architecture.png">
@@ -274,9 +272,9 @@ This brings us back to the bit of the network that we actually train, which are 
   </a>
 </p>
 
-The first layer is another convolution. This is a 'one by one' convolution, which means a kernel size of 1 pixel by 1 pixel. A 1x1 convolution picks a set number of linear combinations of its input feature images; it is often used for [dimensionality reduction](https://stats.stackexchange.com/questions/194142/what-does-1x1-convolution-mean-in-a-neural-network). This architectural choice is motivated by the discussion above about how some linear combination of features images 42, 43 and 48 seems like it might be pretty good at finding the road --- we want to pick the most useful combinations of the 256 feature images from above. In this example, we'll pick 64 linear combinations of the 256 features.
+Our first layer is another convolution. This is a 'one by one' convolution, which means a kernel size of 1 pixel by 1 pixel. A 1x1 convolution picks a set number of linear combinations of its input feature images; it is often used for [dimensionality reduction](https://stats.stackexchange.com/questions/194142/what-does-1x1-convolution-mean-in-a-neural-network). This architectural choice is motivated by the discussion above about how some linear combination of features images 42, 43 and 48 seems like it might be pretty good at finding the road --- we want to let the network pick the most useful combinations of the 256 feature images from above.
 
-Here are some new feature images after the 1x1 convolution. They look similar, but they are generally smoother and brighter than the feature images before the 1x1 convolution.
+In this example, we'll pick 64 linear combinations of the 256 features. Here are some new feature images after that 1x1 convolution. They look similar, but they are generally smoother and brighter than the feature images before the 1x1 convolution.
 
 <div style="columns: 2; column-width: 300px;">
   <p>
@@ -307,7 +305,7 @@ The outputs of the first fully connected layer feed into the second fully connec
 
 # Time to Train
 
-Well, almost ready. Even just for three layers that we need to train, there are quite a few hyperparameters that we need to set before we can fully define the network and the training scenario. How many kernels should we use in our 1x1 convolutions? How large should each fully connected layer be? What kind of smoothing should we do on the steering angle? And many more.
+Well, almost ready. Even just for three layers that we need to train, there are quite a few _hyperparameters_ that we need to set before we can fully define the network and the training scenario. How many kernels should we use in our 1x1 convolutions? How large should each fully connected layer be? What kind of smoothing should we do on the steering angle? And many more.
 
 <p align="center">
   <a href="/assets/driverless/29-hyperparameters.png">
@@ -317,9 +315,9 @@ Well, almost ready. Even just for three layers that we need to train, there are 
 
 There are smart ways to search hyperparameters, but in this case I just tried all possible combinations in a large grid search. It takes a while to run the whole grid, but it's just computation --- set it off before bed, and by the time you get home from work, new data are waiting.
 
-Each point in the grid gives one network to train and evaluate. Then we can evaluate the performance of each of the network to choose the best hyperparameter settings.
+Each point in the grid gives one network to train and evaluate. Then we can evaluate the performance of each of the networks to choose the best hyperparameter settings.
 
-Fortunately, the actual training is made very easy by great libraries. I used [Keras](https://keras.io/). Here's an example of the Keras training output for one of the networks:
+Fortunately, the actual training is made very easy by great libraries, such as [Keras](https://keras.io/). Here's an example of the Keras training output for one of the networks:
 
 ```
 Layer (type)                     Output Shape          Param #     Connected to
@@ -357,11 +355,11 @@ Epoch 17/30
 27144/27144 [==============================] - 148s - loss: 0.0832 - val_loss: 0.0574
 ```
 
-There's a lot going on in this output, and I'd like to remark on a few things. At the start of the output, we have Keras's summary of the model we're training, which includes numbers of parameters to fit. Note that we're keeping the layers from the Inception network that Google trained completely fixed, so we're only worried about training our three layers at the end of the network. [^bottleneck]
+There's a lot going on in this output, and I'd like to remark on a few things. At the start of the output, we have Keras's summary of the model we're training, which includes numbers of parameters to fit. Remember that we're keeping the layers from the Inception network that Google trained completely fixed, so we're only worried about training our three layers at the end of the network. [^bottleneck]
 
-In the second section, we have the training progress, which Keras prints as it is going along. I've split the training data I collected into a training set (80%) and a validation set (20%). [^wing-cameras-keras] At each Epoch, Keras reports the error in the network's predictions on the training set (the `loss`) and the validation set (the `val_loss`).
+In the second section, we have the training progress, which Keras prints as it goes. I've split the training data I collected into a training set (80%) and a validation set (20%). [^wing-cameras-keras] At each Epoch, Keras reports the mean absolute error in the network's predictions on the training set (the `loss`) and the validation set (the `val_loss`).
 
-For each of our three layers, training starts with randomly initialized weights. As you might expect, the initial loss with random weights is pretty terrible, starting at around 79 [^units]. However, Keras uses that error to refine the weights for the next epoch, feeds the training set through again, and sure enough the loss drops with each successive epoch. After 17 epochs, the loss is orders of magnitude lower, at 0.08. Training stops when the validation set loss, `val_loss` starts to increase --- to run more epochs would likely lead to overfitting.
+For each of our three layers, training starts with randomly initialized weights. As you might expect, the initial loss with random weights is pretty terrible, starting at around 79 [^units]. However, Keras uses that loss to refine the weights for the next epoch, feeds the training set through again, and sure enough the loss drops with each successive epoch. After 17 epochs, the loss is orders of magnitude lower, at 0.08. Training stops when the validation set loss, `val_loss` starts to increase --- to run more epochs would likely lead to overfitting.
 
 # Run the Model with Lowest Validation Loss!
 
@@ -378,16 +376,16 @@ We can see the car weaving, and then correcting, but it overcorrects, and eventu
 
 # Try Lots of Things&hellip;
 
-And so the debugging begins. There were still lots of arbitrary decisions not in the grid of hyperparameters, so I started by adding many of those to the grid. For example:
+And so the debugging begins. There were lots of arbitrary decisions not in my initial grid of hyperparameters, so I started by adding many more to the grid. For example:
 
-- Different loss functions --- how should we measure the error? I tried mean squared error and mean average error; the latter seemed a bit better.
+- Different loss functions --- how should we measure the error? I tried mean squared error and mean absolute error; the latter seemed a bit better.
 - Different activation functions --- I tried sigmoid, tanh and [ReLU](<https://en.wikipedia.org/wiki/Rectifier_(neural_networks)>); tanh seemed a bit better.
 - Different [regularization](<https://en.wikipedia.org/wiki/Regularization_(mathematics)>) --- penalizing the weights so that they do not become too large is a common technique to avoid overfitting, and I tried several different L2-regularization weights.
 - Different distributions for initial weights (reduce variance of Normal) --- this did solve some convergence problems during training.
 - Different layer sizes --- how many neurons in each hidden layer?
 - Different network architectures --- try adding more layers? Or fewer layers?
 
-However, none of the things I tried really moved the needle. After thrashing around for a few days without getting anywhere fast, I stopped fiddling with the neural network and added a print statement to the control loop. That quickly revealed the real problem:
+However, none of the things I tried really moved the needle. After thrashing around for a few days without getting anywhere fast, I stopped fiddling with the neural network and added a print statement to the control loop. That quickly revealed the actual problem:
 
 <p align="center">
   <a href="/assets/driverless/34-latency.png">
@@ -395,9 +393,7 @@ However, none of the things I tried really moved the needle. After thrashing aro
   </a>
 </p>
 
-The controller was spending too much time processing each frame, so it was only actually able to steer about three times per second. If you imagine trying to steer, but you can only touch the wheel three times a second, it does seem pretty tough. Further investigation revealed that it was spending most of its time in the Inception prefix layers.
-
-One solution would have been to buy a faster laptop. However, it turned out that it was possible to use fewer inception layers, in particular the first 12 layers, instead of the first 44 (I know it looks like 7 in the diagram, but some are not visible):
+The controller was spending too much time processing each frame, so it was only actually able to steer about three times per second. If you imagine trying to steer, but you can only touch the wheel three times a second, it does seem pretty tough. Further investigation revealed that it was spending most of its time in the Inception prefix layers. One solution would have been to buy a faster laptop. However, it turned out that it was possible to use fewer inception layers, in particular the first 12 layers, instead of the first 44 (it looks like 7 in the diagram, but some are not visible):
 
 <p align="center">
   <a href="/assets/driverless/35-inception-prefix-12.png">
@@ -420,7 +416,7 @@ Eventually it gets to a turn where there are some trees ahead of it, and it does
 
 The resolution for this problem was basically to add more training data --- I drove around that corner a few more times, and eventually it learned to make it. At around the same time, Udacity released a bunch of training data from someone who had a steering wheel, instead of having to do the arrow keys and smoothing, so I added that in too.
 
-I also did some _augmentation_ to the training data, which in retrospect was fairly obvious: you can mirror every image in your original training set and negate the steering angle, and you have another perfectly good training example.
+I also did some _augmentation_ with the training data, which in retrospect was fairly obvious: you can mirror every image in your original training set and negate the steering angle, and you have another training example.
 
 # The Final Result
 
@@ -435,7 +431,7 @@ I changed the throttle control to let it drive at 30mph, which was the cap in th
 
 # Does it Generalize?
 
-So, we've seen that for this race track, we can train the network and make it go around. What if we put it on a totally different race track? Fortunately Udacity provided just a second track in the simulator, so let's try it out.
+So, we've seen that for this race track, we can train the network and make it go around. What if we put it on a totally different race track? Fortunately Udacity provided just a second track in the simulator, so let's try it out. Note that this is exactly the same network as in the previous video, and it has not seen any part of this new track in its training data.
 
 <p style="position:relative;padding-top:56.25%;">
   <iframe src="https://www.youtube.com/embed/3ew8wv6Lhv0" frameborder="0" allowfullscreen
@@ -480,7 +476,7 @@ That's also amazing!
 
 I prepared this talk for the 2018 Holtzbrinck Publishing Group AI Day. I would like to thank the organizers for giving me the impetus to finally write this talk and for providing the video.
 
-If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or even apply to work at [Overleaf](https://www.overleaf.com/jobs). `:)`
+If you've read this far, perhaps you should [follow me on twitter](https://twitter.com/jdleesmiller), or maybe even [join our team](https://www.overleaf.com/jobs). `:)`
 
 &nbsp;
 
