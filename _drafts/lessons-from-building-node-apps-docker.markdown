@@ -182,10 +182,10 @@ So, it's simple to do, but there is quite a bit going on behind the scenes to ma
 /srv/chat$ tree # in image
 .
 ├── node_modules
-│   ├── abbrev
+│   ├── accepts
 ...
-│   └── xmlhttprequest
-├── npm-shrinkwrap.json
+│   └── yeast
+├── package-lock.json
 └── package.json
    </pre>
 
@@ -196,7 +196,7 @@ So, it's simple to do, but there is quite a bit going on behind the scenes to ma
 ├── Dockerfile
 ├── docker-compose.yml
 ├── node_modules
-├── npm-shrinkwrap.json
+├── package-lock.json
 └── package.json
    </pre>
    The bad news is that the `node_modules` in the image are hidden by the bind; inside the container, we instead see only an empty `node_modules` folder on the host.
@@ -207,9 +207,9 @@ So, it's simple to do, but there is quite a bit going on behind the scenes to ma
 .
 ├── Dockerfile
 ├── docker-compose.yml<div style="color: blue;">├── node_modules
-│   ├── abbrev
+│   ├── accepts
 ...
-│   └── xmlhttprequest</div>├── npm-shrinkwrap.json
+│   └── yeast</div>├── package-lock.json
 └── package.json
    </pre>
 
@@ -217,7 +217,7 @@ This gives us what we want: our source files on the host are bound inside the co
 
 We can also now explain the final `mkdir -p node_modules` step in the bootstrapping `Dockerfile` above: we have not actually installed any packages yet, so `npm install` doesn't create the `node_modules` folder during the build. When Docker creates the `/srv/chat/node_modules` volume, it will automatically create the folder for us, but again it will be owned by root, which means the node user won't be able to write to it. We can preempt that by creating `node_modules` as the node user during the build. Once we have some packages installed, we no longer need this line.
 
-### Package Installation and Shrinkwrap
+### Package Installation
 
 So, let's rebuild the image, and we'll be ready to install packages.
 
@@ -234,9 +234,7 @@ node@241554e6b96c:/srv/chat$ npm install --save express
 node@241554e6b96c:/srv/chat$ exit
 ```
 
-Note you don't usually have to specify the version exactly here; it's fine to just run `npm install --save express` to take whatever the latest version is, because the `package.json` and the `package-lock.json` will hold the dependency at that version next time the build runs.
-
-The reason to use npm's [package-lock.json](https://docs.npmjs.com/files/package-lock.json) feature is that, while you can fix the versions of your direct dependencies in your `package.json`, you can't fix the versions of their dependencies, which may be quite loosely specified. This means that if you or someone else rebuilds the image at some future time, you can't guarantee (without using `package-lock.json`) that it won't pull down a different version of some indirect dependency, breaking your app. This seems to happen to me much more often than one might expect, so I advocate using `package-lock.json`. If you are familiar with ruby's excellent [bundler](http://bundler.io/) dependency manager, `npm-shrinkwrap.json` is much like `Gemfile.lock`.
+The `package-lock.json` file, which has for most purposes replaced the older `npm-shrinkwrap.json` file, is important for ensuring that Docker image builds are repeatable. It records the versions of all direct and indirect dependencies and ensures that `npm install`s in Docker builds on different machines will all get the same dependency tree.
 
 Finally, it's worth noting that the `node_modules` we installed are not present on the host. There may be an empty `node_modules` folder on the host, which is a side effect of the binds and volumes we created, but the actual files live in the named `chat_node_modules` volume. If we run another shell in the `chat` container, we'll find them there:
 
