@@ -152,7 +152,7 @@ And the explanation:
 
 1. The `--chown=node:node` flag for `COPY` ensures that the files are owned by the unprivileged `node` user rather than root, which is the default. This is important, because we'll want the `node` user to be able to write to those files during the build.
 
-1. The `npm install` step will run as the `node` user and install the dependencies in `srv/chat/node_modules` inside the container. This is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so this bind effectively hides the node modules that we installed in the image. The final line `mkdir -p node_modules` step and the next section are related to how we deal with this.
+1. The `npm install` step will run as the `node` user and install the dependencies in `srv/chat/node_modules` inside the container. This is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so this bind effectively hides the node modules that we installed in the image. The final line `mkdir -p node_modules` step and the next section are related to how we deal with this [^build-as-root].
 
 ### The `node_modules` Volume Trick
 
@@ -493,6 +493,21 @@ RUN groupmod -g 500 node && usermod -u 500 node
 [^srv]: Fundamentally, it doesn't matter where the files go in the container. `/opt` would also be a very reasonable choice. Another option would be to keep them under `/home/node`, which simplifies some file permissions management in development but requires more typing and makes less sense in production, where I'll advocate for letting root own the application files as a way of keeping them read only. In any case, `/srv` will do.
 
 [^compose-file-v2]: Both the 2.x and 3.x versions of the Docker Compose file format are still being actively developed. The main benefit of the 3.x series is that it is cross-compatible between single-node applications running on Docker Compose and multi-node applications running on Docker Swarm. In order to be compatible, version 3 drops some useful features from version 2. If you are only interested in Docker Compose, you might prefer to stick with the [latest 2.x format](https://docs.docker.com/compose/compose-file/compose-file-v2/).
+
+[^build-as-root]: Some of the trickery in our `Dockerfile` could be removed if we ran the `npm install` build step as root. We can do this and still use the unprivileged node user at runtime, which is where most of the security benefits reside. In that case the `Dockerfile` would look more like this:
+    ```Dockerfile
+    FROM node:10.16.3
+
+    WORKDIR /srv/chat
+
+    COPY package.json package-lock.json ./
+
+    RUN npm install --quiet
+
+    USER node
+    ```
+
+    This is cleaner, without the need for some `mkdir` and `chown` tricks, at the expense of running `npm install` as root at build time. Overall, I think the modest increase in complexity is worth it to avoid running the build as root, but you might decide that you prefer the cleaner `Dockerfile`. One caveat if you choose this path is that in later sections, you would need to run a shell as root (instead of the node user) in order to install new dependencies, as in `docker-compose run --rm --user root chat bash`; this is a bit like "sudoing" to install packages, which is a fairly familiar experience.
 
 [^named-volume]: We could instead use an *anonymous volume* to contain the modules, just by omitting the name:
     ```diff
