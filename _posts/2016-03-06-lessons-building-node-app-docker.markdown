@@ -7,6 +7,12 @@ image: /assets/docker_chat_demo/chat.png
 description: Here are some tips and tricks that I learned the hard way when developing and deploying web applications written for node.js using Docker.
 ---
 
+<p style="text-align: center; font-size: large; background-color: #eef; padding: 1em;">
+<strong>
+<a href="/articles/2019/09/06/lessons-building-node-app-docker.html">REVISED AND UPDATED VERSION NOW AVAILABLE HERE</a>
+</strong>
+</p>
+
 **Updates**
 
 **2016-04-22** There was some lively [discussion about this article on Hacker News](https://news.ycombinator.com/item?id=11545975).
