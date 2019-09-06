@@ -22,7 +22,7 @@ This tutorial assumes you already have some familiarity with Docker and node. If
 
 ### Getting Started
 
-We're going to set things up from scratch. The final code is available [on github here](https://github.com/jdleesmiller/docker-chat-demo), and there are tags for each step along the way. [Here's the code for the first step](https://github.com/jdleesmiller/docker-chat-demo/tree/01-bootstrapping), in case you'd like to follow along.
+We're going to set things up from scratch. The final code is available [on github here](https://github.com/jdleesmiller/docker-chat-demo), and there are tags for each step along the way. [Here's the code for the first step](https://github.com/jdleesmiller/docker-chat-demo/tree/2019-01-bootstrapping), in case you'd like to follow along.
 
 Without Docker, we'd start by installing node and any other dependencies on the host and running `npm init` to create a new package. There's nothing stopping us from doing that here, but we'll learn more if we use Docker from the start. (And of course the whole point of using Docker is that you don't have to install things on the host.) We'll start by creating a "bootstrapping container" that has node installed, and we'll use it to set up the npm package for the application.
 
@@ -112,7 +112,7 @@ $ tree
 └── package.json
 ```
 
-Here's the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/02-bootstrapped).
+Here's the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/2019-02-bootstrapped).
 
 ## Installing Dependencies
 
@@ -262,7 +262,7 @@ found 0 vulnerabilities
 # ...
 ```
 
-Here’s the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/03-dependencies).
+Here’s the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/2019-03-dependencies).
 
 ## Running the App
 
@@ -309,7 +309,7 @@ Then you can see it running on `http://localhost:3000`.
 
 ![Docker chat demo working!](/assets/docker_chat_demo/chat.png)
 
-Here's the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/04-the-app).
+Here's the [resulting code on github](https://github.com/jdleesmiller/docker-chat-demo/tree/2019-04-the-app).
 
 ## Docker for Dev and Prod
 
