@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Lessons from Building Node Apps in Docker (2019)"
-date: 2019-08-26 20:00:00 +0000
+date: 2019-09-06 16:00:00 +0000
 categories: articles
 image: /assets/docker_chat_demo/chat.png
 description: Here are some tips and tricks I've learned for developing and deploying web applications written for node.js using Docker (2019 edition).
@@ -90,7 +90,7 @@ This output indicates that the container ran, echoed `ready` and exited successf
 
 Now we have a node environment set up in Docker, we're ready to set up the initial npm package files. To do this, we'll run an interactive shell in the container for the `chat` service and use it to set up the initial package files:
 
-> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the `node` user in the container will create files on the host via a bind mount; if the uid doesn't match between host and container, your user on the host may not be able to read or write them. See Appendix A for some workarounds for this problem. Docker for Mac users don't have to worry about this because of some uid remapping magic going on behind the scenes, but Docker for Linux get much better performance, so I'd call it a draw.
+> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the `node` user in the container will create files on the host via a bind mount; if the uid doesn't match between host and container, your user on the host may not be able to read or write them. Docker for Mac users don't have to worry about this because of some uid remapping magic going on behind the scenes, but Docker for Linux get much better performance, so I'd call it a draw.
 
 ```shell
 $ docker-compose run --rm chat bash
@@ -475,18 +475,6 @@ My next article in this series will pick up where we left off about testing node
 <p>&nbsp;</p>
 
 If you've read this far, you should [follow me on twitter](https://twitter.com/jdleesmiller), or maybe even apply to work at [Overleaf](https://www.overleaf.com). `:)`
-
-<p>&nbsp;</p>
----
-<p>&nbsp;</p>
-
-# Appendix A: Working around UID/GID Mismatches on Linux
-
-TODO
-
-```Dockerfile
-RUN groupmod -g 500 node && usermod -u 500 node
-```
 
 # Footnotes
 
