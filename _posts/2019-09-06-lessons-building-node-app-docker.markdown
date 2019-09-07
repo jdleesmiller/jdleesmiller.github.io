@@ -407,17 +407,15 @@ $ docker-compose run --rm chat npm install --save-dev nodemon
 to install nodemon, we can update the compose file to run it:
 ```diff
 diff --git a/docker-compose.yml b/docker-compose.yml
-index 47c335d..c7478a2 100644
+index 2ee0d9b..173a297 100644
 --- a/docker-compose.yml
 +++ b/docker-compose.yml
-@@ -5,7 +5,9 @@ services:
+@@ -5,7 +5,7 @@ services:
      build:
        context: .
        target: development
 -    command: node index.js
 +    command: npx nodemon index.js
-+    environment:
-+      NODE_ENV: development
      ports:
        - '3000:3000'
      volumes:
