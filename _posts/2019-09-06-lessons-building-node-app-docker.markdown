@@ -42,7 +42,7 @@ It's a short file, but there already some important points:
 
 1. It starts from the official Docker image for the latest long term support (LTS) node release, at time of writing. I prefer to name a specific version, rather than one of the 'floating' tags like `node:lts` or `node:latest`, so that if you or someone else builds this image on a different machine, they will get the same version, rather than risking an accidental upgrade and attendant head-scratching.
 
-1. The `USER` step tells Docker to run any subsequent build steps, and later the process in the container, as the `node` user, which is an unprivileged user that comes built into all of the official node images from Docker. Without this line, they would run as **root**, which is against security best practices and in particular the [principle of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege). Many docker tutorials skip this step for simplicity, and we will have to do some extra work to avoid running as root, but I think it's very important.
+1. The `USER` step tells Docker to run any subsequent build steps, and later the process in the container, as the `node` user, which is an unprivileged user that comes built into all of the official node images from Docker. Without this line, they would run as **root**, which is against security best practices and in particular the [principle of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege). Many Docker tutorials skip this step for simplicity, and we will have to do some extra work to avoid running as root, but I think it's very important.
 
 1. The `WORKDIR` step sets the working directory for any subsequent build steps, and later for containers created from the image, to `/srv/chat`, which is where we'll put our application files. The `/srv` folder should be available on any system that follows the [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/fhs.shtml), which says that it is for "site-specific data which is served by this system", which sounds like a good fit for a node app [^srv].
 
@@ -63,7 +63,7 @@ Again there is quite a bit to unpack:
 
 1. The `version` line tells Docker Compose which version of its [file format](https://docs.docker.com/compose/compose-file) we are using. Version 3.7 is the latest at the time of writing, so I've gone with that, but older 3.x and 2.x versions would also work fine here; in fact, the 2.x series might even be a better fit, depending on your use case [^compose-file-v2].
 
-1. The file defines a single service, built from the `Dockerfile` in the current directory, denoted `.`. All the service does for now is to echo `ready` and exit.
+1. The file defines a single service called `chat`, built from the `Dockerfile` in the current directory, denoted `.`. All the service does for now is to echo `ready` and exit.
 
 1. The volume line, `.:/srv/chat`, tells Docker to bind mount the current directory `.` on the host at `/srv/chat` in the container, which is the `WORKDIR` we set up in the `Dockerfile` above. This means that changes we'll make to source files on the host will be automatically reflected inside the container, and vice versa. This is very important for keeping your test-edit-reload cycles as short as possible in development. It will, however, create some issues with how npm installs dependencies, which we'll come back to shortly.
 
@@ -148,9 +148,9 @@ And here's the explanation:
 
 1. The `COPY` to `./` copies the npm packaging files to the `WORKDIR` that we set up above. The trailing `/` tells Docker that the destination is a folder. The reason for copying in only the packaging files, rather than the whole application folder, is that Docker will cache the results of the `npm install` step below and rerun it only if the packaging files change. If we copied in all our source files, changing any one would bust the cache even though the required packages had not changed, leading to unnecessary `npm install`s in subsequent builds.
 
-1. The `--chown=node:node` flag for `COPY` ensures that the files are owned by the unprivileged `node` user rather than root, which is the default. This is mainly just for tidiness.
+1. The `--chown=node:node` flag for `COPY` ensures that the files are owned by the unprivileged `node` user rather than root, which is the default [^build-as-root].
 
-1. The `npm install` step will run as the `node` user in the working directory to install the dependencies in `/srv/chat/node_modules` inside the container. This is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so the bind effectively hides the node modules that we installed in the image. The final `mkdir -p node_modules` step and the next section are related to how we deal with this [^build-as-root].
+1. The `npm install` step will run as the `node` user in the working directory to install the dependencies in `/srv/chat/node_modules` inside the container. This is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so the bind effectively hides the node modules that we installed in the image. The final `mkdir -p node_modules` step and the next section are related to how we deal with this.
 
 ### The `node_modules` Volume Trick
 
@@ -228,13 +228,15 @@ The chat app requires express, so let's get a shell in the container and `npm in
 
 ```shell
 $ docker-compose run --rm chat bash
+Creating volume "docker-chat-demo_chat_node_modules" with default driver
 node@241554e6b96c:/srv/chat$ npm install --save express
+# ...
 node@241554e6b96c:/srv/chat$ exit
 ```
 
 The `package-lock.json` file, which has for most purposes replaced the older `npm-shrinkwrap.json` file, is important for ensuring that Docker image builds are repeatable. It records the versions of all direct and indirect dependencies and ensures that `npm install`s in Docker builds on different machines will all get the same dependency tree.
 
-Finally, it's worth noting that the `node_modules` we installed are not present on the host. There may be an empty `node_modules` folder on the host, which is a side effect of the binds and volumes we created, but the actual files live in the named `chat_node_modules` volume. If we run another shell in the `chat` container, we'll find them there:
+Finally, it's worth noting that the `node_modules` we installed are not present on the host. There may be an empty `node_modules` folder on the host, which is a side effect of the binds and volumes we created, but the actual files live in the `chat_node_modules` volume. If we run another shell in the `chat` container, we'll find them there:
 
 ```shell
 $ ls node_modules
@@ -258,8 +260,7 @@ We are finally ready to install the app, so we'll copy in [the remaining source 
 Then we'll install the `socket.io` package. At the time of writing, the chat example is only compatible with socket.io version 1, so we need to request version 1:
 
 ```sh
-$ docker-compose run --rm chat bash
-node@b3722dfddbd6:/srv/chat$ npm install --save socket.io@1
+$ docker-compose run --rm chat npm install --save socket.io@1
 # ...
 ```
 
@@ -346,9 +347,11 @@ index d48e026..6c8965d 100644
 
     This multi-stage `Dockerfile` runs `npm install` in the first stage, which has the full node image at its disposal for the build. Then it copies the resulting `node_modules` folder to the second stage image, which uses the `slim` base image. This technique reduces the size of the production image from 909MB to 152MB, which is about a factor of 6 saving for relatively little effort [^alpine].
 
-1. Again the `USER node` command tells Docker to run the build and the application as the unprivileged `node` user rather than as root.
+1. Again the `USER node` command tells Docker to run the build and the application as the unprivileged `node` user rather than as root. We also have to repeat the `WORKDIR`, because it doesn't persist into the second stage automatically.
 
-1. The `COPY --from=development --chown=root:root ...` line copies the dependencies installed in the preceding `development` stage into the production stage and makes them owned by root, so the node user can read but not write them. The `COPY . .` line then copies the rest of the application files from the host to the working directory in the container, namely `/srv/chat`.
+1. The `COPY --from=development --chown=root:root ...` line copies the dependencies installed in the preceding `development` stage into the production stage and makes them owned by root, so the node user can read but not write them.
+
+1. The `COPY . .` line then copies the rest of the application files from the host to the working directory in the container, namely `/srv/chat`.
 
 1. Finally, the `CMD` step specifies the command to run. In the development stage, the application files came from bind mounts set up with docker-compose, so it made sense to specify the command in the `docker-compose.yml` file instead of the `Dockerfile`. Here it makes more sense to specify the command in the `Dockerfile`, which builds it into the container.
 
@@ -455,7 +458,7 @@ We jumped through some hopefully edifying hoops to bootstrap a node environment 
 
 Node / npm's habit of putting dependencies in the `node_modules` subfolder makes our lives a little bit more complicated than other solutions, such as ruby's bundler, that install your dependencies outside the application folder, but we were able to work around that fairly easily with the nested node modules volume trick.
 
-Finally, we used Docker's multi stage build feature to produce a `Dockerfile` suitable for both development and production. This simple but powerful feature is useful in a wide variety of situations, and we'll see it again in some future articles.
+Finally, we used Docker's multi-stage build feature to produce a `Dockerfile` suitable for both development and production. This simple but powerful feature is useful in a wide variety of situations, and we'll see it again in some future articles.
 
 My next article in this series will pick up where we left off about testing node.js services in Docker. See you then!
 
@@ -500,9 +503,9 @@ If you've read this far, you should [follow me on twitter](https://twitter.com/j
            - .:/srv/chat
     +      - /srv/chat/node_modules
     ```
-    That would be shorter, but it is very easy to forget to clean up anonymous volumes, which leads to a profusion of anonymous modules with no indication which container they came from. You can still clean them up with `docker system prune`, but that is a bit of 'sledge hammer to crack a nut'. The named volumes approach is a bit more verbose but also more transparent.
+    That would be shorter, but it is very easy to forget to clean up anonymous volumes, which leads to a profusion of anonymous modules with no indication which container they came from. You can still clean them up with `docker system prune`, but that is a bit of a 'sledge hammer to crack a nut'. The named volumes approach is a bit more verbose but also more transparent.
 
-    (Extra credit: you might wonder where those dependency files in the volume actually get stored. In short, whether using named or anonymous volumes, they live in a separate directory managed by docker on the host; see the [docker docs about volumes](https://docs.docker.com/storage/volumes/) for more info.)
+    (Extra credit: you might wonder where those dependency files in the volume actually get stored. In short, whether using named or anonymous volumes, they live in a separate directory managed by Docker on the host; see the [Docker docs about volumes](https://docs.docker.com/storage/volumes/) for more info.)
 
 [^no-build]: The eagle eyed reader may have noticed that we don't have to `docker-compose build` to get the dependencies installed before `docker-compose up`. This is because it is running with the node modules in the `chat_node_modules` named volume. The next time we do a build, npm will install the dependencies from scratch into the image, but for installing packages day-to-day, we can just run `npm install` in the container without having to rebuild.
 
