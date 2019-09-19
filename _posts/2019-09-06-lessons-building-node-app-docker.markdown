@@ -18,7 +18,7 @@ In this updated tutorial, we'll set up the [socket.io chat example](http://socke
 * Ensure repeatable builds with [package-lock.json](https://docs.npmjs.com/files/package-lock.json).
 * Share a `Dockerfile` between development and production using multi-stage builds.
 
-This tutorial assumes you already have some familiarity with Docker and node. If you’d like a gentle intro to Docker first, I'd recommend running through [Docker's official introduction](https://docs.docker.com/get-started/).
+This tutorial assumes you already have some familiarity with Docker and node. If you'd like a gentle intro to Docker first, I'd recommend running through [Docker's official introduction](https://docs.docker.com/get-started/).
 
 ### Getting Started
 
@@ -150,11 +150,13 @@ And here's the explanation:
 
 1. The `--chown=node:node` flag for `COPY` ensures that the files are owned by the unprivileged `node` user rather than root, which is the default [^build-as-root].
 
-1. The `npm install` step will run as the `node` user in the working directory to install the dependencies in `/srv/chat/node_modules` inside the container. This is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so the bind effectively hides the node modules that we installed in the image. The final `mkdir -p node_modules` step and the next section are related to how we deal with this.
+1. The `npm install` step will run as the `node` user in the working directory to install the dependencies in `/srv/chat/node_modules` inside the container.
+
+This last step is what we want, but it causes a problem in development when we bind mount the application folder on the host over `/srv/chat`. Unfortunately, the `node_modules` folder doesn't exist on the host, so the bind effectively hides the node modules that we installed in the image. The final `mkdir -p node_modules` step and the next section are related to how we deal with this.
 
 ### The `node_modules` Volume Trick
 
-There are [several](https://github.com/docker/example-voting-app/blob/7629961971ab5ca9fdfeadff52e7127bd73684a5/result-app/Dockerfile#L8) [ways](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/) [around](https://semaphoreci.com/community/tutorials/dockerizing-a-node-js-web-application) this node modules hiding problem, but I think the most elegant is to [use a volume](http://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds) within the bind to contain `node_modules`. To do this, we have to add a few lines to our docker compose file:
+There are [several](https://github.com/docker/example-voting-app/blob/7629961971ab5ca9fdfeadff52e7127bd73684a5/result-app/Dockerfile#L8) [ways](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/) [around](https://semaphoreci.com/community/tutorials/dockerizing-a-node-js-web-application) the node modules hiding problem, but I think the most elegant is to [use a volume](http://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds) within the bind to contain `node_modules`. To do this, we have to add a few lines to our docker compose file:
 
 ```diff
 diff --git a/docker-compose.yml b/docker-compose.yml
@@ -464,6 +466,8 @@ My next article in this series will pick up where we left off about testing node
 ---
 <p>&nbsp;</p>
 
+Thanks to [Hope Thomas](https://twitter.com/h0peth0mas), [Ali Smith](https://twitter.com/40_thieves) and [Miguel Serrano](https://twitter.com/mserranom) for reviewing drafts of this article.
+
 If you've read this far, you should [follow me on twitter](https://twitter.com/jdleesmiller), or maybe even apply to work at [Overleaf](https://www.overleaf.com). `:)`
 
 <p>&nbsp;</p>
@@ -474,7 +478,7 @@ If you've read this far, you should [follow me on twitter](https://twitter.com/j
 
 When using bind mounts to share files between a Linux host and a container, you are likely to hit permissions problems if the numeric uid of the user in the container doesn't match that of the user on the host. For example, files created on the host may not be readable or writable in the container, or vice versa.
 
-We can work around this, but first it's worth noting that if your uid on the host is 1000, everything is fine for Dockerized development with node. This is because Docker's official node images all use uid 1000 for the node user. You can check your uid on the host by running the `id` command, which prints it out. For example, mine currently says `uid=1000(john) gid=1000(john) ...`.
+We can work around this, but first it's worth noting that if your uid on the host is 1000, everything is fine for Dockerized development with node. This is because Docker's official node images [use uid 1000](https://github.com/nodejs/docker-node/blob/c66cc451670ba92c260ce7ea9956e9c9b91bad4d/10/stretch/Dockerfile#L3-L4) for the node user. You can check your uid on the host by running the `id` command, which prints it out. For example, mine currently says `uid=1000(john) gid=1000(john) ...`.
 
 A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu install process. If you can convince everyone on your team to set their uid to 1000, everything will work fine. If not, here are a couple of workarounds:
 
@@ -485,7 +489,7 @@ A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu ins
 2. Use Dockerfile [build arguments](https://docs.docker.com/engine/reference/builder/#arg) to configure the UID and GID of the node user at build time. We can do this by adding a few lines to the development stage of the `Dockerfile`:
    ```Dockerfile
    FROM node:10.16.3 AS development
-   
+
    ARG UID=1000
    ARG GID=1000
    RUN \
@@ -499,7 +503,7 @@ A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu ins
    Each developer with a non-1000 uid/gid has to set these `args` for Docker Compose. One way to do this is to use a `docker-compose.override.yml` file that is not checked into version control (i.e. is in `.gitignore`), to set the `args`, like this:
    ```yaml
    version: '3.7'
-   
+
    services:
      chat:
        build:
