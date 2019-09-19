@@ -88,7 +88,7 @@ This output indicates that the container ran, echoed `ready` and exited successf
 
 #### Initializing an npm package
 
-> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the user in the container needs to have permissions to read and write files on the host via the bind mount, and vice versa. Docker for Mac users don't have to worry about this because of some uid remapping magic behind the scenes, but Docker for Linux get much better performance, so I'd call it a draw.
+> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the user in the container needs to have permissions to read and write files on the host via the bind mount, and vice versa. I've included [an appendix with advice on how to deal with this issue](#appendix-dealing-with-uid-mismatches-on-linux). Docker for Mac users don't have to worry about it because of some uid remapping magic behind the scenes, but Docker for Linux get much better performance, so I'd call it a draw.
 
 Now we have a node environment set up in Docker, we're ready to set up the initial npm package files. To do this, we'll run an interactive shell in the container for the `chat` service and use it to set up the initial package files:
 
@@ -465,6 +465,49 @@ My next article in this series will pick up where we left off about testing node
 <p>&nbsp;</p>
 
 If you've read this far, you should [follow me on twitter](https://twitter.com/jdleesmiller), or maybe even apply to work at [Overleaf](https://www.overleaf.com). `:)`
+
+<p>&nbsp;</p>
+---
+<p>&nbsp;</p>
+
+# Appendix: Dealing with UID mismatches on Linux
+
+When using bind mounts to share files between a Linux host and a container, you are likely to hit permissions problems if the numeric uid of the user in the container doesn't match that of the user on the host. For example, files created on the host may not be readable or writable in the container, or vice versa.
+
+We can work around this, but first it's worth noting that if your uid on the host is 1000, everything is fine for Dockerized development with node. This is because Docker's official node images all use uid 1000 for the node user. You can check your uid on the host by running the `id` command, which prints it out. For example, mine currently says `uid=1000(john) gid=1000(john) ...`.
+
+A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu install process. If you can convince everyone on your team to set their uid to 1000, everything will work fine. If not, here are a couple of workarounds:
+
+1. Run the service as root in development by simply omitting the `USER node` step from the development stage of the Dockerfile (introduced in the [Docker for Dev and Prod](#docker-for-dev-and-prod) section). This ensures that the user in the container (root) will be able to read and write files on the host. If the user in the container creates any files, they'll be owned as root on the host, but you can always fix that by running `sudo chown -R your-user:your-group .` on the host.
+
+   You can (and should) still run the process as an unprivileged user in production.
+
+2. Use Dockerfile [build arguments](https://docs.docker.com/engine/reference/builder/#arg) to configure the UID and GID of the node user at build time. We can do this by adding a few lines to the development stage of the `Dockerfile`:
+   ```Dockerfile
+   FROM node:10.16.3 AS development
+   
+   ARG UID=1000
+   ARG GID=1000
+   RUN \
+     usermod --uid ${UID} node && groupmod --gid ${GID} node &&\
+     mkdir /srv/chat && chown node:node /srv/chat
+
+   # ...
+   ```
+   This introduces two build args, `UID` and `GID`, which default to the existing value of 1000 if no arguments are given, and changes the `node` user and group to use those IDs before creating any files as the user.
+
+   Each developer with a non-1000 uid/gid has to set these `args` for Docker Compose. One way to do this is to use a `docker-compose.override.yml` file that is not checked into version control (i.e. is in `.gitignore`), to set the `args`, like this:
+   ```yaml
+   version: '3.7'
+   
+   services:
+     chat:
+       build:
+         args:
+           UID: '500'
+           GID: '500'
+   ```
+   In this example, the uid and gid in the container will be set to 500. There may be some easier ways of doing this [one day](https://github.com/docker/compose/issues/2380). Again, these changes only need to be done in the development stage, not production.
 
 # Footnotes
 
