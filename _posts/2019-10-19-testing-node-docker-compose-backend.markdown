@@ -170,7 +170,7 @@ It's short but fairly dense. Let's break it down:
 
 ### Development Helper Scripts
 
-Now that we Compose set up, let's see how to use it. While not strictly speaking required, it is often helpful to write some [shell scripts](https://github.com/jdleesmiller/todo-demo/tree/todo-backend/todo/bin) to automate common tasks. This saves on typing and helps with consistency. The most interesting script is the `bin/up` script, which handles the initial setup and can also be safely re-run to make sure you are up to date after pulling in remote changes:
+Now that Compose is set up, let's see how to use it. While not strictly speaking required, it is often helpful to write some [shell scripts](https://github.com/jdleesmiller/todo-demo/tree/todo-backend/todo/bin) to automate common tasks. This saves on typing and helps with consistency. The most interesting script is the `bin/up` script, which handles the initial setup and can also be safely re-run to make sure you are up to date after pulling in remote changes:
 
 #### [`bin/up`](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/bin/up)
 
@@ -234,7 +234,7 @@ Model tests test the 'model' layer of the [Model-View-Controller](https://en.wik
   <a href="/assets/todo-demo/todo-backend-tests.svg"><img src="/assets/todo-demo/todo-backend-tests.svg" alt="From left to right, a database, then a service comprising models, controllers and views. Model tests encompass the database and the models. Integration tests encompass the database, models, controllers and views."></a>
 </p>
 
-Note that both model and integration tests have access to the database; the database is not mocked, because it is an essential part of the application. There are certainly cases where mocks are the right tool for the job, but I think the primary database is rarely one of them. I've included an appendix with some further discussion on this point.
+Note that both model and integration tests have access to the database; the database is not mocked, because it is an essential part of the application. There are certainly cases where mocks are the right tool for the job, but I think the primary database is rarely one of them. I've included [an appendix](#appendix-views-on-testing) with some further discussion on this point.
 
 #### Model Tests
 
@@ -295,7 +295,7 @@ Technically, the main thing that distinguishes a model test from an integration 
 
 #### Integration tests
 
-That brings us to integration tests, in which we do start up the express app and test it primarily by making HTTP requests. I wrote another [test helper](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/test/support/test-server.js) to start express in a global mocha `before` hook, which starts the server once for the whole test suite. The helper also puts a `testClient` object on mocha's `this` with convenience methods for making requests against the app, such as `this.testClient.post`. Here are some integration tests:
+That brings us to integration tests, in which we do start up the express app and test it primarily by making HTTP requests. I wrote another [test helper](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/test/support/test-server.js) to start the express application in a global mocha `before` hook, so it starts once for the whole test suite. The helper also puts a `testClient` object on mocha's `this` with convenience methods for making requests against the app, such as `this.testClient.post`. Here are some integration tests:
 
 #### [`test/integration/todo.test.js`](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/test/integration/todo.test.js)
 ```js
