@@ -146,7 +146,7 @@ services:
     environment:
       PORT: 8080
     ports:
-      - '3000:8080'
+      - '8080:8080'
     volumes:
       - .:/srv/todo
       - todo_node_modules:/srv/todo/node_modules
@@ -164,7 +164,7 @@ It's short but fairly dense. Let's break it down:
 - The `todo` service is built from the current directory, using the `development` stage of the multi-stage Dockerfile, like [in my last post](/articles/2019/09/06/lessons-building-node-app-docker.html#docker-for-dev-and-prod).
 - The `command` runs the service in the container under [nodemon](https://nodemon.io/), so it will restart automatically when the code changes in development.
 - The `todo` service `depends_on` the `postgres` database; this just ensures that the database is started whenever the `todo` service starts.
-- The `todo` service [uses the `PORT` environment variable](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/server.js#L5) to decide what port to listen on in the container, here `8080`. The `ports` key then tells compose to expose port `8080` in the container on port `3000` on the host, so we can access the service on `http://localhost:3000`.
+- The `todo` service [uses the `PORT` environment variable](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/server.js#L5) to decide what port to listen on in the container, here `8080`. The `ports` key then tells compose to expose port `8080` in the container on port `8080` on the host, so we can access the service on `http://localhost:8080`.
 - The `volumes` are set up to allow us to bind the service's source files on the host into the container for fast edit-reload-test cycles, like in [my last post](/articles/2019/09/06/lessons-building-node-app-docker.html#the-node_modules-volume-trick).
 - There's not much to the `postgres` service, because we're using it as it comes. It's worth noting that the image is fixed to version 12, which is the latest at the time of writing. It's a good idea to fix a version (at least a [major version](https://www.postgresql.org/support/versioning/)) to avoid accidental upgrades.
 
@@ -207,21 +207,21 @@ Taking it from the top:
 
 - Finally it brings up the rest of the application with `up -d`, which runs it detached, in the background.
 
-The application is just an API at this point, so here's what it looks like when exercised with `curl` on `localhost:3000` --- an interface that only a developer could love:
+The application is just an API at this point, so here's what it looks like when exercised with `curl` on `localhost:8080` --- an interface that only a developer could love:
 
 ```sh
 # Create a task 'foo'.
 $ curl --header 'Content-Type: application/json' \
   --data '{"description": "foo"}' \
-  http://localhost:3000/api/tasks
+  http://localhost:8080/api/tasks
 {"task":{"description":"foo","id":1}}
 
 # List the tasks, which now include 'foo'.
-$ curl http://localhost:3000/api/tasks
+$ curl http://localhost:8080/api/tasks
 {"tasks":[{"id":1,"description":"foo"}]}
 
 # Complete task 'foo' by its ID.
-$ curl -X DELETE http://localhost:3000/api/tasks/1
+$ curl -X DELETE http://localhost:8080/api/tasks/1
 ```
 
 ## The Tests
