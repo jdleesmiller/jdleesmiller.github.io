@@ -400,7 +400,7 @@ module.exports = {
 }
 ```
 
-The development and test connection strings tell the application connect to postgres as the default `postgres` user, which has default password `postgres`, running on the host `postgres`, as declared in our Compose file. (It is a bit like that [buffalo buffalo sentence](https://en.wikipedia.org/wiki/Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo).) In production, we assume that the service will be provided with a `DATABASE_URL` environment variable, because hard coding production credentials here would be a bad idea.
+The development and test connection strings tell the application how to connect to postgres as the default `postgres` user, which has default password `postgres`, running on the host `postgres`, as declared in our Compose file. (It is a bit like that [buffalo buffalo sentence](https://en.wikipedia.org/wiki/Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo).) In production, we assume that the service will be provided with a `DATABASE_URL` environment variable, because hard coding production credentials here would be a bad idea.
 
 Then in the service's [`package.json`](https://github.com/jdleesmiller/todo-demo/blob/todo-backend/todo/package.json) we can set up the test scripts to run with `NODE_ENV=test`, which is how the service knows to connect to the test database:
 ```json
@@ -472,7 +472,7 @@ So, why do we test? We test to *estimate correctness*. Good testing lets us iter
 
 I say 'estimate' here because we can in principle measure 'ground truth' correctness by letting the system loose in the real world and seeing what happens. If we can release to production quickly and get feedback quickly through great monitoring, and if the cost of system failure is low, we might not need to estimate. For example, if we deliver pictures of cats at scale, we might just ship to production and measure; if we make antilock braking systems, not so much. In most domains, it is worth investing in testing so we can accurately predict and improve correctness before we go to production.
 
-The main way to achieve high prediction accuracy is through high *fidelity*. As they say at NASA, [fly as you test, test as you fly](http://llis.nasa.gov/lesson/1196). For high fidelity, the system under test should closely resemble the one in production, and it should be tested in a way that closely resembles how it is used in production. However, fidelity usually comes at a cost.
+The main way to achieve high prediction accuracy is through high test *fidelity*. As they say at NASA, [fly as you test, test as you fly](http://llis.nasa.gov/lesson/1196). For high fidelity, the system under test should closely resemble the one in production, and it should be tested in a way that closely resembles how it is used in production. However, fidelity usually comes at a cost.
 
 There are two main costs to testing: the effort to create and maintain the tests, and the time to run the tests. Both are important. Software systems and their requirements change frequently, which requires developers to spend time adding and updating tests. And those tests run many, many times, which leaves developers twiddling their thumbs while they wait for test results.
 

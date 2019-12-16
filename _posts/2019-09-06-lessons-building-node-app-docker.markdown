@@ -90,7 +90,7 @@ This output indicates that the container ran, echoed `ready` and exited successf
 
 #### Initializing an npm package
 
-> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the user in the container needs to have permissions to read and write files on the host via the bind mount, and vice versa. I've included [an appendix with advice on how to deal with this issue](#appendix-dealing-with-uid-mismatches-on-linux). Docker for Mac users don't have to worry about it because of some uid remapping magic behind the scenes, but Docker for Linux get much better performance, so I'd call it a draw.
+> ⚠️ Aside for Linux users: For this next step to work smoothly, the `node` user in the container should have the same `uid` (user identifier) as your user on the host. This is because the user in the container needs to have permissions to read and write files on the host via the bind mount, and vice versa. I've included [an appendix with advice on how to deal with this issue](#appendix-dealing-with-uid-mismatches-on-linux). Docker for Mac users don't have to worry about it because of some uid remapping magic behind the scenes, but Docker for Linux users get much better performance, so I'd call it a draw.
 
 Now we have a node environment set up in Docker, we're ready to set up the initial npm package files. To do this, we'll run an interactive shell in the container for the `chat` service and use it to set up the initial package files:
 
