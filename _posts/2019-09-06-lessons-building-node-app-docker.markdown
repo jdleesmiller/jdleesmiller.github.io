@@ -32,7 +32,7 @@ Without Docker, we'd start by installing node and any other dependencies on the 
 
 We'll need to write two files, a `Dockerfile` and a `docker-compose.yml`, to which we'll add more later on. Let's start with the bootstrapping `Dockerfile`:
 
-```Dockerfile
+```docker
 FROM node:10.16.3
 
 USER node
@@ -489,7 +489,7 @@ A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu ins
    You can (and should) still run the process as an unprivileged user in production.
 
 2. Use Dockerfile [build arguments](https://docs.docker.com/engine/reference/builder/#arg) to configure the UID and GID of the node user at build time. We can do this by adding a few lines to the development stage of the `Dockerfile`:
-   ```Dockerfile
+   ```docker
    FROM node:10.16.3 AS development
 
    ARG UID=1000
@@ -522,7 +522,7 @@ A uid of 1000 is fairly common, because it is the uid assigned by the ubuntu ins
 [^compose-file-v2]: Both the 2.x and 3.x versions of the Docker Compose file format are still being actively developed. The main benefit of the 3.x series is that it is cross-compatible between single-node applications running on Docker Compose and multi-node applications running on Docker Swarm. In order to be compatible, version 3 drops some useful features from version 2. If you are only interested in Docker Compose, you might prefer to stick with the [latest 2.x format](https://docs.docker.com/compose/compose-file/compose-file-v2/).
 
 [^build-as-root]: Some of this trickery in the `Dockerfile` can be removed if we allow the `npm install` build step to run as root. If we do, we can and should still use the unprivileged node user at runtime, which is where most of the security benefits reside. A `Dockerfile` to run the build as root and the container as the node user would look more like this:
-    ```Dockerfile
+    ```docker
     FROM node:10.16.3
 
     WORKDIR /srv/chat
