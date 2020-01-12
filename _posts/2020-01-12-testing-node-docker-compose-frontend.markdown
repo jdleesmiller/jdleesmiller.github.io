@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Testing with Node and Docker Compose, Part 2: On the Frontend"
-date: 2019-10-26 16:00:00 +0000
+date: 2020-01-12 20:00:00 +0000
 categories: articles
 image: /assets/todo-demo/todo-demo-frontend.gif
-description: Tutorial article about testing node.js applications under Docker and Docker Compose. Part 2 focuses on testing a React frontend.
+description: Tutorial article about building and testing node.js applications under Docker and Docker Compose. Part 2 focuses on building and testing a React frontend.
 ---
 
 This post is the second in a short series about automated testing in node.js web applications with Docker. Last time, we looked at [backend testing](/articles/2019/10/19/testing-node-docker-compose-backend.html); this time, we'll look at frontend testing.
@@ -34,7 +34,7 @@ In this post, we'll build and test a frontend that is hopefully more user friend
 
 In particular, this post will cover:
 
-- building a simple frontend with [React](https://reactjs.org/), [Bootstrap](https://getbootstrap.com/) and [Webpack](https://webpack.js.org/),
+- building a simple frontend with [React](https://reactjs.org/), [Bootstrap](https://getbootstrap.com/) and [webpack](https://webpack.js.org/),
 - building the frontend with a multi-stage Dockerfile, for both development and production,
 - running backend and frontend containers in Docker Compose, and
 - frontend testing with [jsdom](https://github.com/jsdom/jsdom), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro), [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/) and [testdouble.js](https://github.com/testdouble/testdouble.js).
@@ -138,7 +138,7 @@ A few notable points:
 
 - The `taskStore` singleton implements a very simple event system: one listener can call `taskStore.listen` with a callback to be notified when the task list changes. In this case, there's only one listener, the `App` component, so this is sufficient, but of course a more general event system could be used if needed. Using events here helps reduce coupling between the store and the rest of the frontend; in particular, the logic in the store doesn't depend on React.
 
-- The `taskStore` could try to be smart and update its `tasks` array in response to `create` and `complete` calls, but for now it just re-requests the whole task list from the backend whenever it knows the list has changed. This keeps the store simpler.
+- The `taskStore` could try to be smart and update its local `tasks` array in response to `create` and `complete` calls, but for now it just re-requests the whole task list from the backend whenever it knows the list has changed. This keeps the store simpler.
 
 - It uses [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to talk to the backend through a small wrapper function, `fetchJson`, which sets up the required headers. And it uses [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL) to build the API URLs, to slightly reduce the amount of manual URL string munging required.
 
@@ -300,7 +300,7 @@ This is a smaller component, but again there are a few things to comment on:
 
 - Because the `taskStore` updates the list asynchronously, the `taskStore.complete` call can finish after the component has been unmounted, in which case trying to update the state is an error. The `unmounted` variable tracks when the component is unmounted, to avoid this.
 
-- The button sets an `aria-label` to be friendlier to screen readers. We'll also see that it's helpful in testing, later.
+- The button sets an `aria-label` to be friendlier to screen readers, for improved accessibility. We'll also see that it's helpful in testing, later.
 
 The [`NewTask` component](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/src/component/new-task.js) is similar.
 
@@ -310,11 +310,11 @@ Finally, to bring it together, we also need [an `index.html` file](https://githu
 
 Now that we have the frontend code, let's see how to build it and get it working with the backend express application that we developed in [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html). The main points are:
 
-1. Put the backend and the frontend into separate packages. Each can then have its own `package.json` file and dependencies (and dev dependencies). Frontend applications these days have a _lot_ of dependencies that are not needed on the backend. `npm audit` reports that our todo demo app frontend pulls in 10,996 packages, most of which are related to webpack.
+1. Put the backend and the frontend into separate packages. Each can then have its own `package.json` file and dependencies (and dev dependencies). Frontend applications these days have a _lot_ of dependencies that are not needed on the backend. `npm audit` reports that our todo demo app frontend pulls in 10,997 packages, most of which are related to webpack.
 
 1. In development, run the backend and the frontend in separate containers. The backend container runs the backend service as usual, and the frontend container, which is what our browser will talk to, runs an instance of `webpack-dev-server` configured to serve the frontend and proxy the API endpoints through to the backend container.
 
-1. In production, build the frontend using a multistage `Dockerfile` shared between the backend and the frontend. This lets us build the frontend in one stage with `webpack` and then copy the resulting build artifacts from `dist` into the production backend image in a later stage, so the backend can simply serve them as static files.
+1. For production, build the frontend using a multistage `Dockerfile` shared between the backend and the frontend. This lets us build the frontend in one stage with `webpack` and then copy the resulting build artifacts from `dist` into the production backend image in a later stage, so the backend can simply serve them as static files.
 
 This may be clearer in diagram form:
 
@@ -322,7 +322,7 @@ This may be clearer in diagram form:
   <a href="/assets/todo-demo/todo-demo-frontend-approach.svg"><img src="/assets/todo-demo/todo-demo-frontend-approach.svg" alt="Requests in development go through webpack dev server, which serves frontend requests itself and proxies through to the backend for API requests. In production there is no webpack dev server; the backend serves the frontend files and handles API requests directly." style="max-width: 448px;"></a>
 </p>
 
-Let's start with the multistage `Dockerfile` responsible for producing the images for both the backend and the frontend. It uses the techniques that I covered in [my first post](/articles/2019/09/06/lessons-building-node-app-docker.html#docker-for-dev-and-prod) to avoid running as `root`, and to the use of `slim` images for smaller image sizes, so I'll skip the details related to those things and talk about the overall structure below.
+Let's start with the multistage `Dockerfile` responsible for producing the images for both the backend and the frontend. It uses the techniques that I covered in the [first Docker post](/articles/2019/09/06/lessons-building-node-app-docker.html#docker-for-dev-and-prod) to avoid running as `root`, and to the use of `slim` images for smaller image sizes, so I'll skip the details related to those things and talk about the overall structure below.
 
 #### [`Dockerfile`](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/Dockerfile)
 
@@ -398,7 +398,7 @@ The stages are laid out linearly in the file, but it may be easier to follow in 
 
 4. The `production` stage copies in the dependencies from the `development-backend` so it can run the backend express application, and it copies the `dist` folder, which is the output of the webpack build, so it can serve the frontend [^cdn].
 
-In development, we won't actually build the production stage, so it's just the `development-backend` and `development-frontend` that we'll need in this post. Those will be referenced in the docker-compose file, which will change from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#docker-composeyml) to the following:
+In development, we won't actually build the production stage, so it's just the `development-backend` and `development-frontend` that we'll need in this post. Those will be referenced in the docker-compose file, which will change from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#docker-composeyml) to the following, with an additional `todo-frontend` service:
 
 #### [`docker-compose.yml`](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/docker-compose.yml)
 
@@ -476,7 +476,11 @@ module.exports = {
   // ... more config ...
 ```
 
-With all that in place, we can now bring up the frontend and backend with the `bin/up` script from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#binup), and see the UI on `http://localhost:8080` (see gif at top of post!).
+With all that in place, we can now bring up the frontend and backend with the `bin/up` script from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#binup), and see the UI on `http://localhost:8080`. Here's that gif again:
+
+<p align="center">
+  <a href="/assets/todo-demo/todo-demo-frontend.gif"><img src="/assets/todo-demo/todo-demo-frontend.gif" alt="Create some todos and complete them" style="max-width: 448px;"></a>
+</p>
 
 ## The Tests
 
@@ -668,11 +672,11 @@ describe('TaskStore', function() {
 
 - The first model test is a 'sanity test' that overlaps a bit with the integration tests, in that it's a 'happy path' test. We could write similar happy path model tests for the other public methods of the task store, but it would not be add much value in this case --- the happy path for the single consumer of this `TaskStore` is relatively simple and well covered [^coverage] by an integration test, so testing it exhaustively at model level would yield diminishing returns. If the 'happy path' were more complex, for example with more branching into many 'happy paths', it might make sense to only test some of the happy paths at integration test level and test the rest at model level. And if there were many consumers for this `TaskStore`, having more complete model testing might help to clarify the [contract](https://en.wikipedia.org/wiki/Design_by_contract) that it has with those consumers.
 
-- The remaining tests are for error conditions. `fetchMock` makes it easy to simulate request errors, such as status 400 or 500 responses --- a good use case for mocking.
+- The remaining tests are for error conditions. `fetchMock` makes it easy to simulate errors from the backend, such as status 400 or 500 responses --- a good use case for mocking.
 
 ### Component Tests
 
-Finally, we have the component tests. The 'happy path' integration test did exercise the components, but it didn't make any assertions about latency compensation or error handling, which is where most of the complexity in the components comes from. So, this is a good focus for the component tests. Let's look at the tests for the [`Task`](#frontendsrccomponenttaskjs) component:
+Finally, we have the component tests. The 'happy path' integration test did exercise the components, but it didn't make any assertions about latency compensation or error handling, which is where most of the complexity in the components comes from. So, these areas are a good focus for the component tests. Let's look at the tests for the [`Task`](#frontendsrccomponenttaskjs) component:
 
 #### [`frontend/test/component/task.test.js`](https://github.com/jdleesmiller/todo-demo/blob/master/todo/frontend/test/component/task.test.js)
 
@@ -729,15 +733,15 @@ describe('Task', function() {
 })
 ```
 
-- The component tests use React Testing Library to render the component under test and make assertions about it, and `testdouble` to mock the interactions with the `TaskStore`. We could instead include the `TaskStore` in the system under test and mock the requests it makes with `fetch-mock`, but since the `TaskStore` singleton presents a relatively simple interface for mocking, and we'd have to mock somewhere, I've gone with mocking at the model level here. (See also [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#appendix-views-on-testing) for a discussion of when and what to mock.)
+- The component tests use React Testing Library to render the component under test and make assertions about it, and `testdouble` to mock the interactions with the `TaskStore`. We could instead include the `TaskStore` in the system under test and mock the requests it makes with `fetch-mock`, but since the `taskStore` singleton presents a relatively simple interface for mocking, and we'd have to mock somewhere, I've gone with mocking at the model level here. (See also [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#appendix-views-on-testing) for a discussion of when and what to mock.)
 
-- Both tests here relate to what happens when the user clicks the complete button for the task, so the code to set up the state for the test is in a shared `beforeEach`. If we had a wider range of states and behaviors to set up, some of it would probably be better moved to a separate `describe` with its own `beforeEach`, but here I've just put it all together to keep it simple (YAGNI --- it can always be refactored later).
+- Both tests here relate to what happens when the user clicks the complete button for the task, so the code to set up the state for the test is in a shared `beforeEach`. If we had a wider range of states and behaviors to set up, some of it would probably be better moved to a separate `describe` with its own `beforeEach`, but here I've just put it all together to keep it simple (YAGNI).
 
 - The tests check that the button is disabled (to prevent double clicks) and re-enabled in both the success and error cases, and that an error message is shown in the error case.
 
 The [tests for the `NewTask` component](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/test/component/new-task.test.js) and the [App component](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/test/component/app.test.js) are similar.
 
-One thing that these component tests don't cover is how things look, or indeed anything about the structure of the DOM they generate, other than the presence of appropriate buttons or text. Assertion-based testing like that above tends to be quite time-consuming when used at that level of detail, both initially to create and over time to update when anything changes. And, in my experience, subtle bugs still tend to slip through, due for example to CSS making things invisible or unclickable. So, here I've left the visual testing to manual testing. Another approach that seems interesting is snapshot testing, in which we just record what was rendered so that any changes can be noted, but I have not so far used it in anger. Some of the visual testing can also be achieved with end-to-end tests, which will be the subject of the next post in this series.
+One thing that these component tests don't cover is how things look, or indeed anything about the structure of the DOM they generate, other than the presence of appropriate buttons or text. Assertion-based testing like that above tends to be quite time-consuming when used at that level of detail, both initially to create and over time to update when anything changes. And, in my experience, subtle bugs still tend to slip through, for example due to CSS making things invisible or unclickable. So, here I've left the visual testing to manual testing. Another approach that seems interesting is snapshot testing, in which we just record what was rendered so that any changes can be noted, but I have not so far used it in anger. Some of the visual testing can also be achieved with end-to-end tests, which will be the subject of the next post in this series.
 
 ### Running the Tests
 
@@ -778,7 +782,7 @@ Starting todo_todo_1     ... done
   11 passing (1s)
 ```
 
-It's nice to also be able to run the tests in a real browser, and there is a handy webpack loader, [`mocha-loader`](https://www.npmjs.com/package/mocha-loader) that can handle this. I added a short script to get it to expose the test runner on another port:
+That said, it's nice to also be able to run the tests in a real browser, and there is a handy webpack loader, [`mocha-loader`](https://www.npmjs.com/package/mocha-loader) that can handle this. I added a short script to get it to expose the test runner on another port using Docker Compose's `--publish` flag:
 
 #### [`bin/browser-test`](https://github.com/jdleesmiller/todo-demo/blob/master/todo/bin/browser-test)
 
@@ -796,7 +800,7 @@ docker-compose run --rm --publish 8181:8181 todo-frontend \
   --port 8181 --hot --inline --output-filename test.js
 ```
 
-One caveat is that we need to provide an entrypoint, [`test/index.js`](https://github.com/jdleesmiller/todo-demo/blob/master/todo/frontend/test/index.js), that loads the tests, rather than letting mocha find them recursively. It's still possible to run individual tests with `--grep`, and the browser UI also supports this. Here's what it looks like in-browser:
+One caveat is that we need to provide an entrypoint, [`test/index.js`](https://github.com/jdleesmiller/todo-demo/blob/master/todo/frontend/test/index.js), that imports all the other tests, rather than letting mocha find them on disk itself. This is not so bad, and it's still possible to run individual tests with `--grep`. Here's what it looks like in the browser:
 
 <p align="center">
   <a href="/assets/todo-demo/browser-test.png"><img src="/assets/todo-demo/browser-test.png" alt="Each group of tests has a heading, and within it each test is listed with a green tick mark." style="max-width: 448px;"></a>
@@ -804,7 +808,11 @@ One caveat is that we need to provide an entrypoint, [`test/index.js`](https://g
 
 # Conclusion
 
-We've seen how to build and package a frontend application using webpack, webpack-dev-server, Docker and Docker Compose.
+We've built, packaged and tested a frontend application using webpack and React, and we've wired it up to our backend using Docker and Docker Compose. In particular, we've seen that putting the backend and the frontend into the same multistage `Dockerfile` allows Docker to copy the frontend build artifacts to the backend so the backend can serve them, and that `webpack-dev-server`'s proxy feature is great for exposing the backend API to the frontend.
+
+We've seen three kinds of frontend tests that, like the tests on the backend, focus on different layers of the model-view-controller architecture. In particualr, model tests test the frontend model layer, mocking out the HTTP requests to the backend. Component tests test the view and controller layers, mocking out the model layer. And a 'happy path' integration test checks that the models and components work together, again mocking the backend requests and responses.
+
+This highlights a potential problem with our tests: we could change the way the backend works in such a way that the frontend would break, and the tests would all still pass, because the mocked requests in the frontend tests would be out of date. Next time, we'll set up some end-to-end tests that will test the backend and frontend together. See you then!
 
 ---
 
@@ -822,11 +830,11 @@ If you've read this far, you should [follow me on twitter](https://twitter.com/j
 
 [^dev-dependencies]: This Dockerfile copies the backend dev dependencies (in addition to the runtime dependencies) into the production image. If you would rather not do this, it can be avoided by adding an additional `build-backend` step that installs only the production dependencies. However, because the Dockerfile is already quite long, I'll leave this as an exercise for the reader.
 
-[^cdn]: This approach of bundling the single latest version of the frontend in the production is very clean and container-y and works well at small scale. However, assuming webpack is set up to use asset hashing, you can easily get into a situation where changes to the frontend will result in 404s on assets during or soon after a deploy, because clients are asking for old versions of assets that aren't in the new image. There are a few options:
+[^cdn]: This approach of bundling the single latest version of the frontend in the production is very clean and container-y and works well at small scale. However, assuming webpack is set up to use asset hashing, you can easily get into a situation where changes to the frontend will result in 404s on assets during or soon after a deploy, because clients are asking for old versions of assets that aren't in the new image. There are a few ways to fix this:
 
     - If using blue-green deployments, putting a pull-mode [CDN](https://en.wikipedia.org/wiki/Content_delivery_network#Content_networking_techniques) or caching reverse proxy, such as CloudFlare, in front of the application should in most cases keep old versions of the frontend assets around for long enough. Another option is to add a build cache to the image build process to copy some older versions of the frontend assets in, as well as the latest version. This is similar to how Heroku's build packs and build cache work.
     - If using rolling deployments, which are popular in Kubernetes environments, a push-mode CDN is required, because otherwise requests for new assets might land on pods that are still running the old code, resulting in 404s on the new assets instead of the old ones. The approach here would be to extract the assets from the image before it's deployed, e.g. with `docker cp` from a temporary container, and push them up to the CDN. Or you could do a two-phase deploy, with the old backend plus new assets and then the new backend plus new assets.
 
     It's never easy.
 
-[^coverage]: This article is long enough without also talking about measuring code coverage, but I am generally in favor of doing so. Here it's simple enough to see which tests cover which code, but in a larger application it is often less clear. Code coverage is particularly helpful when the time comes to optimize the test suite. The process of identifying redundant tests or those that add little coverage relative to their running times can then be quantified and to some extent automated. It can also help identify dead code to be deleted.
+[^coverage]: This article is long enough without also talking about measuring code coverage, but I think it is a good thing to do. Here it's simple enough to see which tests cover which code, but in a larger application it is often less clear. Code coverage is particularly helpful when the time comes to optimize the test suite. The process of identifying redundant tests or those that add little coverage relative to their running times can then be quantified and to some extent automated. It can also help identify dead code to be deleted.
