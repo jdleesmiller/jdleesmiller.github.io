@@ -1,0 +1,22 @@
+digraph {
+  rankdir=BT;
+  node [fontname="Courier"];
+  edge [fontname="Courier"];
+  ranksep=1;
+
+  node_12 [shape=box,label="node:12"];
+  node_12_slim [shape=box,label="node:12-slim"];
+
+  development_backend [label="development-backend"];
+  development_frontend [label="development-frontend"];
+  build_frontend [label="build-frontend"];
+  production [label="production"];
+
+  development_backend -> node_12 [label="FROM"];
+  development_frontend -> node_12 [label=" FROM"];
+  build_frontend -> development_frontend [label=" FROM"];
+  production -> node_12_slim [label="FROM    "];
+
+  production -> development_backend [style=dashed,label=" COPY node_modules --from    "];
+  production -> build_frontend [style=dashed,label=" COPY dist --from "];
+}
