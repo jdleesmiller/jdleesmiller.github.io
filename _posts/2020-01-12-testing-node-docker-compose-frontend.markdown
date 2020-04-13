@@ -427,6 +427,7 @@ services:
     depends_on:
       - todo
     environment:
+      HOST: todo-frontend
       PORT: 8080
     ports:
       - '8080:8080'
