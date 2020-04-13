@@ -153,6 +153,8 @@ services:
 
   postgres:
     image: postgres:12
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
 
 volumes:
   todo_node_modules:

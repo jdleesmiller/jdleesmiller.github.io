@@ -463,7 +463,7 @@ module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devServer: {
     // Allow connections from outside the container (not much use otherwise).
-    host: '0.0.0.0',
+    host: process.env.HOST || '0.0.0.0',
     // Proxy api routes through to the todo backend.
     proxy: [
       {
