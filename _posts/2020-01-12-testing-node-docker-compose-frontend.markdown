@@ -398,7 +398,7 @@ The stages are laid out linearly in the file, but it may be easier to follow in 
 
 4. The `production` stage copies in the dependencies from the `development-backend` so it can run the backend express application, and it copies the `dist` folder, which is the output of the webpack build, so it can serve the frontend [^cdn].
 
-In development, we won't actually build the production stage, so it's just the `development-backend` and `development-frontend` that we'll need in this post. Those will be referenced in the docker-compose file, which will change from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#docker-composeyml) to the following, with an additional `todo-frontend` service:
+In development, we won't actually build the production stage, so it's just the `development-backend` and `development-frontend` that we'll need in this post. Those will be referenced in the docker-compose file, which will change from [part 1](/articles/2019/10/19/testing-node-docker-compose-backend.html#docker-composeyml) to the following, with an additional `frontend` service:
 
 #### [`docker-compose.yml`](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/docker-compose.yml)
 
@@ -406,7 +406,7 @@ In development, we won't actually build the production stage, so it's just the `
 version: '3.7'
 
 services:
-  todo:
+  backend:
     build:
       context: .
       target: development-backend
@@ -417,43 +417,45 @@ services:
       PORT: 8080
     volumes:
       - ./backend:/srv/todo/backend
-      - todo_backend_node_modules:/srv/todo/backend/node_modules
+      - backend_node_modules:/srv/todo/backend/node_modules
 
-  todo-frontend:
+  frontend:
     build:
       context: .
       target: development-frontend
     command: npx webpack-dev-server
     depends_on:
-      - todo
+      - backend
     environment:
-      HOST: todo-frontend
+      HOST: frontend
       PORT: 8080
     ports:
       - '8080:8080'
     volumes:
       - ./frontend:/srv/todo/frontend
-      - todo_frontend_node_modules:/srv/todo/frontend/node_modules
+      - frontend_node_modules:/srv/todo/frontend/node_modules
 
   postgres:
     image: postgres:12
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
 
 volumes:
-  todo_backend_node_modules:
-  todo_frontend_node_modules:
+  backend_node_modules:
+  frontend_node_modules:
 ```
 
 Key points are:
 
-1. The name of the Dockerfile stage targeted by the backend `todo` service changed from just `development` to `development-backend`, as discussed above.
+1. The name of the Dockerfile stage targeted by the `backend` service changed from just `development` to `development-backend`, as discussed above.
 
-1. The new `todo-frontend` service runs `webpack-dev-server`. It depends on the backend `todo` service so it can proxy requests for the API back to the backend.
+1. The new `frontend` service runs `webpack-dev-server`. It depends on the `backend` service so it can proxy requests for the API back to the backend.
 
 1. The exposed port `8080` moved from the backend service to the frontend service, so we can view the frontend in the browser.
 
 1. The `node_modules` volume trick described in the [first Docker post](/articles/2019/09/06/lessons-building-node-app-docker.html#the-node_modules-volume-trick) is repeated for the frontend, so there are now two volumes that contain the `node_modules`. I have also changed the paths to reflect the separation into `backend` and `frontend` packages.
 
-Finally, we need the to set up `webpack.config.js` to do the proxying. Here's the relevant part of the webpack config that proxies requests from the browser to the frontend under `/api` through to the backend `todo` service:
+Finally, we need the to set up `webpack.config.js` to do the proxying. Here's the relevant part of the webpack config that proxies requests from the browser to the frontend under `/api` through to the `backend` service:
 
 #### [`frontend/webpack.config.js`](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/webpack.config.js)
 
@@ -469,7 +471,7 @@ module.exports = {
     proxy: [
       {
         context: ['/api'],
-        target: `http://todo:${process.env.PORT}`
+        target: `http://backend:${process.env.PORT}`
       }
     ]
   },
@@ -746,14 +748,14 @@ One thing that these component tests don't cover is how things look, or indeed a
 
 ### Running the Tests
 
-So, we have finally reached the part where we can run `npm test` in a container. In particular, the tests will run in the `todo-frontend` container. They are set up to run in node with [jsdom](https://github.com/jsdom/jsdom) and [babel](https://babeljs.io/), which requires some [setup](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/test/setup.js) when running `mocha`. This allows us to run the tests on the command line in a simulated browser environment, which is quicker to set up than a full browser.
+So, we have finally reached the part where we can run `npm test` in a container. In particular, the tests will run in the `frontend` container. They are set up to run in node with [jsdom](https://github.com/jsdom/jsdom) and [babel](https://babeljs.io/), which requires some [setup](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/frontend/test/setup.js) when running `mocha`. This allows us to run the tests on the command line in a simulated browser environment, which is quicker to set up than a full browser.
 
 ```
-$ docker-compose run --rm todo-frontend npm test
+$ docker-compose run --rm frontend npm test
 Starting todo_postgres_1 ... done
-Starting todo_todo_1     ... done
+Starting todo_backend_1     ... done
 
-> todo-frontend@1.0.0 test /srv/todo/frontend
+> frontend@1.0.0 test /srv/todo/frontend
 > mocha --require test/setup
 
 
@@ -785,7 +787,7 @@ Starting todo_todo_1     ... done
 
 That said, it's nice to also be able to run the tests in a real browser, and there is a handy webpack loader, [`mocha-loader`](https://www.npmjs.com/package/mocha-loader) that can handle this. I added a short script to get it to expose the test runner on another port using Docker Compose's `--publish` flag:
 
-#### [`bin/browser-test`](https://github.com/jdleesmiller/todo-demo/blob/master/todo/bin/browser-test)
+#### [`bin/browser-test`](https://github.com/jdleesmiller/todo-demo/blob/todo-frontend/todo/bin/browser-test)
 
 ```sh
 #!/usr/bin/env bash
@@ -796,7 +798,7 @@ That said, it's nice to also be able to run the tests in a real browser, and the
 
 set -e
 
-docker-compose run --rm --publish 8181:8181 todo-frontend \
+docker-compose run --rm --publish 8181:8181 --use-aliases frontend \
   npx webpack-dev-server 'mocha-loader!./test/index.js' \
   --port 8181 --hot --inline --output-filename test.js
 ```
