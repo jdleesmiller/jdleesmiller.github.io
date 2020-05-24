@@ -817,6 +817,8 @@ We've seen three kinds of frontend tests that, like the tests on the backend, fo
 
 This highlights a potential problem with our tests: we could change the way the backend works in such a way that the frontend would break, and the tests would all still pass, because the mocked requests in the frontend tests would be out of date. Next time, we'll set up some end-to-end tests that will test the backend and frontend together. See you then!
 
+[Onward to part 3!](/articles/2020/05/24/testing-node-docker-compose-end-to-end.html)
+
 ---
 
 <p>&nbsp;</p>

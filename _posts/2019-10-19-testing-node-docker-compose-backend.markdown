@@ -456,6 +456,8 @@ The Docker Compose setup for this project was pretty simple --- just one contain
 
 Next time, we'll add a frontend so we can manage our TODO list without `curl`, and of course we will add some frontend tests. See you then!
 
+[Onward to part 2!](/articles/2020/01/12/testing-node-docker-compose-frontend.html)
+
 <p>&nbsp;</p>
 ---
 <p>&nbsp;</p>

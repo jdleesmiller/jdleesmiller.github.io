@@ -464,6 +464,8 @@ Finally, we used Docker's multi-stage build feature to produce a `Dockerfile` su
 
 My next article in this series will pick up where we left off about testing node.js services in Docker. See you then!
 
+[Onward to the series about testing!](/articles/2019/10/19/testing-node-docker-compose-backend.html)
+
 <p>&nbsp;</p>
 ---
 <p>&nbsp;</p>
