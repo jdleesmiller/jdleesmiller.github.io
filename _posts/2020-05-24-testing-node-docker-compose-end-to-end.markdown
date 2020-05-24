@@ -643,7 +643,7 @@ index bb0d6dd..bd0a56e 100644
  })
 ```
 
-Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application. End-to-end testing with `jsdom` instead of a full headless browser is also worth considering for many applications.
+Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application, improvin the fidelity of the test. One disadvantage is that we [lose](https://github.com/jdleesmiller/todo-demo/commit/517f458b402f4d028dfe06ca43905a8f5deff38b) the ability to run the frontend integration test in a normal browser, where loading the `storage` package is impossible, but we could still run the rest of the frontend tests in a normal browser. End-to-end testing with `jsdom` instead of a full headless browser is worth considering for many applications.
 
 ### Conclusions
 
