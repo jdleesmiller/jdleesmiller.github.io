@@ -643,7 +643,7 @@ index bb0d6dd..bd0a56e 100644
  })
 ```
 
-Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application, improving the fidelity of the test. One disadvantage is that we [lose](https://github.com/jdleesmiller/todo-demo/commit/517f458b402f4d028dfe06ca43905a8f5deff38b) the ability to run the frontend integration test in a normal browser, where loading the `storage` package is impossible, but we could still run the rest of the frontend tests in a normal browser. End-to-end testing with `jsdom` instead of a full headless browser is worth considering for many applications.
+Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application, improving the fidelity of the test [^pptr-testing-library]. One disadvantage is that we [lose](https://github.com/jdleesmiller/todo-demo/commit/517f458b402f4d028dfe06ca43905a8f5deff38b) the ability to run the frontend integration test in a normal browser, where loading the `storage` package is impossible, but we could still run the rest of the frontend tests in a normal browser. End-to-end testing with `jsdom` instead of a full headless browser is worth considering for many applications.
 
 ### Conclusions
 
@@ -669,3 +669,5 @@ If you've read this far, you should [follow me on twitter](https://twitter.com/j
 [^suffix]: The numeric suffix is so you can run multiple instances of the same container with the `--scale` flag to [`docker-compose up`](https://docs.docker.com/compose/reference/up/). We won't use this feature here.
 
 [^project-name]: One disadvantage of hard coding the project name in this way is that you can't run two instances of the project in different folders, which the default Compose behavior of using the directory name as the project name allows. Setting it based on `$(basename $(pwd))` would bring this back.
+
+[^pptr-testing-library]: There is a package, [`pptr-testing-library`](https://github.com/testing-library/pptr-testing-library), that brings some DOM Testing Library-style queries to Puppeteer. At the time of writing, some of the key features around `waitForElement` are not yet implemented, but it's a good start and a promising direction!
