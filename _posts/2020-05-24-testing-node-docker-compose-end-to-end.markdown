@@ -23,7 +23,7 @@ In particular, we'll:
 - Set up end-to-end tests with [puppeteer](https://pptr.dev/) in Docker.
 - Promote some frontend integration tests using [jsdom](https://github.com/jsdom/jsdom) from the previous post to end-to-end tests, reducing the number of mocks we need to maintain.
 
-As usual, the code is [available on GitHub](https://github.com/jdleesmiller/todo-demo), and each post in the series has a git tag that marks the [corresponding code](https://github.com/jdleesmiller/todo-demo/tree/todo-end-to-end/todo).
+As usual, the code is [available on GitHub](https://github.com/jdleesmiller/todo-demo), and each post in the series has a git tag that marks the [corresponding code](https://github.com/jdleesmiller/todo-demo/tree/todo-end-to-end-jsdom/todo).
 
 ### Separate Test and Development Environments
 
@@ -643,7 +643,7 @@ index bb0d6dd..bd0a56e 100644
  })
 ```
 
-Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application, improvin the fidelity of the test. One disadvantage is that we [lose](https://github.com/jdleesmiller/todo-demo/commit/517f458b402f4d028dfe06ca43905a8f5deff38b) the ability to run the frontend integration test in a normal browser, where loading the `storage` package is impossible, but we could still run the rest of the frontend tests in a normal browser. End-to-end testing with `jsdom` instead of a full headless browser is worth considering for many applications.
+Compared to the fully end-to-end test we wrote with puppeteer above, which depended on a lot of CSS classes to make the query selectors work, this *mostly* end-to-end test with `jsdom` uses React Test Library matchers that are hopefully much less fragile and more closely resemble how the user uses the application, improving the fidelity of the test. One disadvantage is that we [lose](https://github.com/jdleesmiller/todo-demo/commit/517f458b402f4d028dfe06ca43905a8f5deff38b) the ability to run the frontend integration test in a normal browser, where loading the `storage` package is impossible, but we could still run the rest of the frontend tests in a normal browser. End-to-end testing with `jsdom` instead of a full headless browser is worth considering for many applications.
 
 ### Conclusions
 
