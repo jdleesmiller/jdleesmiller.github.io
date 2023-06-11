@@ -1,0 +1,10 @@
+{
+    "cSpell.customDictionaries": {
+        "custom-dictionary-folder-jdleesmiller-github-io": {
+            "name": "custom-dictionary-folder-jdleesmiller-github-io",
+            "path": "${workspaceFolder:jdleesmiller.github.io}/.cspell/custom-dictionary-folder-jdleesmiller-github-io.txt",
+            "addWords": true,
+            "scope": "folder"
+        }
+    }
+}

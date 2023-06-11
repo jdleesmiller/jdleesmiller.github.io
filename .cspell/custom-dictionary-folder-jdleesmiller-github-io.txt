@@ -1,0 +1,7 @@
+# Custom Dictionary Words
+eqref
+Multinomial
+quantile
+quantiles
+textrm
+undercovers
