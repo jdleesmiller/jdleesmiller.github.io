@@ -7,13 +7,13 @@ image: /assets/sql-bootstrap/cats-example.png
 description: Calculate bootstrap confidence intervals in mostly standard SQL, for PostgreSQL and BigQuery.
 ---
 
-A confidence interval is a good way to express the uncertainty in an estimate. This post is about how to calculate approximate confidence intervals in portable (mostly) standard SQL using [bootstrapping](<https://en.wikipedia.org/wiki/Bootstrapping_(statistics)>). We'll also see that BigQuery is surprisingly fast at running the required bootstrap calculations, which makes it surprisingly cheap to add a confidence interval to nearly any point estimate you calculate in BigQuery.
+A confidence interval is a good way to express the uncertainty in an estimate. This post is about how to calculate approximate confidence intervals in portable (mostly) standard SQL using [bootstrapping](<https://en.wikipedia.org/wiki/Bootstrapping_(statistics)>). We'll also see that BigQuery is surprisingly fast at running the required bootstrap calculations, which makes it easy to add a confidence interval to nearly any point estimate you calculate in BigQuery.
 
-The code for this article is on GitHub.
+The code for this article is [open source](https://github.com/jdleesmiller/sql-bootstrap).
 
 ### Background: Confidence Intervals and the Bootstrap
 
-Let's start with some background on confidence intervals and the bootstrap, illustrated with a small example. If you already know all about these, feel free to [skip to the queries](TODO).
+Let's start with some background on confidence intervals and the bootstrap, illustrated with a small example. If you already know all about these, feel free to [skip to the queries](#the-bootstrap-in-sql).
 
 Suppose we want to find the average mass of an (adult, domestic) cat [^cat-mass], and we've started by selecting 10 cats at random and measuring their masses in kilograms:
 
@@ -102,8 +102,8 @@ One way to think about bootstrapping is as a 'what if' sensitivity analysis with
 This example hints at several important caveats:
 
 1. Bootstrap CIs require a lot of computation. There is no hard and fast rule for the number of resamples that one should use, but 1000 is generally regarded as the minimum for calculation of confidence intervals. This means that instead of computing a statistic once, bootstrapping requires that it be computed thousands of times. Fortunately, the required computation can be efficiently parallelized, as we shall see below.
-1. Bootstrap CIs are approximate. In [many common cases](https://en.wikipedia.org/wiki/Confidence_interval#Confidence_interval_for_specific_distributions), there are more accurate (and efficient) methods of calculating confidence intervals. They should be used where possible. Bootstrapping is still a useful technique for more complicated cases or as a check on whether the assumptions of other methods are satisfied.
-1. The 'percentile bootstrap' approach of calculating the confidence interval directly from the quantiles of the bootstrap distribution is simple to implement and intuitively appealing, but it is known to produce intervals that are too narrow, particularly for small sample sizes. This may explain why the bootstrap interval obtained above was narrower than the \\(t\\) interval. [Appendix A](TODO) discusses some ways of correcting for this issue.
+1. Bootstrap CIs are approximate. In [many common cases](https://en.wikipedia.org/wiki/Confidence_interval#Confidence_interval_for_specific_distributions), there are more accurate and efficient methods of calculating confidence intervals. They should be used where possible. Bootstrapping is still a useful technique for more complicated cases or as an additional check on other methods.
+1. The 'percentile bootstrap' approach of calculating the confidence interval directly from the quantiles of the bootstrap distribution is simple to implement and intuitively appealing, but it is known to produce intervals that are too narrow, particularly for small sample sizes. This may explain why the bootstrap interval obtained above was narrower than the \\(t\\) interval. There are some ways to correct for this [^correction], but this approach will do for now.
 
 ### The Bootstrap in SQL
 
@@ -142,7 +142,7 @@ SELECT avg(mass) FROM cats;
 (1 row)
 ```
 
-The following query calculates a 95% CI around this estimate using 1000 resamples (for PostgreSQL; the query for BigQuery is here TODO):
+The following query calculates a 95% CI around this estimate using 1000 resamples (for PostgreSQL; the query for BigQuery is [here](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/example-sql/bq-bootstrap-pure-percent.sql)):
 
 ```sql
 WITH bootstrap_indexes AS (
@@ -199,9 +199,9 @@ Finally, we put them all together to get a single row with the most likely estim
 (1 row)
 ```
 
-That is, our estimate here is 4.49kg with 95% CI [4.47kg, 4.51kg]. In this case, the data were [generated](TODO) with a true mass of 4.5kg, so the mean is not far out, and the true rate is within the 95% confidence interval, as we'd expect to happen 95% of the time. (If you rerun the same query on the example data, you may get somewhat different numbers due to randomness in the bootstrap sampling, but with 1000 resamples they should not be very different very often.)
+That is, our estimate here is 4.49kg with 95% CI [4.47kg, 4.51kg]. In this case, the data were [generated](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/make-example-data.R) with a true mass of 4.5kg, so the mean is not far out, and the true rate is within the 95% confidence interval, as we'd expect to happen 95% of the time. (If you rerun the same query on the example data, you may get somewhat different numbers due to randomness in the bootstrap sampling, but with 1000 resamples they should not be very different very often.)
 
-This query takes ~20s to run on my benchmarking instance, and `EXPLAIN ANALYZE` shows most of that time is spent joining the `bootstrap_map` and `bootstrap_data` back together in `bootstrap_measures`. Let's see if we can speed it up.
+This query takes ~20s to run on my instance, and `EXPLAIN ANALYZE` shows most of that time is spent joining the `bootstrap_map` and `bootstrap_data` back together in `bootstrap_measures`. Let's see if we can speed it up.
 
 ### The Poisson Bootstrap in SQL
 
@@ -307,7 +307,7 @@ In general, for a sample of \\(n\\) original observations, the bootstrap weights
 
 1. Approximate the \\(\\textrm{Binomial}(n, \\frac{1}{n})\\) distribution by a \\(\\textrm{Poisson}(1)\\) [distribution](https://en.wikipedia.org/wiki/Poisson_distribution). This is a [good approximation](https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation) for any reasonably large \\(n\\), and it avoids having the weights depend on \\(n\\), which is again helpful for parallel running.
 
-These simplifications allow us to avoid the join that was the most expensive part of the 'pure' bootstrap; instead, the query attaches the Poisson weights directly to the observations and computes the required weighted mean. The Poisson bootstrap query for the `cats` example with 1000 resamples looks like this (for PostgreSQL; the query for BigQuery is here TODO):
+These simplifications allow us to avoid the join that was the most expensive part of the 'pure' bootstrap; instead, the query attaches the Poisson weights directly to the observations and computes the required weighted mean. The Poisson bootstrap query for the `cats` example with 1000 resamples looks like this (for PostgreSQL; the query for BigQuery is [here](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/example-sql/bq-bootstrap-poisson-percent.sql)):
 
 ```sql
 WITH bootstrap_indexes AS (
@@ -363,7 +363,7 @@ Let's again take it one CTE at a time:
 
 - `bootstrap_indexes` is as it was in the pure case.
 - `bootstrap_variates` generates 1000 \\(\\textrm{Uniform}(0,1)\\) random numbers for each of the 10000 observations; like `bootstrap_map` in the 'pure' bootstrap query above, it has 10 million rows.
-- `bootstrap_weights` converts the variates from the uniform distribution to the Poisson distribution using [inverse transform sampling](https://en.wikipedia.org/wiki/Inverse_transform_sampling), in which we invert the Poisson cumulative distribution function [^do-not-combine]. The `CASE` statement here is basically an unrolled loop generated from [this R code](TODO); it encodes that, when drawing from the \\(\\textrm{Poisson}(1)\\) distribution, one obtains 0 with probability 0.368, 0 or 1 with probability 0.736, 0, 1, or 2 with probability 0.920, and so on, up to 15 where the probability is so close to 1 that we start to hit the limits of 64-bit floating point numbers.
+- `bootstrap_weights` converts the variates from the uniform distribution to the Poisson distribution using [inverse transform sampling](https://en.wikipedia.org/wiki/Inverse_transform_sampling), in which we invert the Poisson cumulative distribution function [^do-not-combine]. The `CASE` statement here is basically an unrolled loop generated from [this R code](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/make-sql-bootstrap.R#L22-L35); it encodes that, when drawing from the \\(\\textrm{Poisson}(1)\\) distribution, one obtains 0 with probability 0.368, 0 or 1 with probability 0.736, 0, 1, or 2 with probability 0.920, and so on, up to 15 where the probability is so close to 1 that we start to hit the limits of 64-bit floating point numbers.
 - `bootstrap_measures` again computes the mean mass for each resample, but this time it does so by finding a weighted average using the bootstrap weights.
 - `bootstrap_ci` and `sample_measures` are exactly as before.
 
@@ -371,113 +371,35 @@ This query produces essentially the same results, but in ~12s rather than ~20s f
 
 ### Benchmark Results
 
-So, let's see some timings for the pure and Poisson approaches and PostgreSQL and BigQuery:
+So, let's see some timings for the pure and Poisson approaches and PostgreSQL and BigQuery, as we vary the size of the sample:
 
 <p align="center">
-<img src="/assets/sql-bootstrap/benchmark.svg" alt="TODO" style="max-height: 40em;" />
+<img src="/assets/sql-bootstrap/benchmark.svg" alt="Running times with Postgres for the Pure Bootstrap and Poisson Bootstrap increase from near zero for one thousand cats to roughly 2200s and 700s, respectively. Running times with BigQuery remain near zero over the entire range." style="max-height: 40em;" />
 </p>
 
 These are wall clock times for 1000 bootstrap resamples. The Postgres instance used here was a Google Cloud SQL instance with 4 vCPUs and 16GiB of RAM, running Postgres 15.2. Each point is based on 10 trials. The error bars are (of course!) bootstrap 95% CIs.
 
 The main conclusions are that the Poisson queries run faster than the pure queries, and that BigQuery is a lot faster than Postgres on both kinds of queries. Execution times with BigQuery remained essentially constant over the whole range. This is basically because BigQuery parallelized the bootstrap across many nodes, whereas Postgres ran it serially. The CPU times that BigQuery reported for queries that I ran manually were comparable to the wall clock times for Postgres.
 
-I had hoped Postgres would also parallelize the queries, but it did not. It only ever used one out of the four cores available. The [docs](https://www.postgresql.org/docs/15/parallel-safety.html) indicate that `random` is currently labelled as `PARALLEL RESTRICTED`, which might be a contributing factor.
+I had hoped Postgres would also parallelize the queries, but it did not. It only ever used one out of its four available cores. The [docs](https://www.postgresql.org/docs/15/parallel-safety.html) indicate that `random` is currently labelled as `PARALLEL RESTRICTED`, which might be a contributing factor.
 
 It would be unwise to draw any conclusions about the absolute or relative costs of Postgres and BigQuery from these results, but I did learn a few things related to costs, so here they are. I spent £35 on running the Cloud SQL instance for a few days and £12 on 100 "flat rate flex slots" for BigQuery for a few hours. That said, the Cloud SQL instance was not always busy, and I had to rerun some tests after all my results perished in a `make` accident [^precious]. Had I avoided that, it probably would have finished in about half the time (and cost). The queries with less than \\(10^6\\) cats all ran fine in BigQuery's on-demand pricing model and apparently fit within the free tier. For the larger datasets, I hit a limit (understandably) on the amount of CPU time they were using for the bootstrap resamples, which was very large compared to the size of the input data that the query was billed on. To get around that, I had to reserve some capacity, which required putting in a quota increase request but was otherwise a fairly painless process.
 
 Finally, we should check that the generated intervals are correct. Here is a comparison with the `boot` package from R:
 
 <p align="center">
-<img src="/assets/sql-bootstrap/check.svg" alt="TODO" style="max-height: 40em;" />
+<img src="/assets/sql-bootstrap/check.svg" alt="There is a violin plot for each method used, and all of the violins are roughly similar in their position and shape. The line for Student's t intervals runs somewhere through the thickest part of the violin in each case, but generally there is more mass on the inside of the interval, indicating some undercoverage." style="max-height: 40em;" />
 </p>
 
-Each row shows the distribution of the 95% confidence interval endpoints over 100 bootstrapping trials for a fixed sample of 100 cats, as computed with R as the baseline, and Postgres and BigQuery using the 'pure' and Poisson bootstrap queries above. The plots also include the \(t\) intervals from equation \\eqref{t-ci} and, because this is synthetic data, the normal CI calculated from the true population variance used to generate the dataset.
+Each row shows the distribution of the 95% confidence interval endpoints over 100 bootstrapping trials for a fixed sample of 100 cats, as computed with R as the baseline, and Postgres and BigQuery using the 'pure' and Poisson bootstrap queries above. The plots also include the \\(t\\) intervals from equation \\eqref{t-ci} and, because this is synthetic data, the normal CI calculated from the true population variance used to generate the dataset.
 
-There is good agreement between the distributions for R and the two SQL queries, which indicates that the queries are computing the right things. All of the bootstrap percentile intervals undercover somewhat with respect to the \(t\) interval, which as noted above is a common problem for percentile intervals. There are some methods that attempt to correct for this. TODO footnote. For this particular sample, the \(t\) interval also undercovers compared to the interval using the true population variance, but on average it does cover correctly.
+There is good agreement between the distributions for R and the two SQL queries, which indicates that the queries are computing the right things. All of the bootstrap percentile intervals undercover somewhat with respect to the \\(t\\) interval, which as noted above is a common problem for percentile intervals. There are some methods that attempt to correct for this [^correction]. For this particular sample, the \\(t\\) interval is also too narrow compared to the interval obtained using the true population variance, but on average it would cover correctly here.
 
 ### Conclusions
 
-We have seen how to implement bootstrap confidence intervals in (mostly) standard SQL. The queries run remarkably quickly in BigQuery, and they are usable for relatively small samples, at least, in Postgres. Using the Poisson approximation can significantly speed up the queries.
+We have seen how to implement bootstrap confidence intervals in (mostly) standard SQL. The full set of example queries is [here](https://github.com/jdleesmiller/sql-bootstrap/tree/d654236aa6f669fcd5ab68c3827d40eeb95d3092/example-sql). The queries run remarkably quickly in BigQuery, and they are usable for relatively small samples, at least, in Postgres. Using the Poisson approximation can significantly speed up the queries.
 
-Where a formula exists for confidence intervals, it is usually best to use it. However, if you do need to bootstrap, and all you have is SQL, it turns out you can do it.
-
-### SCRATCH
-
-### Appendix: Application to A/B Testing
-
-In A/B testing (which goes by many names, such as split testing or ), 
-
-An important area in which the classical \\(t\\) confidence intervals are known to be problematic is A/B testing [Kohavi], in which we have two versions of a web site and wish 
-
-For 10000 trials of the cats data with sample size 30 and 1000 resamples, where we'd expect t intervals to do well, they indeed do fairly well.
-|method |endpoint |   miss|
-|:------|:--------|------:|
-|perc   |lo       | 0.0333|
-|perc   |hi       | 0.0331|
-|stud   |lo       | 0.0261|
-|stud   |hi       | 0.0264|
-|z      |lo       | 0.0257|
-|z      |hi       | 0.0258|
-|t      |lo       | 0.0258|
-|t      |hi       | 0.0263|
-
-
-The bootstrapping algorithm is surprisingly simple:
-
-1. Take the original sample and generate \\(r\\) new samples, called _replicates_, each of which is constructed by selecting observations from the original sample at random with replacement.
-2. Calculate the statistic of interest for each of the replicates.
-3.
-
-The mechanism behind bootstrap confidence intervals is repeated sampling with replacement.
-
-Suppose we have a sample of \\(n\\) observations.
-
-There comes a time in most analyses where I stop writing SQL queries and load the data into R instead. Recently I've been working with data too large for this to be possible. One reason for this is that I have not (until now!) had a good way of capturing uncertainty or statistical
-
-Recently I have been writing a lot of SQL queries to analyze various things
-
-I find few things as annoying and as common as graphs without error bars.
-
-A confidence interval is a way of expressing the uncertainty in an estimate.
-
-There are relatively simple formulas for confidence intervals around
-
-### Confidence Intervals
-
-Suppose we have a web page with a button on it, and we want to know the fraction of page views that result in a button click --- a conversion or click through rate. If we've recorded 1000 page views and 10 button clicks, our best estimate for the conversion rate is 1%. How confident should we be that we'll see 10 button clicks from the next 1000 page views?
-
-### What is a Confidence Interval?
-
-A confidence interval is a way of expressing the uncertainty in an estimate, like an error bar on a graph. For example, a 95% confidence interval of 0.8%–1.3% would mean that we are "95% confident" [^strict-definition] that the true value is between 0.8% and 1.3%.
-
-When estimating a mean, there is a widely used and fairly simple formula for the 95% confidence interval. For a sample of \\(n\\) values with mean \\(\\bar{x}\\) and standard deviation \\(s\\), the 95% confidence interval for the mean is given by
-\\[
-\\bar{x} \\pm 1.96 \\frac{s}{\\sqrt{n}}
-\\]
-
-The magic factor of 1.96 comes from Student's \\(t\\) distribution, assuming that the population variance is unknown (and I have never known it to be known) and the sample size is reasonably large.
-
-https://www.simplypsychology.org/confidence-interval.html
-
-When estimating an unknown quantity, a 95% confidence interval is a range that contains the true value of the quantity 95% of the time [^strict-definition]. For example, we might say that a 95% confidence interval for a conversion rate is 0.8%–1.3%. This is often better than just saying that the conversion rate is 1.0%, because it expresses the uncertainty in our estimate, like error bars on a graph.
-
-Strictly speaking, the frequentist
-
-One might hope that a 95% confidence interval
-
-When estimating some unknown quantity, a confidence interval, roughly speaking, lets us say that we are confident the true value is somewhere in that range.
-
-As with most terms in statistics, it does not mean quite what you would think it does.
-
-A confidence interval is an estimated range for some unknown parameter. Usually we look for a 95% confidence interval
-
-### What are Bootstrap Confidence Intervals?
-
-### References
-
-https://en.wikipedia.org/wiki/Inverse_transform_sampling
-
-http://www.stat.yale.edu/Courses/1997-98/101/confint.htm
+Where a [standard formula](https://en.wikipedia.org/wiki/Confidence_interval#Confidence_interval_for_specific_distributions) exists for confidence intervals, it is usually best to use it. However, if you do need to bootstrap, and all you have is SQL, it turns out you can do it. 
 
 ### Footnotes
 
@@ -487,19 +409,7 @@ http://www.stat.yale.edu/Courses/1997-98/101/confint.htm
 [^multinomial-binomial]: It may be helpful to think of this in physical terms. The physical analogy for the multinomial distribution would be rolling an \\(n\\)-sided die \\(n\\) times; the weight of an observation would be the number of times the die lands on the corresponding face. For the binomial approximation, it would be flipping a (very) unfair coin with probability \\(\\frac{1}{n}\\) of coming up heads; each observation gets its own coin, which is flipped \\(n\\) times, and the observation's weight is the number of heads. Instead of rolling one giant die, which might look more like a disco ball, for the whole sample, the binomial approximation lets us flip the \\(n\\) independent coins in parallel.
 [^do-not-combine]: It might be tempting to combine the `bootstrap_variates` and `bootstrap_weights` CTEs, but `CASE WHEN random() < x THEN y WHEN random() < z THEN w ...` will generate a new random number for each `WHEN`, rather than repeatedly testing the same random number against the breaks of the target CDF. That might be an interesting way to sample from a Geometric distribution, but it is not what we want here.
 [^precious]: If you hit Ctrl-C to interrupt `make`, it deletes the target by default, because it doesn't want to leave half-built files hanging around. That is not what you want when the target is a CSV with all your results in it. The solution is to mark the target as `.PRECIOUS`.
-
-
-
-[^strict-definition]:  
- As often seems to happen in the world of statistics, the precise meaning of "95% confident" is not quite what one might hope. Its frequentist interpretation is that if one were to repeat the whole process of collecting the original sample and computing the confidence interval many times, in 95% of those repeats the confidence interval would contain the true value. It is not, as one might hope, an assertion that the true value lies within the interval with probability 0.95. For that, one instead wants a Bayesian interval estimate, sometimes called a [credible interval](https://en.wikipedia.org/wiki/Credible_interval). Fortunately, the two kinds of intervals do agree in many practical situations, so confusion on this point is unlikely to lead to disaster.
-[^ci-interpretation]: It is worth noting that the conclusion here is _not_ that 95% of all cats weigh between 3.6kg and 5.3kg; rather, it is that the _mean_ mass of all cats lies somewhere in this interval, with 95% confidence. That said, if you did want to estimate 2.5% and 97.5% quantiles of the distribution of the mass of cats, you could use the bootstrap to get confidence intervals on those quantiles!
-[^small-samples]: Caution is warranted when the sample size is very small (less than 50), as in this toy example, because the empirical bootstrap distribution quantiles may be too narrow. There are [more sophisticated ways](<https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Deriving_confidence_intervals_from_the_bootstrap_distribution>) of calculating the confidence interval that compensate for small samples. I have glossed over this concern here, because if you are using a database, you probably have more than 10 cats.
-
-It would be nice to say "a 95% confidence interval contains the true value with probability 0.95". However, as often seems to happen in statistics, the true meaning is subtly different. Strictly speaking, the frequentist interpretation is that if one were to collect an infinite number of samples, the true value would lie within a 95% confidence interval in 95% of those samples. This says nothing about whether the particular 95% confidence interval you calculated for your experiment contains the true value.
-
-As often happens in statistics, "95% confidence interval" does not mean quite what one might hope it does.
-
-In the frequentist interpretation, it does not mean "the true value is in this interval with probability 0.95"; instead, it means that if one were to repeat the experiment many times, the true value
+[^correction]: There are [several ways](<https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Deriving_confidence_intervals_from_the_bootstrap_distribution>) to calculate a confidence interval from the bootstrap distribution, of which the percentile bootstrap is the simplest. Queries for the "Studentized" bootstrap are available in the companion repo [here for Postgres](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/example-sql/pg-bootstrap-pure-student.sql) and [here for BigQuery](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/example-sql/bq-bootstrap-pure-student.sql). The Studentized intervals seem to have better coverage, but in my experience they are quite sensitive to outliers. I am not sure there is any broad consensus on which one of these approaches is best overall.
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
