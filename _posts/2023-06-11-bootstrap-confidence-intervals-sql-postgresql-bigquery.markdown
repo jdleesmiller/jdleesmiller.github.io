@@ -186,9 +186,9 @@ Let's take it one [CTE](https://www.postgresql.org/docs/13/queries-with.html) at
 1. `bootstrap_indexes` enumerates the bootstrap resamples, 1 to 1000, as `bootstrap_index`.
 1. `bootstrap_data` generates a contiguous sequence of row numbers, one for each row in the input data, `data_index`. (Here I've used `id` as the natural way to order the rows, but you could use anything.) The `- 1` is important, because it makes the sequence start from 0 rather than 1, and the next CTE will generate random indexes starting at 0.
 1. `bootstrap_map` performs the resampling with replacement by generating 10000 random integers in the range of the `data_index` for each of the 1000 resamples. The `JOIN bootstrap_indexes ON TRUE` produces the full [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of the bootstrap and data indexes, so for 1000 resamples of 10000 observations, there are 10 million rows in this CTE.
-1. `bootstrap_measures` computes the mean mass for each resample by joining the bootstrap data with the bootstrap map by `data_index`, grouping by `bootstrap_index`, and calculating the mean within each group (i.e. within each resample).
+1. `bootstrap` computes the mean mass for each resample by joining the bootstrap data with the bootstrap map by `data_index`, grouping by `bootstrap_index`, and calculating the mean within each group (i.e. within each resample).
 1. `bootstrap_ci` uses the `percentile_cont` [ordered-set aggregate function](https://www.postgresql.org/docs/13/functions-aggregate.html) to find the 2.5% and 97.5% percentiles of the empirical bootstrap distribution.
-1. `sample_measures` computes the most likely estimate as we did above.
+1. `sample` computes the most likely estimate as we did above.
 
 Finally, we put them all together to get a single row with the most likely estimate, `mass_avg`, as above, and the confidence interval bounds, `mass_lo` and `mass_hi`:
 
@@ -201,7 +201,7 @@ Finally, we put them all together to get a single row with the most likely estim
 
 That is, our estimate here is 4.49kg with 95% CI [4.47kg, 4.51kg]. In this case, the data were [generated](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/make-example-data.R) with a true mass of 4.5kg, so the mean is not far out, and the true rate is within the 95% confidence interval, as we'd expect to happen 95% of the time. (If you rerun the same query on the example data, you may get somewhat different numbers due to randomness in the bootstrap sampling, but with 1000 resamples they should not be very different very often.)
 
-This query takes ~20s to run on my instance, and `EXPLAIN ANALYZE` shows most of that time is spent joining the `bootstrap_map` and `bootstrap_data` back together in `bootstrap_measures`. Let's see if we can speed it up.
+This query takes ~20s to run on my instance, and `EXPLAIN ANALYZE` shows most of that time is spent joining the `bootstrap_map` and `bootstrap_data` back together in the `bootstrap` CTE. Let's see if we can speed it up.
 
 ### The Poisson Bootstrap in SQL
 
@@ -364,8 +364,8 @@ Let's again take it one CTE at a time:
 - `bootstrap_indexes` is as it was in the pure case.
 - `bootstrap_variates` generates 1000 \\(\\textrm{Uniform}(0,1)\\) random numbers for each of the 10000 observations; like `bootstrap_map` in the 'pure' bootstrap query above, it has 10 million rows.
 - `bootstrap_weights` converts the variates from the uniform distribution to the Poisson distribution using [inverse transform sampling](https://en.wikipedia.org/wiki/Inverse_transform_sampling), in which we invert the Poisson cumulative distribution function [^do-not-combine]. The `CASE` statement here is basically an unrolled loop generated from [this R code](https://github.com/jdleesmiller/sql-bootstrap/blob/d654236aa6f669fcd5ab68c3827d40eeb95d3092/make-sql-bootstrap.R#L22-L35); it encodes that, when drawing from the \\(\\textrm{Poisson}(1)\\) distribution, one obtains 0 with probability 0.368, 0 or 1 with probability 0.736, 0, 1, or 2 with probability 0.920, and so on, up to 15 where the probability is so close to 1 that we start to hit the limits of 64-bit floating point numbers.
-- `bootstrap_measures` again computes the mean mass for each resample, but this time it does so by finding a weighted average using the bootstrap weights.
-- `bootstrap_ci` and `sample_measures` are exactly as before.
+- `bootstrap` again computes the mean mass for each resample, but this time it does so by finding a weighted average using the bootstrap weights.
+- `bootstrap_ci` and `sample` are exactly as before.
 
 This query produces essentially the same results, but in ~12s rather than ~20s for the 'pure' bootstrap query above, which may not seem like much given all the extra mathematics, but it can be a larger savings for larger datasets.
 
